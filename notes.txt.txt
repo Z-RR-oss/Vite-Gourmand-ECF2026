@@ -1,0 +1,20 @@
+PAGES PUBLIQUES
+- Accueil
+- Liste des menus
+- Détail menu
+- Contact
+- Inscription
+- Connexion
+
+ESPACE UTILISATEUR
+- Mon compte
+- Mes commandes
+- Commander un menu
+
+ESPACE EMPLOYÉ
+- Gestion des commandes
+- Gestion des menus
+
+ESPACE ADMIN
+- Gestion des utilisateurs
+- Statistiques
