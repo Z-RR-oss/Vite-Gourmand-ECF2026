@@ -17,6 +17,7 @@ $menus = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <h2><?php echo $menu['prix']; ?> €</h2>
     <p><?php echo $menu['description']; ?></p>
     <p>Minimum : <?php echo $menu['nb_personnes_min']; ?> personnes</p>
+    <a href="menu.php?id=<?php echo $menu['id']; ?>">Afficher le menu</a>
        </div>
 
 <?php endforeach; ?>
