@@ -11,7 +11,15 @@ if (!isset($_SESSION['user_id'])) {
 $user_id = $_SESSION['user_id'];
 
 // Récupérer les commandes du user
-$sql = "SELECT * FROM commandes WHERE user_id = :user_id";
+$sql =  "SELECT menus.titre, commandes.nb_personnes, commandes.prix_total
+        FROM menus
+        INNER JOIN commandes
+        ON commandes.menu_id = menus.id
+        WHERE commandes.user_id = :user_id";
+          
+          
+        
+
 $stmt = $pdo->prepare($sql);
 
 $stmt->execute([
@@ -33,12 +41,16 @@ $commandes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 <?php foreach ($commandes as $une_commande): ?> 
     <div>
-        <h2>Menu ID : <?php echo $une_commande['menu_id']; ?></h2>
+        <h2>Menu  : <?php echo $une_commande['titre']; ?></h2>
         <p>Nombre de personnes : <?php echo $une_commande['nb_personnes']; ?></p>
         <p>Prix total : <?php echo $une_commande['prix_total']; ?> €</p>
         <hr>
     </div>
+
+
 <?php endforeach; ?>
+
+
 
 </body>
 </html>
