@@ -11,7 +11,7 @@ if (!isset($_SESSION['user_id'])) {
 $user_id = $_SESSION['user_id'];
 
 // Récupérer les commandes du user
-$sql =  "SELECT menus.titre, commandes.nb_personnes, commandes.prix_total
+$sql =  "SELECT menus.titre, commandes.nb_personnes, commandes.prix_total, commandes.id
         FROM menus
         INNER JOIN commandes
         ON commandes.menu_id = menus.id
@@ -44,6 +44,7 @@ $commandes = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <h2>Menu  : <?php echo $une_commande['titre']; ?></h2>
         <p>Nombre de personnes : <?php echo $une_commande['nb_personnes']; ?></p>
         <p>Prix total : <?php echo $une_commande['prix_total']; ?> €</p>
+        <a href="supprimer-commande.php?id=<?php echo$une_commande['id'];?> ">Annuler</a>
         <hr>
     </div>
 

@@ -1,4 +1,5 @@
 <?php
+session_start();
 require_once '../Config/database.php';
 $id = $_GET['id'];
 echo $id;
