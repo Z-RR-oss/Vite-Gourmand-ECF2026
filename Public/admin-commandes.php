@@ -41,8 +41,9 @@ $commandes = $stmt->fetchAll(PDO::FETCH_ASSOC);?>
         <p>Client : <?php echo $une_commande['email']; ?></p>
 
         <p>Nombre de personnes : <?php echo $une_commande['nb_personnes']; ?></p>
-
+         <p>Status : <?php echo $une_commande['statut'];?></p>
         <p>Prix total : <?php echo $une_commande['prix_total']; ?> €</p>
+        <a href="valider-commande.php?id=<?php echo $une_commande['id'];?>">Valider</a>
 
         <hr>
     </div>
