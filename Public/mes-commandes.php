@@ -45,6 +45,7 @@ $commandes = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <p>Nombre de personnes : <?php echo $une_commande['nb_personnes']; ?></p>
         <p>Prix total : <?php echo $une_commande['prix_total']; ?> €</p>
         <a href="supprimer-commande.php?id=<?php echo$une_commande['id'];?> ">Annuler</a>
+        <a href="modifier-commande.php?id=<?php echo$une_commande['id'];?>">Modifier la commande</a>
         <hr>
     </div>
 
