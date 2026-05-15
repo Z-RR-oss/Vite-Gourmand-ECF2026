@@ -43,7 +43,13 @@ $commandes = $stmt->fetchAll(PDO::FETCH_ASSOC);?>
         <p>Nombre de personnes : <?php echo $une_commande['nb_personnes']; ?></p>
          <p>Status : <?php echo $une_commande['statut'];?></p>
         <p>Prix total : <?php echo $une_commande['prix_total']; ?> €</p>
-        <a href="valider-commande.php?id=<?php echo $une_commande['id'];?>">Valider</a>
+        <a href="changer-statut.php?id=<?php echo $une_commande['id']; ?>&statut=validée">Valider</a>
+
+<a href="changer-statut.php?id=<?php echo $une_commande['id']; ?>&statut=en préparation">Préparer</a>
+
+<a href="changer-statut.php?id=<?php echo $une_commande['id']; ?>&statut=livrée">Livrer</a>
+
+<a href="changer-statut.php?id=<?php echo $une_commande['id']; ?>&statut=terminée">Terminer</a>
 
         <hr>
     </div>
