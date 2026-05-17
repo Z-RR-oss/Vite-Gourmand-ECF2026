@@ -49,9 +49,12 @@ $commandes = $stmt->fetchAll(PDO::FETCH_ASSOC);?>
     color: orange;
 }
 
-.commande:hover{
-    transform: scale(1.01);
+.commande{
     transition: 0.2s;
+}
+
+.commande:hover{
+    transform: translateY(-3px);
 }
 
 button{
@@ -129,6 +132,30 @@ footer{
     margin-top: 50px;
     color: gray;
 }
+@media (max-width: 768px){
+
+    .navbar{
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+    }
+
+    .commande{
+        padding: 10px;
+    }
+
+    a{
+        display: block;
+        margin-top: 10px;
+    }
+
+}
+.statut{
+    margin-top: 10px;
+}
+
+
+
 
 </style>
     
@@ -136,6 +163,7 @@ footer{
 </head>
 <body>
     <div class="navbar">
+        <h1>Bienvenue <?php echo $_SESSION['email']; ?> 👋</h1>
     <h2>🍽️ Vite Gourmand</h2>
 
     <div>
@@ -148,6 +176,11 @@ footer{
 <h1>Vite Gourmand</h1>
 
 <h1>Liste des commandes</h1>
+<?php if (empty($commandes)): ?>
+
+    <p>Aucune commande pour le moment.</p>
+
+<?php endif; ?>
 
 <?php foreach ($commandes as $une_commande): ?>
 

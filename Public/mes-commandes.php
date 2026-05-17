@@ -114,10 +114,12 @@ a{
 .navbar a:hover{
     color: orange;
 }
+.commande{
+    transition: 0.2s;
+}
 
 .commande:hover{
-    transform: scale(1.01);
-    transition: 0.2s;
+    transform: translateY(-3px);
 }
 
 button{
@@ -134,6 +136,28 @@ footer{
     margin-top: 50px;
     color: gray;
 }
+@media (max-width: 768px){
+
+    .navbar{
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+    }
+
+    .commande{
+        padding: 10px;
+    }
+
+    a{
+        display: block;
+        margin-top: 10px;
+    }
+
+}
+
+.statut{
+    margin-top: 10px;
+}
 </style>
     <meta charset="UTF-8">
     <title>Mes commandes</title>
@@ -141,6 +165,7 @@ footer{
 <body>
     <h1>Vite Gourmand</h1>
     <div class="navbar">
+        <h1>Bienvenue <?php echo $_SESSION['email']; ?> 👋</h1>
     <h2>🍽️ Vite Gourmand</h2>
 
     <div>
@@ -151,6 +176,11 @@ footer{
 </div>
 
 <h1>Mes commandes</h1>
+<?php if (empty($commandes)): ?>
+
+    <p>Aucune commande pour le moment.</p>
+
+<?php endif; ?>
 
 <?php foreach ($commandes as $une_commande): ?> 
     <div class="commande">
