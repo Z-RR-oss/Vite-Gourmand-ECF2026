@@ -28,6 +28,40 @@ $commandes = $stmt->fetchAll(PDO::FETCH_ASSOC);?>
 <head>
     <meta charset="UTF-8">
     <style>
+        .navbar{
+    background-color: #111;
+    color: white;
+    padding: 15px 20px;
+    border-radius: 10px;
+    margin-bottom: 30px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.navbar a{
+    background: transparent;
+    margin-left: 10px;
+}
+
+.navbar a:hover{
+    color: orange;
+}
+
+.commande:hover{
+    transform: scale(1.01);
+    transition: 0.2s;
+}
+
+button{
+    background: green;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+}
 
 body{
     font-family: Arial, sans-serif;
@@ -90,11 +124,26 @@ a{
     border-radius: 5px;
 }
 
+footer{
+    text-align: center;
+    margin-top: 50px;
+    color: gray;
+}
+
 </style>
     
     <title>Admin - Toutes les commandes</title>
 </head>
 <body>
+    <div class="navbar">
+    <h2>🍽️ Vite Gourmand</h2>
+
+    <div>
+        <a href="index.php">Accueil</a>
+        <a href="mes-commandes.php">Mes commandes</a>
+        <a href="admin-commandes.php">Admin</a>
+    </div>
+</div>
 
 <h1>Vite Gourmand</h1>
 
@@ -124,4 +173,7 @@ a{
 <?php endforeach; ?>
 
 </body>
+<footer>
+    <p>© 2026 Vite Gourmand - Tous droits réservés</p>
+</footer>
 </html>
