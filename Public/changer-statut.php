@@ -13,13 +13,31 @@ require_once '../Config/database.php';
 
     $id = $_GET['id'];
     $statut = $_GET['statut'];
+    if (!is_numeric($id)) {
+
+    echo "ID invalide";
+    exit;
+}
+
+
+    $statutsAutorises = ["validé", "en préparation" ,"livrée" , "terminée"];
+     $statut = strtolower($statut);
+
+    if (in_array ($statut, $statutsAutorises)){
+        echo "accès autorisé";
+    } else {
+        echo "Statut invalide";
+        exit;
+        
+    }
 
 
 
 
 $sql = "UPDATE commandes
        SET statut = :statut
-       WHERE id= :id";
+       WHERE id= :id
+       ";
 
 $stmt = $pdo->prepare($sql);
 
@@ -27,6 +45,13 @@ $stmt->execute([
     ':id' => $id,
     ':statut' => $statut
     
+
+    
 ]);
 
-    echo "la commande est $statut";
+   header("Location: admin-commandes.php");
+exit;;
+
+
+
+    

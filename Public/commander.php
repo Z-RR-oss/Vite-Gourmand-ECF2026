@@ -39,7 +39,8 @@ $stmt->execute([
     ':prix_total' => $prix_total
 ]);
 
-echo "Commande validée !";
+header("Location: mes-commandes.php");
+exit;;
 
 
 

@@ -3,6 +3,11 @@ session_start();
 require_once '../Config/database.php';
 
 $id = $_GET['id'];
+if (!is_numeric($id)) {
+
+    echo "ID invalide";
+    exit;
+}
 echo $id;
 
 
@@ -11,13 +16,16 @@ if ($_SERVER ['REQUEST_METHOD'] === 'POST') {
  echo $nb_personnes;
 $sql = "UPDATE commandes
 SET nb_personnes = :nb_personnes
-WHERE id = :id";
+WHERE id = :id
+AND user_id = :user_id";
+
 
 $stmt = $pdo->prepare($sql);
 
 $stmt->execute([
     ':id' => $id,
-    ':nb_personnes' => $nb_personnes
+    ':nb_personnes' => $nb_personnes,
+    ':user_id' => $user_id
 ]);
 
 

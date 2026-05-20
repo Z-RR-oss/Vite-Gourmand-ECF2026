@@ -23,6 +23,7 @@ $stmt->execute([
     
 ]);
 
-    echo "Commande validée";
+    header("Location: admin-commandes.php");
+exit;
+;
 
-    
