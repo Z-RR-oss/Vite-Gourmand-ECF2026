@@ -10,6 +10,8 @@ if (!is_numeric($id)) {
 }
 echo $id;
 
+$user_id = $_SESSION['user_id'];
+
 $stmt = $pdo->prepare (
 "DELETE FROM commandes WHERE id = :id
 AND user_id = :user_id"

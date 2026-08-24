@@ -7,9 +7,56 @@ $menus = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <!DOCTYPE html>
-<html>
+<html lang="fr">
+   <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vite & Gourmand</title>
+    <link rel="stylesheet" href="style.css">
+</head>
 <body>
+   <nav class="navbar">
 
+    <div class="navbar-logo">
+        <a href="index.php">
+            <img src="LogoVG.png" alt="Logo Vite & Gourmand" width="150">
+        </a>
+
+        <h1>
+            <a href="index.php">Vite & Gourmand</a>
+        </h1>
+    </div>
+
+    <div class="navbar-links">
+        <a href="index.php#menus">Menus</a>
+        <a href="mes-commandes.php">Mes commandes</a>
+    </div>
+
+    <div class="navbar-user">
+        <a href="login.php">Connexion</a>
+    </div>
+
+</nav>
+<section class="hero">
+    <div class="texte">
+ <h1>Des plats gourmands,prêts sans attendre</h1>
+ <p>   Commandez simplement vos menus
+    et profitez d'un moment convivial.</p>
+    </div>
+  
+<a href="index.php#menus">Découvrir nos menus</a>
+</div>
+  <div class="image">
+
+<img src="" alt="">
+</div>
+
+</section>
+
+
+
+</section>
+<section id="menus">
 <?php foreach ($menus as $menu): ?>
 
      <div>
@@ -21,6 +68,7 @@ $menus = $stmt->fetchAll(PDO::FETCH_ASSOC);
        </div>
 
 <?php endforeach; ?>
+</section>
 
 </body>
 </html>

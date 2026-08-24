@@ -210,3 +210,4 @@ footer{
     <p>© 2026 Vite Gourmand - Tous droits réservés</p>
 </footer>
 </html>
+

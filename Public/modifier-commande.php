@@ -2,6 +2,13 @@
 session_start();
 require_once '../Config/database.php';
 
+if (!isset($_SESSION['user_id'])) {
+    echo "Accès refusé";
+    exit;
+}
+
+$user_id = $_SESSION['user_id'];
+
 $id = $_GET['id'];
 if (!is_numeric($id)) {
 
@@ -30,11 +37,6 @@ $stmt->execute([
 
 
 
-}
-
-if (!isset($_SESSION['user_id'])) {
-    echo "Accès refusé";
-    exit;
 }
 
 $sql = "SELECT * FROM commandes WHERE id = :id";
