@@ -1,0 +1,55 @@
+:root {
+    --violet-principal: #6D28D9;
+    --blanc: #FFFFFF;
+}
+
+
+
+
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 40px;
+    background-color:var(--violet-principal);
+}
+
+.navbar-logo {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.navbar-logo img {
+    width: 60px;
+    height: auto;
+}
+
+.navbar-logo h1 a,
+.navbar-links a,
+.navbar-user a {
+    color: white;
+    text-decoration: none;
+}
+
+.navbar-logo h1 a {
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.navbar-links {
+    display: flex;
+    gap: 25px;
+}
+
+.navbar-links a {
+    display: inline-block;
+    transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.navbar-links a:hover {
+    transform: translateY(-3px);
+}
+
+

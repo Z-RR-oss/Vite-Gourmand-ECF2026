@@ -1,0 +1,28 @@
+Bonjour,
+
+Voici une première version fonctionnelle de mon projet ECF "Vite & Gourmand".
+
+Le backend principal est déjà opérationnel :
+
+* authentification
+* gestion des rôles
+* commandes
+* espace administrateur
+* workflow des statuts
+* sécurisation des actions principales
+
+Le projet continue d’évoluer avec les prochaines étapes prévues :
+
+* amélioration du front-end
+* responsive
+* documentation technique
+* maquettes
+* déploiement
+
+Lien GitHub :
+https://github.com/Z-RR-oss/Vite-Gourmand-ECF2026
+
+Lien Trello / gestion de projet :
+https://trello.com/b/mHfEGdUL/vite-gourmand-projet-ecf
+
+Cordialement
