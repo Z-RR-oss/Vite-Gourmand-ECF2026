@@ -33,6 +33,9 @@ $menus = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </div>
 
     <div class="navbar-user">
+        <button class="burger-menu" aria-label="Ouvrir le menu">
+            ☰
+        </button>
         <a href="login.php">Connexion</a>
     </div>
 
@@ -48,7 +51,7 @@ $menus = $stmt->fetchAll(PDO::FETCH_ASSOC);
 </div>
   <div class="image">
 
-<img src="" alt="">
+<img src="Burger.webp" alt="Plat gourmand proposé par Vite & Gourmand">
 </div>
 
 </section>
