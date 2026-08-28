@@ -16,8 +16,12 @@ $menus = $stmt->fetchAll(PDO::FETCH_ASSOC);
     
 </head>
 
-<body>
-    <
+<body>  
+    <input
+    type="text"
+    id="search-menu"
+    placeholder="Rechercher un menu..."
+>
    <nav class="navbar">
 
     <div class="navbar-logo">
