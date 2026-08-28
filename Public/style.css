@@ -110,21 +110,34 @@
     display: none;
 }
 
-
 @media (max-width: 768px) {
-
 
     .navbar-links,
     .navbar-user {
         display: none;
     }
+
+    .burger-menu {
+        display: block;
+        background: transparent;
+        border: none;
+        color: white;
+        font-size: 32px;
+        cursor: pointer;
+    }
+
+    .navbar-links.menu-open {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        gap: 20px;
+        align-items: center;
+    }
+
     .hero {
         flex-direction: column;
         gap: 30px;
         padding: 30px 20px;
-    }
-    .texte h1 {
-        font-size: 32px;
     }
 
     .texte,
@@ -132,7 +145,11 @@
         width: 100%;
     }
 
-       .burger-menu {
-        display: block;
+    .texte h1 {
+        font-size: 32px;
     }
+    .navbar {
+    flex-wrap: wrap;
+}
+
 }

@@ -13,8 +13,11 @@ $menus = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vite & Gourmand</title>
     <link rel="stylesheet" href="style.css">
+    
 </head>
+
 <body>
+    <
    <nav class="navbar">
 
     <div class="navbar-logo">
@@ -30,14 +33,16 @@ $menus = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <div class="navbar-links">
         <a href="index.php#menus">Menus</a>
         <a href="mes-commandes.php">Mes commandes</a>
+         <a href="login.php">Connexion</a>
     </div>
 
-    <div class="navbar-user">
-        <button class="burger-menu" aria-label="Ouvrir le menu">
-            ☰
-        </button>
+   
+       
         <a href="login.php">Connexion</a>
     </div>
+     <button class="burger-menu" aria-label="Ouvrir le menu">
+            ☰
+        </button>
 
 </nav>
 <section class="hero">
@@ -72,6 +77,6 @@ $menus = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 <?php endforeach; ?>
 </section>
-
+<script src="scripts.js"></script>
 </body>
 </html>
