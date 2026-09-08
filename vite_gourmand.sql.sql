@@ -87,9 +87,9 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `nom`, `prénom`, `email`, `password`, `role`) VALUES
-(4, '', '', 'etiennelambeau@outlook.fr', '$2y$10$JAAryi6qxR/MzigVi8kAq.m2YpLJU0nVeUsRl2wtURGhFHecvqOF6', ''),
-(5, '', '', 'test@test.com', '$2y$10$3PlGEsQur3Rb5EqMS6lKcOAU5pfYcg/eD/2ojsVVeBYQcsfECgUhO', ''),
-(6, '', '', 'admin@test.com', '$2y$10$hyo3uwyoww4zGg.QKjYg4OB8SAFyHIBS1dAawNhFCY4VrbiKCCswa', 'admin');
+(4, 'Demo', 'Quentin', 'quentin@example.com', '$2y$10$JAAryi6qxR/MzigVi8kAq.m2YpLJU0nVeUsRl2wtURGhFHecvqOF6', 'utilisateur'),
+(5, 'Demo', 'Charlie', 'charlie@example.com', '$2y$10$3PlGEsQur3Rb5EqMS6lKcOAU5pfYcg/eD/2ojsVVeBYQcsfECgUhO', 'employe'),
+(6, 'Demo', 'Corentin', 'corentin@example.com', '$2y$10$hyo3uwyoww4zGg.QKjYg4OB8SAFyHIBS1dAawNhFCY4VrbiKCCswa', 'admin');
 
 --
 -- Index pour les tables déchargées
