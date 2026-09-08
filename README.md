@@ -8,9 +8,6 @@
 
 ## Comptes tests
 
-Admin :
-admin@test.com
-
-Utilisateur :
-user@test.com
-etiennelambeau@outlook
+Administrateur : corentin@example.com
+Employé : charlie@example.com
+Utilisateur : quentin@example.com
