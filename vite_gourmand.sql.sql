@@ -75,18 +75,20 @@ INSERT INTO `menus` (`id`, `titre`, `description`, `prix`, `nb_personnes_min`) V
 
 CREATE TABLE `users` (
   `id` int(11) NOT NULL,
-  `nom` varchar(25) NOT NULL,
-  `prénom` varchar(25) NOT NULL,
+  `nom` varchar(50) NOT NULL,
+  `prenom` varchar(50) NOT NULL,
   `email` varchar(255) NOT NULL,
   `password` text NOT NULL,
-  `role` varchar(25) NOT NULL
+  `role` varchar(25) NOT NULL DEFAULT 'utilisateur',
+  `gsm` varchar(20) DEFAULT NULL,
+  `adresse` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Déchargement des données de la table `users`
 --
 
-INSERT INTO `users` (`id`, `nom`, `prénom`, `email`, `password`, `role`) VALUES
+INSERT INTO `users` (`id`, `nom`, `prenom`, `email`, `password`, `role`) VALUES
 (4, 'Demo', 'Quentin', 'quentin@example.com', '$2y$10$JAAryi6qxR/MzigVi8kAq.m2YpLJU0nVeUsRl2wtURGhFHecvqOF6', 'utilisateur'),
 (5, 'Demo', 'Charlie', 'charlie@example.com', '$2y$10$3PlGEsQur3Rb5EqMS6lKcOAU5pfYcg/eD/2ojsVVeBYQcsfECgUhO', 'employe'),
 (6, 'Demo', 'Corentin', 'corentin@example.com', '$2y$10$hyo3uwyoww4zGg.QKjYg4OB8SAFyHIBS1dAawNhFCY4VrbiKCCswa', 'admin');
@@ -111,7 +113,8 @@ ALTER TABLE `menus`
 -- Index pour la table `users`
 --
 ALTER TABLE `users`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `email` (`email`);
 
 --
 -- AUTO_INCREMENT pour les tables déchargées
