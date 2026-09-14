@@ -17,11 +17,45 @@ $menus = $stmt->fetchAll(PDO::FETCH_ASSOC);
 </head>
 
 <body>  
-    <input
+<input
     type="text"
     id="search-menu"
     placeholder="Rechercher un menu..."
 >
+
+<div class="filters">
+
+    <input
+        type="number"
+        id="prix-min"
+        placeholder="Prix minimum"
+    >
+
+    <input
+        type="number"
+        id="prix-max"
+        placeholder="Prix maximum"
+    >
+
+    <select id="theme">
+        <option value="">Tous les thèmes</option>
+        <option value="Classique">Classique</option>
+        <option value="Noël">Noël</option>
+    </select>
+
+    <select id="regime">
+        <option value="">Tous les régimes</option>
+        <option value="Classique">Classique</option>
+        <option value="Vegan">Vegan</option>
+    </select>
+
+    <input
+        type="number"
+        id="personnes"
+        placeholder="Nombre de personnes"
+    >
+
+</div>
    <nav class="navbar">
 
     <div class="navbar-logo">
@@ -81,6 +115,6 @@ $menus = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 <?php endforeach; ?>
 </section>
-<script src="scripts.js"></script>
+<script src="scripts.js?v=2"></script>
 </body>
 </html>
