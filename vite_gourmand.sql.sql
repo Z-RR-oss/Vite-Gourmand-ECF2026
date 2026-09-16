@@ -374,6 +374,24 @@ VALUES
 );
 
 
+
+
+INSERT INTO `plats` (`id`, `nom`, `description`, `type_plat`) VALUES
+(1, 'Salade gourmande', 'Salade fraîche de saison', 'entree');
+
+INSERT INTO `menu_plat` (`menu_id`, `plat_id`, `ordre_affichage`) VALUES
+(1, 1, 1);
+
+INSERT INTO `allergenes` (`id`, `nom`) VALUES
+(1, 'Gluten');
+
+INSERT INTO `plat_allergene` (`plat_id`, `allergene_id`) VALUES
+(1, 1);
+
+INSERT INTO `menu_images` (`id`, `menu_id`, `chemin_image`, `texte_alternatif`) VALUES
+(1, 1, 'Burger.webp', 'Plat du menu Classique');
+
+
 INSERT INTO `commandes`
 (`id`, `user_id`, `menu_id`, `nb_personnes`, `prix_total`, `statut`)
 VALUES
