@@ -1,213 +1,430 @@
 <?php
+
 session_start();
 require_once '../Config/database.php';
 
 
-    if ($_SESSION['role'] == "admin") {
-       
-        echo "Bienvenue Admin !";
-    } else {
-        echo "Accès refusé";
-        exit;
-    }
-$sql = "SELECT commandes.*, menus.titre, users.email
-        FROM commandes
-        INNER JOIN menus
+// 1. Vérifier que l'utilisateur est connecté
+if (!isset($_SESSION['user_id'], $_SESSION['role'])) {
+    header("Location: login.php");
+    exit;
+}
+
+
+// 2. Autoriser uniquement les admins et employés
+if (
+    $_SESSION['role'] !== 'admin'
+    && $_SESSION['role'] !== 'employe'
+) {
+    exit("Accès refusé.");
+}
+
+
+// 3. Récupérer toutes les commandes
+$sql = "
+    SELECT
+        commandes.*,
+        menus.titre,
+        users.email,
+        users.nom,
+        users.prenom
+    FROM commandes
+
+    INNER JOIN menus
         ON commandes.menu_id = menus.id
-        INNER JOIN users
-        ON commandes.user_id = users.id";
+
+    INNER JOIN users
+        ON commandes.user_id = users.id
+
+    ORDER BY commandes.created_at DESC
+";
 
 $stmt = $pdo->prepare($sql);
-
 $stmt->execute();
 
-$commandes = $stmt->fetchAll(PDO::FETCH_ASSOC);?>
+$commandes = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+?>
 
 <!DOCTYPE html>
+
 <html lang="fr">
+
 <head>
+
     <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Gestion des commandes - Vite & Gourmand</title>
+
     <style>
-        .navbar{
-    background-color: #111;
-    color: white;
-    padding: 15px 20px;
-    border-radius: 10px;
-    margin-bottom: 30px;
 
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            padding: 20px;
+        }
 
-.navbar a{
-    background: transparent;
-    margin-left: 10px;
-}
+        h1 {
+            color: #333;
+        }
 
-.navbar a:hover{
-    color: orange;
-}
+        .navbar {
+            background-color: #111;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
 
-.commande{
-    transition: 0.2s;
-}
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
 
-.commande:hover{
-    transform: translateY(-3px);
-}
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            margin-left: 10px;
+        }
 
-button{
-    background: green;
-    color: white;
-    border: none;
-    padding: 10px 15px;
-    border-radius: 5px;
-    cursor: pointer;
-}
+        .navbar a:hover {
+            color: orange;
+        }
 
-body{
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
-    padding: 20px;
-}
+        .commande {
+            background: white;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 10px;
 
-h1{
-    color: #333;
-}
+            box-shadow:
+                0 2px 5px rgba(0, 0, 0, 0.1);
 
-.commande{
-    background: white;
-    padding: 15px;
-    margin-bottom: 20px;
-    border-radius: 10px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-}
+            transition: 0.2s;
+        }
 
-.statut{
-    font-weight: bold;
-    padding: 5px 10px;
-    border-radius: 5px;
-    display: inline-block;
-}
+        .commande:hover {
+            transform: translateY(-3px);
+        }
 
-.en-attente{
-    background-color: orange;
-    color: white;
-}
+        .statut {
+            font-weight: bold;
+            padding: 5px 10px;
+            border-radius: 5px;
+            display: inline-block;
+            background: #eeeeee;
+        }
 
-.validee{
-    background-color: green;
-    color: white;
-}
+        .actions {
+            margin-top: 15px;
+        }
 
-.preparation{
-    background-color: blue;
-    color: white;
-}
+        .actions a {
+            display: inline-block;
 
-.livree{
-    background-color: purple;
-    color: white;
-}
+            margin-top: 8px;
+            margin-right: 8px;
 
-.terminee{
-    background-color: gray;
-    color: white;
-}
+            text-decoration: none;
 
-a{
-    display: inline-block;
-    margin-top: 10px;
-    margin-right: 10px;
-    text-decoration: none;
-    background: black;
-    color: white;
-    padding: 8px 12px;
-    border-radius: 5px;
-}
+            background: black;
+            color: white;
 
-footer{
-    text-align: center;
-    margin-top: 50px;
-    color: gray;
-}
-@media (max-width: 768px){
+            padding: 8px 12px;
+            border-radius: 5px;
+        }
 
-    .navbar{
-        flex-direction: column;
-        gap: 10px;
-        text-align: center;
-    }
+        .actions a:hover {
+            background: #444;
+        }
 
-    .commande{
-        padding: 10px;
-    }
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            color: gray;
+        }
 
-    a{
-        display: block;
-        margin-top: 10px;
-    }
+        @media (max-width: 768px) {
 
-}
-.statut{
-    margin-top: 10px;
-}
+            .navbar {
+                flex-direction: column;
+                gap: 10px;
+                text-align: center;
+            }
 
+            .commande {
+                padding: 12px;
+            }
 
+            .actions a {
+                display: block;
+                margin-top: 10px;
+            }
+        }
 
+    </style>
 
-</style>
-    
-    <title>Admin - Toutes les commandes</title>
 </head>
+
+
 <body>
-    <div class="navbar">
-        <h1>Bienvenue <?php echo $_SESSION['email']; ?> 👋</h1>
-    <h2>🍽️ Vite Gourmand</h2>
 
-    <div>
-        <a href="index.php">Accueil</a>
-        <a href="mes-commandes.php">Mes commandes</a>
-        <a href="admin-commandes.php">Admin</a>
-    </div>
-</div>
+    <nav class="navbar">
 
-<h1>Vite Gourmand</h1>
+        <div>
 
-<h1>Liste des commandes</h1>
-<?php if (empty($commandes)): ?>
+            <h2>🍽️ Vite & Gourmand</h2>
 
-    <p>Aucune commande pour le moment.</p>
+            <p>
+                Connecté :
+                <?php
+                echo htmlspecialchars(
+                    $_SESSION['email'] ?? ''
+                );
+                ?>
+            </p>
 
-<?php endif; ?>
+        </div>
 
-<?php foreach ($commandes as $une_commande): ?>
 
-    <div class="commande">
-        <h2>Menu : <?php echo $une_commande['titre']; ?></h2>
+        <div>
 
-        <p>Client : <?php echo $une_commande['email']; ?></p>
+            <a href="index.php">
+                Accueil
+            </a>
 
-        <p>Nombre de personnes : <?php echo $une_commande['nb_personnes']; ?></p>
-         <p class="statut">Status : <?php echo $une_commande['statut'];?></p>
-        <p>Prix total : <?php echo $une_commande['prix_total']; ?> €</p>
-        <a href="changer-statut.php?id=<?php echo $une_commande['id']; ?>&statut=validée">Valider</a>
+            <a href="mes-commandes.php">
+                Mes commandes
+            </a>
 
-<a href="changer-statut.php?id=<?php echo $une_commande['id']; ?>&statut=en préparation">Préparer</a>
+            <a href="admin-commandes.php">
+                Gestion commandes
+            </a>
 
-<a href="changer-statut.php?id=<?php echo $une_commande['id']; ?>&statut=livrée">Livrer</a>
+        </div>
 
-<a href="changer-statut.php?id=<?php echo $une_commande['id']; ?>&statut=terminée">Terminer</a>
+    </nav>
 
-        <hr>
-    </div>
 
-<?php endforeach; ?>
+    <main>
+
+        <h1>Gestion des commandes</h1>
+
+
+        <?php if (empty($commandes)): ?>
+
+            <p>
+                Aucune commande pour le moment.
+            </p>
+
+        <?php else: ?>
+
+
+            <?php foreach ($commandes as $commande): ?>
+
+                <div class="commande">
+
+                    <h2>
+                        Commande n°
+                        <?php echo (int) $commande['id']; ?>
+                    </h2>
+
+
+                    <h3>
+                        Menu :
+                        <?php
+                        echo htmlspecialchars(
+                            $commande['titre']
+                        );
+                        ?>
+                    </h3>
+
+
+                    <p>
+                        Client :
+                        <?php
+                        echo htmlspecialchars(
+                            $commande['prenom']
+                            . ' '
+                            . $commande['nom']
+                        );
+                        ?>
+                    </p>
+
+
+                    <p>
+                        Email :
+                        <?php
+                        echo htmlspecialchars(
+                            $commande['email']
+                        );
+                        ?>
+                    </p>
+
+
+                    <p>
+                        Nombre de personnes :
+                        <?php
+                        echo (int) $commande['nb_personnes'];
+                        ?>
+                    </p>
+
+
+                    <p>
+                        Date :
+                        <?php
+                        echo !empty($commande['date_prestation'])
+                            ? htmlspecialchars(
+                                $commande['date_prestation']
+                            )
+                            : 'Non renseignée';
+                        ?>
+                    </p>
+
+
+                    <p>
+                        Heure :
+                        <?php
+                        echo !empty($commande['heure_prestation'])
+                            ? htmlspecialchars(
+                                $commande['heure_prestation']
+                            )
+                            : 'Non renseignée';
+                        ?>
+                    </p>
+
+
+                    <p>
+                        Lieu :
+                        <?php
+                        echo !empty($commande['lieu_prestation'])
+                            ? htmlspecialchars(
+                                $commande['lieu_prestation']
+                            )
+                            : 'Non renseigné';
+                        ?>
+                    </p>
+
+
+                    <p>
+                        Prix total :
+                        <?php
+                        echo number_format(
+                            $commande['prix_total'],
+                            2,
+                            ',',
+                            ' '
+                        );
+                        ?>
+                        €
+                    </p>
+
+
+                    <p class="statut">
+                        Statut :
+                        <?php
+                        echo htmlspecialchars(
+                            $commande['statut']
+                        );
+                        ?>
+                    </p>
+
+
+                    <div class="actions">
+
+                        <a
+                            href="changer-statut.php?id=<?php
+                            echo (int) $commande['id'];
+                            ?>&statut=<?php
+                            echo urlencode('accepté');
+                            ?>"
+                        >
+                            Accepter
+                        </a>
+
+
+                        <a
+                            href="changer-statut.php?id=<?php
+                            echo (int) $commande['id'];
+                            ?>&statut=<?php
+                            echo urlencode('en préparation');
+                            ?>"
+                        >
+                            Préparer
+                        </a>
+
+
+                        <a
+                            href="changer-statut.php?id=<?php
+                            echo (int) $commande['id'];
+                            ?>&statut=<?php
+                            echo urlencode('en cours de livraison');
+                            ?>"
+                        >
+                            En cours de livraison
+                        </a>
+
+
+                        <a
+                            href="changer-statut.php?id=<?php
+                            echo (int) $commande['id'];
+                            ?>&statut=<?php
+                            echo urlencode('livré');
+                            ?>"
+                        >
+                            Livré
+                        </a>
+
+
+                        <a
+                            href="changer-statut.php?id=<?php
+                            echo (int) $commande['id'];
+                            ?>&statut=<?php
+                            echo urlencode(
+                                'en attente du retour de matériel'
+                            );
+                            ?>"
+                        >
+                            Attente retour matériel
+                        </a>
+
+
+                        <a
+                            href="changer-statut.php?id=<?php
+                            echo (int) $commande['id'];
+                            ?>&statut=<?php
+                            echo urlencode('terminée');
+                            ?>"
+                        >
+                            Terminer
+                        </a>
+
+                    </div>
+
+                </div>
+
+            <?php endforeach; ?>
+
+
+        <?php endif; ?>
+
+    </main>
+
+
+    <footer>
+
+        <p>
+            © 2026 Vite & Gourmand
+            - Tous droits réservés
+        </p>
+
+    </footer>
 
 </body>
-<footer>
-    <p>© 2026 Vite Gourmand - Tous droits réservés</p>
-</footer>
+
 </html>
 
