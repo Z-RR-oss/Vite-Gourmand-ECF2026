@@ -72,7 +72,7 @@ $stmtHistorique->execute([
 $historiques = $stmtHistorique->fetchAll(PDO::FETCH_ASSOC);
 
 
-// 4. Regrouper l'historique par commande
+// 4. Regrouper les historiques par commande
 $historiquesParCommande = [];
 
 foreach ($historiques as $historique) {
@@ -309,9 +309,7 @@ foreach ($historiques as $historique) {
 
                     <p>
                         Nombre de personnes :
-                        <?php
-                        echo (int) $commande['nb_personnes'];
-                        ?>
+                        <?php echo (int) $commande['nb_personnes']; ?>
                     </p>
 
 
@@ -430,10 +428,7 @@ foreach ($historiques as $historique) {
 
                     <div class="historique">
 
-                        <h3>
-                            Suivi de la commande
-                        </h3>
-
+                        <h3>Suivi de la commande</h3>
 
                         <?php
                         $commandeId = $commande['id'];
@@ -471,9 +466,7 @@ foreach ($historiques as $historique) {
 
                                         <?php
                                         echo htmlspecialchars(
-                                            $historique[
-                                                'date_modification'
-                                            ]
+                                            $historique['date_modification']
                                         );
                                         ?>
 
@@ -496,12 +489,12 @@ foreach ($historiques as $historique) {
                     </div>
 
 
-                    <!-- Actions autorisées uniquement
-                    tant que la commande est en attente -->
+                    <!--
+                    Modifier / annuler uniquement
+                    tant que la commande est en attente
+                    -->
 
-                    <?php
-                    if ($commande['statut'] === 'en attente'):
-                    ?>
+                    <?php if ($commande['statut'] === 'en attente'): ?>
 
                         <div class="actions">
 
@@ -533,6 +526,29 @@ foreach ($historiques as $historique) {
                         </p>
 
                     <?php endif; ?>
+
+
+                    <!--
+                    Avis possible uniquement
+                    lorsque la commande est terminée
+                    -->
+
+                    <?php if ($commande['statut'] === 'terminée'): ?>
+
+                        <div class="actions">
+
+                            <a
+                                href="laisser-avis.php?id=<?php
+                                echo (int) $commande['id'];
+                                ?>"
+                            >
+                                Laisser un avis
+                            </a>
+
+                        </div>
+
+                    <?php endif; ?>
+
 
                 </div>
 
