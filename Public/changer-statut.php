@@ -11,7 +11,7 @@ if (!isset($_SESSION['user_id'], $_SESSION['role'])) {
 }
 
 
-// 2. Seuls un employé ou un administrateur
+// 2. Seuls les employés et administrateurs
 // peuvent modifier le statut d'une commande
 if (
     $_SESSION['role'] !== 'admin'
@@ -26,7 +26,7 @@ $id = $_GET['id'] ?? null;
 $statut = $_GET['statut'] ?? null;
 
 
-// 4. Vérifier l'identifiant de la commande
+// 4. Vérifier l'identifiant
 if (!$id || !is_numeric($id)) {
     exit("ID de commande invalide.");
 }
@@ -34,7 +34,7 @@ if (!$id || !is_numeric($id)) {
 $id = (int) $id;
 
 
-// 5. Vérifier le statut demandé
+// 5. Vérifier le statut
 if (!$statut) {
     exit("Statut manquant.");
 }
@@ -42,7 +42,6 @@ if (!$statut) {
 $statut = strtolower(trim($statut));
 
 
-// Statuts prévus par le sujet Studi
 $statutsAutorises = [
     "accepté",
     "en préparation",
@@ -52,6 +51,7 @@ $statutsAutorises = [
     "terminée"
 ];
 
+
 if (!in_array($statut, $statutsAutorises, true)) {
     exit("Statut invalide.");
 }
@@ -59,7 +59,11 @@ if (!in_array($statut, $statutsAutorises, true)) {
 
 // 6. Vérifier que la commande existe
 $sqlCommande = "
-    SELECT id, statut
+    SELECT
+        id,
+        statut,
+        date_debut_attente_retour,
+        materiel_retourne
     FROM commandes
     WHERE id = :id
 ";
@@ -72,14 +76,15 @@ $stmtCommande->execute([
 
 $commande = $stmtCommande->fetch(PDO::FETCH_ASSOC);
 
+
 if (!$commande) {
     exit("Commande introuvable.");
 }
 
 
-// Si le statut est déjà le même,
-// inutile de créer une nouvelle ligne d'historique
+// Éviter de créer deux fois le même historique
 if ($commande['statut'] === $statut) {
+
     header("Location: admin-commandes.php");
     exit;
 }
@@ -87,18 +92,56 @@ if ($commande['statut'] === $statut) {
 
 try {
 
-    // Les deux opérations doivent réussir ensemble
     $pdo->beginTransaction();
 
 
-    // 7. Modifier le statut actuel de la commande
-    $sqlUpdate = "
-        UPDATE commandes
-        SET statut = :statut
-        WHERE id = :id
-    ";
+    /*
+     * 7. Modifier la commande
+     *
+     * Si elle passe en attente du retour de matériel,
+     * on enregistre également la date de début.
+     */
+    if (
+        $statut ===
+        'en attente du retour de matériel'
+    ) {
 
-    $stmtUpdate = $pdo->prepare($sqlUpdate);
+        $sqlUpdate = "
+            UPDATE commandes
+
+            SET
+                statut = :statut,
+
+                date_debut_attente_retour =
+                    COALESCE(
+                        date_debut_attente_retour,
+                        NOW()
+                    ),
+
+                materiel_retourne = 0,
+
+                date_retour_materiel = NULL,
+
+                frais_retard_materiel = 0
+
+            WHERE id = :id
+        ";
+
+    } else {
+
+        $sqlUpdate = "
+            UPDATE commandes
+
+            SET statut = :statut
+
+            WHERE id = :id
+        ";
+    }
+
+
+    $stmtUpdate = $pdo->prepare(
+        $sqlUpdate
+    );
 
     $stmtUpdate->execute([
         ':statut' => $statut,
@@ -106,13 +149,14 @@ try {
     ]);
 
 
-    // 8. Enregistrer le changement dans l'historique
+    // 8. Ajouter le changement à l'historique
     $sqlHistorique = "
         INSERT INTO historique_statuts (
             commande_id,
             statut,
             modifie_par
         )
+
         VALUES (
             :commande_id,
             :statut,
@@ -120,7 +164,9 @@ try {
         )
     ";
 
-    $stmtHistorique = $pdo->prepare($sqlHistorique);
+    $stmtHistorique = $pdo->prepare(
+        $sqlHistorique
+    );
 
     $stmtHistorique->execute([
         ':commande_id' => $id,
@@ -129,23 +175,28 @@ try {
     ]);
 
 
-    // 9. Valider les deux opérations
+    // 9. Tout s'est bien passé
     $pdo->commit();
 
 
-    // 10. Retour à la liste des commandes
     header("Location: admin-commandes.php");
     exit;
 
 
 } catch (PDOException $e) {
 
-    // Annuler les modifications si une opération échoue
     if ($pdo->inTransaction()) {
         $pdo->rollBack();
     }
 
-    error_log($e->getMessage());
 
-    exit("Une erreur est survenue lors du changement de statut.");
+    error_log(
+        "Erreur changement statut commande : "
+        . $e->getMessage()
+    );
+
+
+    exit(
+        "Une erreur est survenue lors du changement de statut."
+    );
 }

@@ -118,9 +118,7 @@ $commandes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         body {
             font-family: Arial, sans-serif;
-
             background-color: #f4f4f4;
-
             padding: 20px;
         }
 
@@ -128,32 +126,22 @@ $commandes = $stmt->fetchAll(PDO::FETCH_ASSOC);
             color: #333;
         }
 
-
-        /* Navigation */
-
         .navbar {
-
             background-color: #111;
             color: white;
 
             padding: 15px 20px;
-
             border-radius: 10px;
-
             margin-bottom: 30px;
 
             display: flex;
-
             justify-content: space-between;
             align-items: center;
         }
 
         .navbar a {
-
             color: white;
-
             text-decoration: none;
-
             margin-left: 10px;
         }
 
@@ -161,15 +149,10 @@ $commandes = $stmt->fetchAll(PDO::FETCH_ASSOC);
             color: orange;
         }
 
-
-        /* Filtres */
-
         .filtres {
-
             background: white;
 
             padding: 20px;
-
             margin-bottom: 25px;
 
             border-radius: 10px;
@@ -179,9 +162,7 @@ $commandes = $stmt->fetchAll(PDO::FETCH_ASSOC);
         }
 
         .filtres form {
-
             display: flex;
-
             flex-wrap: wrap;
 
             gap: 10px;
@@ -190,11 +171,8 @@ $commandes = $stmt->fetchAll(PDO::FETCH_ASSOC);
         }
 
         .champ {
-
             display: flex;
-
             flex-direction: column;
-
             gap: 5px;
         }
 
@@ -204,24 +182,19 @@ $commandes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         .champ input,
         .champ select {
-
             padding: 10px;
 
             border: 1px solid #ccc;
-
             border-radius: 5px;
         }
 
         .filtres button {
-
             padding: 10px 15px;
 
             border: none;
-
             border-radius: 5px;
 
             background: black;
-
             color: white;
 
             cursor: pointer;
@@ -232,7 +205,6 @@ $commandes = $stmt->fetchAll(PDO::FETCH_ASSOC);
         }
 
         .reset {
-
             display: inline-block;
 
             padding: 10px 15px;
@@ -240,21 +212,15 @@ $commandes = $stmt->fetchAll(PDO::FETCH_ASSOC);
             text-decoration: none;
 
             background: #ddd;
-
             color: black;
 
             border-radius: 5px;
         }
 
-
-        /* Commandes */
-
         .commande {
-
             background: white;
 
             padding: 20px;
-
             margin-bottom: 20px;
 
             border-radius: 10px;
@@ -266,12 +232,10 @@ $commandes = $stmt->fetchAll(PDO::FETCH_ASSOC);
         }
 
         .commande:hover {
-
             transform: translateY(-3px);
         }
 
         .statut {
-
             font-weight: bold;
 
             padding: 5px 10px;
@@ -283,16 +247,11 @@ $commandes = $stmt->fetchAll(PDO::FETCH_ASSOC);
             background: #eeeeee;
         }
 
-
-        /* Actions */
-
         .actions {
-
             margin-top: 15px;
         }
 
         .actions a {
-
             display: inline-block;
 
             margin-top: 8px;
@@ -313,18 +272,31 @@ $commandes = $stmt->fetchAll(PDO::FETCH_ASSOC);
         }
 
         .actions .annuler {
-
             background: #b00020;
         }
 
         .actions .annuler:hover {
-
             background: #800018;
         }
 
+        .actions .retour-materiel {
+            background: #176b3a;
+        }
+
+        .actions .retour-materiel:hover {
+            background: #10502b;
+        }
+
+        .info-annulation {
+            background: #fff0f0;
+
+            padding: 12px;
+            margin-top: 15px;
+
+            border-radius: 8px;
+        }
 
         footer {
-
             text-align: center;
 
             margin-top: 50px;
@@ -332,30 +304,22 @@ $commandes = $stmt->fetchAll(PDO::FETCH_ASSOC);
             color: gray;
         }
 
-
         @media (max-width: 768px) {
 
             .navbar {
-
                 flex-direction: column;
-
                 gap: 10px;
-
                 text-align: center;
             }
 
             .filtres form {
-
                 flex-direction: column;
-
                 align-items: stretch;
             }
 
             .champ input,
             .champ select {
-
                 width: 100%;
-
                 box-sizing: border-box;
             }
 
@@ -364,9 +328,7 @@ $commandes = $stmt->fetchAll(PDO::FETCH_ASSOC);
             }
 
             .actions a {
-
                 display: block;
-
                 margin-top: 10px;
             }
         }
@@ -379,419 +341,471 @@ $commandes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <body>
 
 
-    <!-- Navigation -->
+<nav class="navbar">
 
-    <nav class="navbar">
+    <div>
 
-        <div>
+        <h2>
+            🍽️ Vite & Gourmand
+        </h2>
 
-            <h2>
-                🍽️ Vite & Gourmand
-            </h2>
+        <p>
+            Connecté :
 
-            <p>
+            <?php
+            echo htmlspecialchars(
+                $_SESSION['email'] ?? ''
+            );
+            ?>
+        </p>
 
-                Connecté :
-
-                <?php
-                echo htmlspecialchars(
-                    $_SESSION['email'] ?? ''
-                );
-                ?>
-
-            </p>
-
-        </div>
+    </div>
 
 
-        <div>
+    <div>
 
-            <a href="index.php">
-                Accueil
-            </a>
+        <a href="index.php">
+            Accueil
+        </a>
 
-            <a href="admin-commandes.php">
-                Gestion commandes
-            </a>
+        <a href="admin-commandes.php">
+            Gestion commandes
+        </a>
 
-            <a href="admin-avis.php">
-                Gestion avis
-            </a>
+        <a href="admin-avis.php">
+            Gestion avis
+        </a>
 
-        </div>
+    </div>
 
-    </nav>
-
-
-    <main>
+</nav>
 
 
-        <h1>
-            Gestion des commandes
-        </h1>
+<main>
+
+    <h1>
+        Gestion des commandes
+    </h1>
 
 
-        <!-- Filtres -->
+    <!-- Filtres -->
 
-        <section class="filtres">
+    <section class="filtres">
 
-            <h2>
-                Rechercher une commande
-            </h2>
-
-
-            <form
-                method="GET"
-                action="admin-commandes.php"
-            >
+        <h2>
+            Rechercher une commande
+        </h2>
 
 
-                <div class="champ">
+        <form
+            method="GET"
+            action="admin-commandes.php"
+        >
 
-                    <label for="client">
-                        Client
-                    </label>
+            <div class="champ">
 
-                    <input
-                        type="text"
-                        id="client"
-                        name="client"
-                        placeholder="Nom, prénom ou email"
-                        value="<?php
-                        echo htmlspecialchars(
-                            $client
-                        );
-                        ?>"
-                    >
+                <label for="client">
+                    Client
+                </label>
 
-                </div>
-
-
-                <div class="champ">
-
-                    <label for="statut">
-                        Statut
-                    </label>
-
-                    <select
-                        id="statut"
-                        name="statut"
-                    >
-
-                        <option value="">
-                            Tous les statuts
-                        </option>
-
-
-                        <option
-                            value="en attente"
-                            <?php
-                            if ($statut === 'en attente') {
-                                echo 'selected';
-                            }
-                            ?>
-                        >
-                            En attente
-                        </option>
-
-
-                        <option
-                            value="accepté"
-                            <?php
-                            if ($statut === 'accepté') {
-                                echo 'selected';
-                            }
-                            ?>
-                        >
-                            Accepté
-                        </option>
-
-
-                        <option
-                            value="en préparation"
-                            <?php
-                            if ($statut === 'en préparation') {
-                                echo 'selected';
-                            }
-                            ?>
-                        >
-                            En préparation
-                        </option>
-
-
-                        <option
-                            value="en cours de livraison"
-                            <?php
-                            if (
-                                $statut ===
-                                'en cours de livraison'
-                            ) {
-                                echo 'selected';
-                            }
-                            ?>
-                        >
-                            En cours de livraison
-                        </option>
-
-
-                        <option
-                            value="livré"
-                            <?php
-                            if ($statut === 'livré') {
-                                echo 'selected';
-                            }
-                            ?>
-                        >
-                            Livré
-                        </option>
-
-
-                        <option
-                            value="en attente du retour de matériel"
-                            <?php
-                            if (
-                                $statut ===
-                                'en attente du retour de matériel'
-                            ) {
-                                echo 'selected';
-                            }
-                            ?>
-                        >
-                            En attente du retour de matériel
-                        </option>
-
-
-                        <option
-                            value="terminée"
-                            <?php
-                            if ($statut === 'terminée') {
-                                echo 'selected';
-                            }
-                            ?>
-                        >
-                            Terminée
-                        </option>
-
-
-                        <option
-                            value="annulée"
-                            <?php
-                            if ($statut === 'annulée') {
-                                echo 'selected';
-                            }
-                            ?>
-                        >
-                            Annulée
-                        </option>
-
-                    </select>
-
-                </div>
-
-
-                <button type="submit">
-                    Filtrer
-                </button>
-
-
-                <a
-                    class="reset"
-                    href="admin-commandes.php"
+                <input
+                    type="text"
+                    id="client"
+                    name="client"
+                    placeholder="Nom, prénom ou email"
+                    value="<?php
+                    echo htmlspecialchars(
+                        $client
+                    );
+                    ?>"
                 >
-                    Réinitialiser
-                </a>
 
-            </form>
-
-        </section>
+            </div>
 
 
-        <!-- Résultats -->
+            <div class="champ">
 
-        <?php if (empty($commandes)): ?>
+                <label for="statut">
+                    Statut
+                </label>
 
-            <p>
-                Aucune commande ne correspond à votre recherche.
-            </p>
+                <select
+                    id="statut"
+                    name="statut"
+                >
 
-
-        <?php else: ?>
-
-
-            <p>
-
-                <?php
-                echo count($commandes);
-                ?>
-
-                commande(s) trouvée(s).
-
-            </p>
+                    <option value="">
+                        Tous les statuts
+                    </option>
 
 
-            <?php foreach ($commandes as $commande): ?>
-
-
-                <div class="commande">
-
-
-                    <h2>
-
-                        Commande n°
-
+                    <option
+                        value="en attente"
                         <?php
-                        echo (int) $commande['id'];
+                        if ($statut === 'en attente') {
+                            echo 'selected';
+                        }
                         ?>
+                    >
+                        En attente
+                    </option>
 
-                    </h2>
 
-
-                    <h3>
-
-                        Menu :
-
+                    <option
+                        value="accepté"
                         <?php
-                        echo htmlspecialchars(
-                            $commande['titre']
-                        );
+                        if ($statut === 'accepté') {
+                            echo 'selected';
+                        }
                         ?>
+                    >
+                        Accepté
+                    </option>
 
-                    </h3>
 
-
-                    <p>
-
-                        Client :
-
+                    <option
+                        value="en préparation"
                         <?php
-                        echo htmlspecialchars(
-                            $commande['prenom']
-                            . ' '
-                            . $commande['nom']
-                        );
+                        if ($statut === 'en préparation') {
+                            echo 'selected';
+                        }
                         ?>
+                    >
+                        En préparation
+                    </option>
 
-                    </p>
 
-
-                    <p>
-
-                        Email :
-
+                    <option
+                        value="en cours de livraison"
                         <?php
-                        echo htmlspecialchars(
-                            $commande['email']
-                        );
+                        if (
+                            $statut
+                            === 'en cours de livraison'
+                        ) {
+                            echo 'selected';
+                        }
                         ?>
+                    >
+                        En cours de livraison
+                    </option>
 
-                    </p>
 
-
-                    <p>
-
-                        Nombre de personnes :
-
+                    <option
+                        value="livré"
                         <?php
-                        echo (int)
-                            $commande['nb_personnes'];
+                        if ($statut === 'livré') {
+                            echo 'selected';
+                        }
                         ?>
+                    >
+                        Livré
+                    </option>
 
-                    </p>
 
-
-                    <p>
-
-                        Date :
-
+                    <option
+                        value="en attente du retour de matériel"
                         <?php
-                        echo !empty(
+                        if (
+                            $statut
+                            === 'en attente du retour de matériel'
+                        ) {
+                            echo 'selected';
+                        }
+                        ?>
+                    >
+                        En attente du retour de matériel
+                    </option>
+
+
+                    <option
+                        value="terminée"
+                        <?php
+                        if ($statut === 'terminée') {
+                            echo 'selected';
+                        }
+                        ?>
+                    >
+                        Terminée
+                    </option>
+
+
+                    <option
+                        value="annulée"
+                        <?php
+                        if ($statut === 'annulée') {
+                            echo 'selected';
+                        }
+                        ?>
+                    >
+                        Annulée
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <button type="submit">
+                Filtrer
+            </button>
+
+
+            <a
+                class="reset"
+                href="admin-commandes.php"
+            >
+                Réinitialiser
+            </a>
+
+        </form>
+
+    </section>
+
+
+    <!-- Commandes -->
+
+    <?php if (empty($commandes)): ?>
+
+        <p>
+            Aucune commande ne correspond à votre recherche.
+        </p>
+
+
+    <?php else: ?>
+
+
+        <p>
+
+            <?php
+            echo count($commandes);
+            ?>
+
+            commande(s) trouvée(s).
+
+        </p>
+
+
+        <?php foreach ($commandes as $commande): ?>
+
+
+            <div class="commande">
+
+
+                <h2>
+
+                    Commande n°
+
+                    <?php
+                    echo (int) $commande['id'];
+                    ?>
+
+                </h2>
+
+
+                <h3>
+
+                    Menu :
+
+                    <?php
+                    echo htmlspecialchars(
+                        $commande['titre']
+                    );
+                    ?>
+
+                </h3>
+
+
+                <p>
+
+                    Client :
+
+                    <?php
+                    echo htmlspecialchars(
+                        $commande['prenom']
+                        . ' '
+                        . $commande['nom']
+                    );
+                    ?>
+
+                </p>
+
+
+                <p>
+
+                    Email :
+
+                    <?php
+                    echo htmlspecialchars(
+                        $commande['email']
+                    );
+                    ?>
+
+                </p>
+
+
+                <p>
+
+                    Nombre de personnes :
+
+                    <?php
+                    echo (int)
+                        $commande['nb_personnes'];
+                    ?>
+
+                </p>
+
+
+                <p>
+
+                    Date :
+
+                    <?php
+                    echo !empty(
+                        $commande['date_prestation']
+                    )
+                        ? htmlspecialchars(
                             $commande['date_prestation']
                         )
-                            ? htmlspecialchars(
-                                $commande['date_prestation']
-                            )
-                            : 'Non renseignée';
-                        ?>
+                        : 'Non renseignée';
+                    ?>
 
-                    </p>
+                </p>
 
 
-                    <p>
+                <p>
 
-                        Heure :
+                    Heure :
 
-                        <?php
-                        echo !empty(
+                    <?php
+                    echo !empty(
+                        $commande['heure_prestation']
+                    )
+                        ? htmlspecialchars(
                             $commande['heure_prestation']
                         )
-                            ? htmlspecialchars(
-                                $commande['heure_prestation']
-                            )
-                            : 'Non renseignée';
-                        ?>
+                        : 'Non renseignée';
+                    ?>
 
-                    </p>
+                </p>
 
 
-                    <p>
+                <p>
 
-                        Lieu :
+                    Lieu :
 
-                        <?php
-                        echo !empty(
+                    <?php
+                    echo !empty(
+                        $commande['lieu_prestation']
+                    )
+                        ? htmlspecialchars(
                             $commande['lieu_prestation']
                         )
-                            ? htmlspecialchars(
-                                $commande['lieu_prestation']
-                            )
-                            : 'Non renseigné';
-                        ?>
+                        : 'Non renseigné';
+                    ?>
 
-                    </p>
+                </p>
 
 
-                    <p>
+                <p>
 
-                        Adresse :
+                    Adresse :
 
-                        <?php
-                        echo !empty(
+                    <?php
+                    echo !empty(
+                        $commande['adresse_prestation']
+                    )
+                        ? htmlspecialchars(
                             $commande['adresse_prestation']
                         )
-                            ? htmlspecialchars(
-                                $commande['adresse_prestation']
-                            )
-                            : 'Non renseignée';
-                        ?>
+                        : 'Non renseignée';
+                    ?>
 
-                    </p>
+                </p>
 
+
+                <p>
+
+                    Prix total :
+
+                    <?php
+                    echo number_format(
+                        $commande['prix_total'],
+                        2,
+                        ',',
+                        ' '
+                    );
+                    ?>
+
+                    €
+
+                </p>
+
+
+                <p class="statut">
+
+                    Statut :
+
+                    <?php
+                    echo htmlspecialchars(
+                        $commande['statut']
+                    );
+                    ?>
+
+                </p>
+
+
+                <?php
+                if (
+                    !empty(
+                        $commande['date_debut_attente_retour']
+                    )
+                ):
+                ?>
 
                     <p>
 
-                        Prix total :
-
-                        <?php
-                        echo number_format(
-                            $commande['prix_total'],
-                            2,
-                            ',',
-                            ' '
-                        );
-                        ?>
-
-                        €
-
-                    </p>
-
-
-                    <p class="statut">
-
-                        Statut :
+                        Début attente retour matériel :
 
                         <?php
                         echo htmlspecialchars(
-                            $commande['statut']
+                            $commande[
+                                'date_debut_attente_retour'
+                            ]
+                        );
+                        ?>
+
+                    </p>
+
+                <?php endif; ?>
+
+
+                <?php
+                if (
+                    (int) $commande['materiel_retourne']
+                    === 1
+                ):
+                ?>
+
+                    <p>
+
+                        <strong>
+                            Matériel retourné :
+                        </strong>
+
+                        Oui
+
+                    </p>
+
+
+                    <p>
+
+                        Date du retour :
+
+                        <?php
+                        echo htmlspecialchars(
+                            $commande[
+                                'date_retour_materiel'
+                            ] ?? ''
                         );
                         ?>
 
@@ -800,106 +814,165 @@ $commandes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                     <?php
                     if (
-                        $commande['statut'] !== 'terminée'
-                        && $commande['statut'] !== 'annulée'
+                        (float)
+                        $commande[
+                            'frais_retard_materiel'
+                        ] > 0
                     ):
                     ?>
 
+                        <p>
 
-                        <div class="actions">
+                            <strong>
+                                Frais de retard matériel :
+                            </strong>
 
+                            <?php
+                            echo number_format(
+                                $commande[
+                                    'frais_retard_materiel'
+                                ],
+                                2,
+                                ',',
+                                ' '
+                            );
+                            ?>
 
-                            <a
-                                href="changer-statut.php?id=<?php
-                                echo (int) $commande['id'];
-                                ?>&statut=<?php
-                                echo urlencode('accepté');
-                                ?>"
-                            >
-                                Accepter
-                            </a>
+                            €
 
-
-                            <a
-                                href="changer-statut.php?id=<?php
-                                echo (int) $commande['id'];
-                                ?>&statut=<?php
-                                echo urlencode(
-                                    'en préparation'
-                                );
-                                ?>"
-                            >
-                                Préparer
-                            </a>
-
-
-                            <a
-                                href="changer-statut.php?id=<?php
-                                echo (int) $commande['id'];
-                                ?>&statut=<?php
-                                echo urlencode(
-                                    'en cours de livraison'
-                                );
-                                ?>"
-                            >
-                                En cours de livraison
-                            </a>
-
-
-                            <a
-                                href="changer-statut.php?id=<?php
-                                echo (int) $commande['id'];
-                                ?>&statut=<?php
-                                echo urlencode('livré');
-                                ?>"
-                            >
-                                Livré
-                            </a>
-
-
-                            <a
-                                href="changer-statut.php?id=<?php
-                                echo (int) $commande['id'];
-                                ?>&statut=<?php
-                                echo urlencode(
-                                    'en attente du retour de matériel'
-                                );
-                                ?>"
-                            >
-                                Attente retour matériel
-                            </a>
-
-
-                            <a
-                                href="changer-statut.php?id=<?php
-                                echo (int) $commande['id'];
-                                ?>&statut=<?php
-                                echo urlencode('terminée');
-                                ?>"
-                            >
-                                Terminer
-                            </a>
-
-
-                            <a
-                                class="annuler"
-                                href="annuler-commande-employe.php?id=<?php
-                                echo (int) $commande['id'];
-                                ?>"
-                            >
-                                Annuler la commande
-                            </a>
-
-
-                        </div>
-
+                        </p>
 
                     <?php endif; ?>
 
+                <?php endif; ?>
 
-                    <?php
-                    if ($commande['statut'] === 'annulée'):
-                    ?>
+
+                <!-- Actions -->
+
+                <?php
+                if (
+                    $commande['statut'] !== 'terminée'
+                    && $commande['statut'] !== 'annulée'
+                ):
+                ?>
+
+                    <div class="actions">
+
+
+                        <a
+                            href="changer-statut.php?id=<?php
+                            echo (int) $commande['id'];
+                            ?>&statut=<?php
+                            echo urlencode('accepté');
+                            ?>"
+                        >
+                            Accepter
+                        </a>
+
+
+                        <a
+                            href="changer-statut.php?id=<?php
+                            echo (int) $commande['id'];
+                            ?>&statut=<?php
+                            echo urlencode(
+                                'en préparation'
+                            );
+                            ?>"
+                        >
+                            Préparer
+                        </a>
+
+
+                        <a
+                            href="changer-statut.php?id=<?php
+                            echo (int) $commande['id'];
+                            ?>&statut=<?php
+                            echo urlencode(
+                                'en cours de livraison'
+                            );
+                            ?>"
+                        >
+                            En cours de livraison
+                        </a>
+
+
+                        <a
+                            href="changer-statut.php?id=<?php
+                            echo (int) $commande['id'];
+                            ?>&statut=<?php
+                            echo urlencode('livré');
+                            ?>"
+                        >
+                            Livré
+                        </a>
+
+
+                        <a
+                            href="changer-statut.php?id=<?php
+                            echo (int) $commande['id'];
+                            ?>&statut=<?php
+                            echo urlencode(
+                                'en attente du retour de matériel'
+                            );
+                            ?>"
+                        >
+                            Attente retour matériel
+                        </a>
+
+
+                        <?php
+                        if (
+                            $commande['statut']
+                            ===
+                            'en attente du retour de matériel'
+                        ):
+                        ?>
+
+                            <a
+                                class="retour-materiel"
+                                href="retour-materiel.php?id=<?php
+                                echo (int) $commande['id'];
+                                ?>"
+                            >
+                                Matériel retourné
+                            </a>
+
+                        <?php endif; ?>
+
+
+                        <a
+                            href="changer-statut.php?id=<?php
+                            echo (int) $commande['id'];
+                            ?>&statut=<?php
+                            echo urlencode('terminée');
+                            ?>"
+                        >
+                            Terminer
+                        </a>
+
+
+                        <a
+                            class="annuler"
+                            href="annuler-commande-employe.php?id=<?php
+                            echo (int) $commande['id'];
+                            ?>"
+                        >
+                            Annuler la commande
+                        </a>
+
+
+                    </div>
+
+                <?php endif; ?>
+
+
+                <!-- Informations d'annulation -->
+
+                <?php
+                if ($commande['statut'] === 'annulée'):
+                ?>
+
+                    <div class="info-annulation">
 
                         <p>
 
@@ -908,6 +981,7 @@ $commandes = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             </strong>
 
                         </p>
+
 
                         <?php
                         if (
@@ -963,29 +1037,57 @@ $commandes = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         <?php endif; ?>
 
 
-                    <?php endif; ?>
+                        <?php
+                        if (
+                            !empty(
+                                $commande[
+                                    'date_annulation'
+                                ]
+                            )
+                        ):
+                        ?>
+
+                            <p>
+
+                                Date d'annulation :
+
+                                <?php
+                                echo htmlspecialchars(
+                                    $commande[
+                                        'date_annulation'
+                                    ]
+                                );
+                                ?>
+
+                            </p>
+
+                        <?php endif; ?>
+
+                    </div>
+
+                <?php endif; ?>
 
 
-                </div>
+            </div>
 
 
-            <?php endforeach; ?>
+        <?php endforeach; ?>
 
 
-        <?php endif; ?>
+    <?php endif; ?>
 
 
-    </main>
+</main>
 
 
-    <footer>
+<footer>
 
-        <p>
-            © 2026 Vite & Gourmand
-            - Tous droits réservés
-        </p>
+    <p>
+        © 2026 Vite & Gourmand
+        - Tous droits réservés
+    </p>
 
-    </footer>
+</footer>
 
 
 </body>
