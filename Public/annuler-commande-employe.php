@@ -70,7 +70,7 @@ if ($commande['statut'] === 'annulée') {
 }
 
 
-// 6. Ne pas annuler une commande déjà terminée
+// 6. Ne pas annuler une commande terminée
 if ($commande['statut'] === 'terminée') {
     exit("Une commande terminée ne peut plus être annulée.");
 }
@@ -91,7 +91,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     );
 
 
-    // Modes de contact autorisés
     $modesAutorises = [
         'Téléphone',
         'Email',
@@ -106,12 +105,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             true
         )
     ) {
-        $erreur = "Veuillez sélectionner un mode de contact valide.";
+        $erreur =
+            "Veuillez sélectionner un mode de contact valide.";
     }
 
 
     if ($motif === '') {
-        $erreur = "Le motif de l'annulation est obligatoire.";
+        $erreur =
+            "Le motif de l'annulation est obligatoire.";
     }
 
 
@@ -273,7 +274,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         textarea {
             min-height: 120px;
-
             resize: vertical;
         }
 
