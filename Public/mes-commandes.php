@@ -268,7 +268,13 @@ foreach ($historiques as $historique) {
             <a href="mes-commandes.php">
                 Mes commandes
             </a>
+               <a href="mon-profil.php">
+    Mon profil
+</a>
 
+<a href="logout.php">
+    Déconnexion
+</a>
         </div>
 
     </nav>
