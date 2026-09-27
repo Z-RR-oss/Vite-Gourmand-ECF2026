@@ -4,41 +4,70 @@ session_start();
 require_once '../Config/database.php';
 
 
-// 1. Vérifier la connexion
-if (!isset($_SESSION['user_id'], $_SESSION['role'])) {
+// --------------------------------------------------
+// 1. VÉRIFIER LA CONNEXION
+// --------------------------------------------------
+
+if (
+    !isset(
+        $_SESSION['user_id'],
+        $_SESSION['role']
+    )
+) {
+
     header("Location: login.php");
     exit;
 }
 
 
-// 2. Autoriser uniquement admin et employé
+// --------------------------------------------------
+// 2. AUTORISATION
+// --------------------------------------------------
+
 if (
     $_SESSION['role'] !== 'admin'
     && $_SESSION['role'] !== 'employe'
 ) {
+
     exit("Accès refusé.");
 }
 
 
-// 3. Vérifier l'identifiant de la commande
-$id = $_GET['id'] ?? null;
+// --------------------------------------------------
+// 3. IDENTIFIANT
+// --------------------------------------------------
+
+$id =
+    $_GET['id']
+    ?? null;
+
 
 if (!$id || !is_numeric($id)) {
-    exit("ID de commande invalide.");
+
+    exit(
+        "ID de commande invalide."
+    );
 }
+
 
 $id = (int) $id;
 
 
-// 4. Récupérer la commande
+// --------------------------------------------------
+// 4. RÉCUPÉRER LA COMMANDE POUR L'AFFICHAGE
+// --------------------------------------------------
+
 $sql = "
     SELECT
         commandes.*,
+
         menus.titre,
+
         users.nom,
         users.prenom,
         users.email,
         users.gsm
+
     FROM commandes
 
     INNER JOIN menus
@@ -50,45 +79,82 @@ $sql = "
     WHERE commandes.id = :id
 ";
 
-$stmt = $pdo->prepare($sql);
+
+$stmt =
+    $pdo->prepare(
+        $sql
+    );
+
 
 $stmt->execute([
     ':id' => $id
 ]);
 
-$commande = $stmt->fetch(PDO::FETCH_ASSOC);
+
+$commande =
+    $stmt->fetch(
+        PDO::FETCH_ASSOC
+    );
 
 
 if (!$commande) {
-    exit("Commande introuvable.");
+
+    exit(
+        "Commande introuvable."
+    );
 }
 
 
-// 5. Empêcher une nouvelle annulation
-if ($commande['statut'] === 'annulée') {
-    exit("Cette commande est déjà annulée.");
+// Empêcher une nouvelle annulation
+if (
+    $commande['statut']
+    === 'annulée'
+) {
+
+    exit(
+        "Cette commande est déjà annulée."
+    );
 }
 
 
-// 6. Ne pas annuler une commande terminée
-if ($commande['statut'] === 'terminée') {
-    exit("Une commande terminée ne peut plus être annulée.");
+// Une commande terminée
+// ne peut plus être annulée
+if (
+    $commande['statut']
+    === 'terminée'
+) {
+
+    exit(
+        "Une commande terminée ne peut plus être annulée."
+    );
 }
 
 
 $erreur = '';
 
 
-// 7. Traitement du formulaire
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+// --------------------------------------------------
+// 5. TRAITEMENT DU FORMULAIRE
+// --------------------------------------------------
 
-    $modeContact = trim(
-        $_POST['mode_contact'] ?? ''
-    );
+if (
+    $_SERVER['REQUEST_METHOD']
+    === 'POST'
+) {
 
-    $motif = trim(
-        $_POST['motif'] ?? ''
-    );
+
+    $modeContact =
+        trim(
+            $_POST['mode_contact']
+            ?? ''
+        );
+
+
+    $motif =
+        trim(
+            $_POST['motif']
+            ?? ''
+        );
 
 
     $modesAutorises = [
@@ -105,49 +171,195 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             true
         )
     ) {
+
         $erreur =
             "Veuillez sélectionner un mode de contact valide.";
     }
 
 
     if ($motif === '') {
+
         $erreur =
             "Le motif de l'annulation est obligatoire.";
     }
 
 
-    // 8. Annuler la commande
+    // --------------------------------------------------
+    // 6. ANNULATION
+    // --------------------------------------------------
+
     if ($erreur === '') {
+
 
         try {
 
             $pdo->beginTransaction();
 
 
+            /*
+             * Relire et verrouiller la commande.
+             * Cela empêche deux annulations
+             * concurrentes de restaurer
+             * deux fois le stock.
+             */
+            $sqlVerif = "
+                SELECT
+                    id,
+                    menu_id,
+                    statut
+
+                FROM commandes
+
+                WHERE id = :id
+
+                FOR UPDATE
+            ";
+
+
+            $stmtVerif =
+                $pdo->prepare(
+                    $sqlVerif
+                );
+
+
+            $stmtVerif->execute([
+                ':id' => $id
+            ]);
+
+
+            $commandeVerif =
+                $stmtVerif->fetch(
+                    PDO::FETCH_ASSOC
+                );
+
+
+            if (!$commandeVerif) {
+
+                throw new Exception(
+                    "Commande introuvable."
+                );
+            }
+
+
+            if (
+                $commandeVerif['statut']
+                === 'annulée'
+            ) {
+
+                throw new Exception(
+                    "Cette commande est déjà annulée."
+                );
+            }
+
+
+            if (
+                $commandeVerif['statut']
+                === 'terminée'
+            ) {
+
+                throw new Exception(
+                    "Une commande terminée ne peut plus être annulée."
+                );
+            }
+
+
+            // --------------------------------------------------
+            // 7. PASSER LA COMMANDE À ANNULÉE
+            // --------------------------------------------------
+
             $sqlUpdate = "
                 UPDATE commandes
 
                 SET
                     statut = 'annulée',
-                    mode_contact_annulation = :mode_contact,
-                    motif_annulation = :motif,
-                    date_annulation = NOW()
+
+                    mode_contact_annulation =
+                        :mode_contact,
+
+                    motif_annulation =
+                        :motif,
+
+                    date_annulation =
+                        NOW()
 
                 WHERE id = :id
+
+                AND statut <> 'annulée'
+                AND statut <> 'terminée'
             ";
 
-            $stmtUpdate = $pdo->prepare(
-                $sqlUpdate
-            );
+
+            $stmtUpdate =
+                $pdo->prepare(
+                    $sqlUpdate
+                );
+
 
             $stmtUpdate->execute([
-                ':mode_contact' => $modeContact,
-                ':motif' => $motif,
-                ':id' => $id
+
+                ':mode_contact' =>
+                    $modeContact,
+
+                ':motif' =>
+                    $motif,
+
+                ':id' =>
+                    $id
             ]);
 
 
-            // 9. Ajouter l'annulation à l'historique
+            if (
+                $stmtUpdate->rowCount()
+                !== 1
+            ) {
+
+                throw new Exception(
+                    "La commande ne peut plus être annulée."
+                );
+            }
+
+
+            // --------------------------------------------------
+            // 8. RESTAURER LE STOCK
+            // --------------------------------------------------
+
+            $sqlStock = "
+                UPDATE menus
+
+                SET stock_disponible =
+                    stock_disponible + 1
+
+                WHERE id = :menu_id
+            ";
+
+
+            $stmtStock =
+                $pdo->prepare(
+                    $sqlStock
+                );
+
+
+            $stmtStock->execute([
+                ':menu_id' =>
+                    $commandeVerif['menu_id']
+            ]);
+
+
+            if (
+                $stmtStock->rowCount()
+                !== 1
+            ) {
+
+                throw new Exception(
+                    "Impossible de restaurer le stock du menu."
+                );
+            }
+
+
+            // --------------------------------------------------
+            // 9. HISTORIQUE
+            // --------------------------------------------------
+
             $sqlHistorique = "
                 INSERT INTO historique_statuts (
                     commande_id,
@@ -162,13 +374,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 )
             ";
 
-            $stmtHistorique = $pdo->prepare(
-                $sqlHistorique
-            );
+
+            $stmtHistorique =
+                $pdo->prepare(
+                    $sqlHistorique
+                );
+
 
             $stmtHistorique->execute([
-                ':commande_id' => $id,
-                ':modifie_par' => $_SESSION['user_id']
+
+                ':commande_id' =>
+                    $id,
+
+                ':modifie_par' =>
+                    $_SESSION['user_id']
             ]);
 
 
@@ -182,19 +401,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             exit;
 
 
-        } catch (PDOException $e) {
+        } catch (Throwable $e) {
 
-            if ($pdo->inTransaction()) {
+
+            if (
+                $pdo->inTransaction()
+            ) {
+
                 $pdo->rollBack();
             }
+
 
             error_log(
                 "Erreur annulation employé : "
                 . $e->getMessage()
             );
 
+
             $erreur =
-                "Une erreur est survenue lors de l'annulation.";
+                $e->getMessage();
         }
     }
 }
@@ -218,6 +443,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         Annuler une commande - Vite & Gourmand
     </title>
 
+
     <style>
 
         body {
@@ -225,6 +451,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             background-color: #f4f4f4;
             padding: 20px;
         }
+
 
         main {
             max-width: 650px;
@@ -237,8 +464,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             border-radius: 10px;
 
             box-shadow:
-                0 2px 8px rgba(0, 0, 0, 0.1);
+                0 2px 8px
+                rgba(0, 0, 0, 0.1);
         }
+
 
         .commande-info {
             background: #f5f5f5;
@@ -250,6 +479,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             margin-bottom: 20px;
         }
 
+
         label {
             display: block;
 
@@ -258,6 +488,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             font-weight: bold;
         }
+
 
         select,
         textarea {
@@ -272,10 +503,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             border-radius: 5px;
         }
 
+
         textarea {
             min-height: 120px;
             resize: vertical;
         }
+
 
         button {
             margin-top: 20px;
@@ -293,9 +526,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             cursor: pointer;
         }
 
+
         button:hover {
             background-color: #800018;
         }
+
 
         .erreur {
             background: #ffdede;
@@ -308,6 +543,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             margin-bottom: 15px;
         }
+
 
         .retour {
             display: inline-block;
@@ -322,7 +558,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <body>
 
+
 <main>
+
 
     <h1>
         Annuler une commande
@@ -331,25 +569,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <div class="commande-info">
 
+
         <h2>
             Commande n°
-            <?php echo (int) $commande['id']; ?>
+            <?php
+            echo (int)
+                $commande['id'];
+            ?>
         </h2>
 
 
         <p>
-            <strong>Menu :</strong>
+
+            <strong>
+                Menu :
+            </strong>
 
             <?php
             echo htmlspecialchars(
                 $commande['titre']
             );
             ?>
+
         </p>
 
 
         <p>
-            <strong>Client :</strong>
+
+            <strong>
+                Client :
+            </strong>
 
             <?php
             echo htmlspecialchars(
@@ -358,45 +607,60 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 . $commande['nom']
             );
             ?>
+
         </p>
 
 
         <p>
-            <strong>Email :</strong>
+
+            <strong>
+                Email :
+            </strong>
 
             <?php
             echo htmlspecialchars(
                 $commande['email']
             );
             ?>
+
         </p>
 
 
         <p>
-            <strong>Téléphone :</strong>
+
+            <strong>
+                Téléphone :
+            </strong>
 
             <?php
             echo htmlspecialchars(
                 $commande['gsm']
             );
             ?>
+
         </p>
 
 
         <p>
-            <strong>Statut actuel :</strong>
+
+            <strong>
+                Statut actuel :
+            </strong>
 
             <?php
             echo htmlspecialchars(
                 $commande['statut']
             );
             ?>
+
         </p>
+
 
     </div>
 
 
     <?php if ($erreur !== ''): ?>
+
 
         <p class="erreur">
 
@@ -408,6 +672,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         </p>
 
+
     <?php endif; ?>
 
 
@@ -418,6 +683,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 
     <form method="POST">
+
 
         <label for="mode_contact">
             Mode de contact utilisé
@@ -466,6 +732,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             Confirmer l'annulation
         </button>
 
+
     </form>
 
 
@@ -476,7 +743,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         Retour aux commandes
     </a>
 
+
 </main>
+
 
 </body>
 
