@@ -4,70 +4,119 @@ session_start();
 require_once '../Config/database.php';
 
 
-// 1. Vérifier que l'utilisateur est connecté
+// --------------------------------------------------
+// 1. VÉRIFIER LA CONNEXION
+// --------------------------------------------------
+
 if (!isset($_SESSION['user_id'])) {
+
     header("Location: login.php");
     exit;
 }
 
-$user_id = (int) $_SESSION['user_id'];
+
+$user_id =
+    (int) $_SESSION['user_id'];
 
 
-// 2. Vérifier l'identifiant
-$id = $_GET['id'] ?? null;
+// --------------------------------------------------
+// 2. VÉRIFIER L'IDENTIFIANT
+// --------------------------------------------------
+
+$id =
+    $_GET['id']
+    ?? null;
+
 
 if (!$id || !is_numeric($id)) {
-    exit("ID de commande invalide.");
+
+    exit(
+        "ID de commande invalide."
+    );
 }
+
 
 $id = (int) $id;
 
 
-// 3. Vérifier que la commande appartient
-// bien à l'utilisateur connecté
-$sql = "
-    SELECT
-        id,
-        statut
-    FROM commandes
-
-    WHERE id = :id
-    AND user_id = :user_id
-";
-
-$stmt = $pdo->prepare($sql);
-
-$stmt->execute([
-    ':id' => $id,
-    ':user_id' => $user_id
-]);
-
-$commande = $stmt->fetch(PDO::FETCH_ASSOC);
-
-
-if (!$commande) {
-    exit(
-        "Commande introuvable ou accès refusé."
-    );
-}
-
-
-// 4. Seules les commandes en attente
-// peuvent être annulées
-if ($commande['statut'] !== 'en attente') {
-
-    exit(
-        "Cette commande ne peut plus être annulée car elle a déjà été prise en charge."
-    );
-}
-
-
-// 5. Annuler la commande et conserver son historique
+// --------------------------------------------------
+// 3. ANNULATION
+// --------------------------------------------------
 
 try {
 
     $pdo->beginTransaction();
 
+
+    /*
+     * On verrouille la commande pendant
+     * l'annulation pour éviter qu'elle
+     * soit annulée deux fois simultanément.
+     */
+    $sqlCommande = "
+        SELECT
+            id,
+            user_id,
+            menu_id,
+            statut
+
+        FROM commandes
+
+        WHERE id = :id
+        AND user_id = :user_id
+
+        FOR UPDATE
+    ";
+
+
+    $stmtCommande =
+        $pdo->prepare(
+            $sqlCommande
+        );
+
+
+    $stmtCommande->execute([
+        ':id' =>
+            $id,
+
+        ':user_id' =>
+            $user_id
+    ]);
+
+
+    $commande =
+        $stmtCommande->fetch(
+            PDO::FETCH_ASSOC
+        );
+
+
+    if (!$commande) {
+
+        throw new Exception(
+            "Commande introuvable ou accès refusé."
+        );
+    }
+
+
+    /*
+     * Le client ne peut annuler
+     * que tant que la commande
+     * est encore en attente.
+     */
+    if (
+        $commande['statut']
+        !== 'en attente'
+    ) {
+
+        throw new Exception(
+            "Cette commande ne peut plus être annulée car elle a déjà été prise en charge."
+        );
+    }
+
+
+    // --------------------------------------------------
+    // 4. PASSER LA COMMANDE À ANNULÉE
+    // --------------------------------------------------
 
     $sqlUpdate = "
         UPDATE commandes
@@ -79,17 +128,73 @@ try {
         AND statut = 'en attente'
     ";
 
-    $stmtUpdate = $pdo->prepare(
-        $sqlUpdate
-    );
+
+    $stmtUpdate =
+        $pdo->prepare(
+            $sqlUpdate
+        );
+
 
     $stmtUpdate->execute([
-        ':id' => $id,
-        ':user_id' => $user_id
+        ':id' =>
+            $id,
+
+        ':user_id' =>
+            $user_id
     ]);
 
 
-    // 6. Ajouter l'annulation à l'historique
+    if (
+        $stmtUpdate->rowCount()
+        !== 1
+    ) {
+
+        throw new Exception(
+            "La commande ne peut plus être annulée."
+        );
+    }
+
+
+    // --------------------------------------------------
+    // 5. RENDRE UNE DISPONIBILITÉ AU MENU
+    // --------------------------------------------------
+
+    $sqlStock = "
+        UPDATE menus
+
+        SET stock_disponible =
+            stock_disponible + 1
+
+        WHERE id = :menu_id
+    ";
+
+
+    $stmtStock =
+        $pdo->prepare(
+            $sqlStock
+        );
+
+
+    $stmtStock->execute([
+        ':menu_id' =>
+            $commande['menu_id']
+    ]);
+
+
+    if (
+        $stmtStock->rowCount()
+        !== 1
+    ) {
+
+        throw new Exception(
+            "Impossible de restaurer le stock du menu."
+        );
+    }
+
+
+    // --------------------------------------------------
+    // 6. HISTORIQUE
+    // --------------------------------------------------
 
     $sqlHistorique = "
         INSERT INTO historique_statuts (
@@ -105,37 +210,50 @@ try {
         )
     ";
 
-    $stmtHistorique = $pdo->prepare(
-        $sqlHistorique
-    );
+
+    $stmtHistorique =
+        $pdo->prepare(
+            $sqlHistorique
+        );
+
 
     $stmtHistorique->execute([
-        ':commande_id' => $id,
-        ':modifie_par' => $user_id
+        ':commande_id' =>
+            $id,
+
+        ':modifie_par' =>
+            $user_id
     ]);
 
 
     $pdo->commit();
 
 
-} catch (PDOException $e) {
+} catch (Throwable $e) {
+
 
     if ($pdo->inTransaction()) {
+
         $pdo->rollBack();
     }
+
 
     error_log(
         "Erreur annulation commande : "
         . $e->getMessage()
     );
 
+
     exit(
-        "Une erreur est survenue lors de l'annulation de la commande."
+        $e->getMessage()
     );
 }
 
 
-// 7. Retour vers l'espace utilisateur
+// --------------------------------------------------
+// 7. RETOUR ESPACE CLIENT
+// --------------------------------------------------
+
 header(
     "Location: mes-commandes.php"
 );
