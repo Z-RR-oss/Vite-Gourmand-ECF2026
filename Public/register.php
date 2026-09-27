@@ -1,5 +1,6 @@
 <?php
 require_once '../Config/database.php';
+require_once '../Config/mail.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
@@ -76,7 +77,43 @@ try {
         ':prenom' => $prenom
     ]);
 
-    echo "Utilisateur créé avec succès !";
+  // Envoyer l'email de bienvenue
+$contenuEmail = "
+    <h2>Bienvenue chez Vite & Gourmand !</h2>
+
+    <p>
+        Bonjour "
+        . htmlspecialchars($prenom)
+        . ",
+    </p>
+
+    <p>
+        Votre compte a bien été créé.
+    </p>
+
+    <p>
+        Vous pouvez désormais vous connecter
+        et commander nos menus directement
+        depuis votre espace client.
+    </p>
+
+    <p>
+        À bientôt,<br>
+        L'équipe Vite & Gourmand
+    </p>
+";
+
+$nomComplet =
+    $prenom . ' ' . $nom;
+
+envoyerEmail(
+    $email,
+    $nomComplet,
+    'Bienvenue chez Vite & Gourmand',
+    $contenuEmail
+);
+
+echo "Utilisateur créé avec succès ! Un email de bienvenue vous a été envoyé.";
 
 } catch (PDOException $e) {
 

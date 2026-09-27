@@ -1,11 +1,14 @@
 <?php
 
 session_start();
+
 require_once '../Config/database.php';
+require_once '../Config/mail.php';
 
 
 // 1. Vérifier que l'utilisateur est connecté
 if (!isset($_SESSION['user_id'], $_SESSION['role'])) {
+
     header("Location: login.php");
     exit;
 }
@@ -17,6 +20,7 @@ if (
     $_SESSION['role'] !== 'admin'
     && $_SESSION['role'] !== 'employe'
 ) {
+
     exit("Accès refusé.");
 }
 
@@ -28,6 +32,7 @@ $statut = $_GET['statut'] ?? null;
 
 // 4. Vérifier l'identifiant
 if (!$id || !is_numeric($id)) {
+
     exit("ID de commande invalide.");
 }
 
@@ -36,10 +41,14 @@ $id = (int) $id;
 
 // 5. Vérifier le statut
 if (!$statut) {
+
     exit("Statut manquant.");
 }
 
-$statut = strtolower(trim($statut));
+
+$statut = strtolower(
+    trim($statut)
+);
 
 
 $statutsAutorises = [
@@ -52,43 +61,88 @@ $statutsAutorises = [
 ];
 
 
-if (!in_array($statut, $statutsAutorises, true)) {
+if (
+    !in_array(
+        $statut,
+        $statutsAutorises,
+        true
+    )
+) {
+
     exit("Statut invalide.");
 }
 
 
-// 6. Vérifier que la commande existe
+// --------------------------------------------------
+// 6. RÉCUPÉRER LA COMMANDE + CLIENT + MENU
+// --------------------------------------------------
+
 $sqlCommande = "
     SELECT
-        id,
-        statut,
-        date_debut_attente_retour,
-        materiel_retourne
+        commandes.id,
+        commandes.statut,
+        commandes.date_debut_attente_retour,
+        commandes.materiel_retourne,
+
+        users.nom,
+        users.prenom,
+        users.email,
+
+        menus.titre AS menu_titre
+
     FROM commandes
-    WHERE id = :id
+
+    INNER JOIN users
+        ON users.id = commandes.user_id
+
+    INNER JOIN menus
+        ON menus.id = commandes.menu_id
+
+    WHERE commandes.id = :id
 ";
 
-$stmtCommande = $pdo->prepare($sqlCommande);
+
+$stmtCommande =
+    $pdo->prepare(
+        $sqlCommande
+    );
+
 
 $stmtCommande->execute([
     ':id' => $id
 ]);
 
-$commande = $stmtCommande->fetch(PDO::FETCH_ASSOC);
+
+$commande =
+    $stmtCommande->fetch(
+        PDO::FETCH_ASSOC
+    );
 
 
 if (!$commande) {
+
     exit("Commande introuvable.");
 }
 
 
-// Éviter de créer deux fois le même historique
-if ($commande['statut'] === $statut) {
+// Éviter de créer deux fois
+// le même historique
+if (
+    $commande['statut']
+    === $statut
+) {
 
-    header("Location: admin-commandes.php");
+    header(
+        "Location: admin-commandes.php"
+    );
+
     exit;
 }
 
+
+// --------------------------------------------------
+// MODIFICATION DU STATUT
+// --------------------------------------------------
 
 try {
 
@@ -96,10 +150,9 @@ try {
 
 
     /*
-     * 7. Modifier la commande
-     *
-     * Si elle passe en attente du retour de matériel,
-     * on enregistre également la date de début.
+     * Si la commande passe en attente
+     * du retour de matériel,
+     * on enregistre la date de début.
      */
     if (
         $statut ===
@@ -139,9 +192,11 @@ try {
     }
 
 
-    $stmtUpdate = $pdo->prepare(
-        $sqlUpdate
-    );
+    $stmtUpdate =
+        $pdo->prepare(
+            $sqlUpdate
+        );
+
 
     $stmtUpdate->execute([
         ':statut' => $statut,
@@ -149,7 +204,7 @@ try {
     ]);
 
 
-    // 8. Ajouter le changement à l'historique
+    // Ajouter le changement à l'historique
     $sqlHistorique = "
         INSERT INTO historique_statuts (
             commande_id,
@@ -164,28 +219,36 @@ try {
         )
     ";
 
-    $stmtHistorique = $pdo->prepare(
-        $sqlHistorique
-    );
+
+    $stmtHistorique =
+        $pdo->prepare(
+            $sqlHistorique
+        );
+
 
     $stmtHistorique->execute([
-        ':commande_id' => $id,
-        ':statut' => $statut,
-        ':modifie_par' => $_SESSION['user_id']
+
+        ':commande_id' =>
+            $id,
+
+        ':statut' =>
+            $statut,
+
+        ':modifie_par' =>
+            $_SESSION['user_id']
     ]);
 
 
-    // 9. Tout s'est bien passé
     $pdo->commit();
-
-
-    header("Location: admin-commandes.php");
-    exit;
 
 
 } catch (PDOException $e) {
 
-    if ($pdo->inTransaction()) {
+
+    if (
+        $pdo->inTransaction()
+    ) {
+
         $pdo->rollBack();
     }
 
@@ -200,3 +263,108 @@ try {
         "Une erreur est survenue lors du changement de statut."
     );
 }
+
+
+// --------------------------------------------------
+// EMAIL POUR LAISSER UN AVIS
+// --------------------------------------------------
+
+
+if ($statut === 'terminée') {
+
+
+    $baseUrl =
+        defined('APP_URL')
+        ? APP_URL
+        : 'http://vite-gourmand.local';
+
+
+    $lienAvis =
+        rtrim(
+            $baseUrl,
+            '/'
+        )
+        . '/laisser-avis.php?id='
+        . $id;
+
+
+    $prenom =
+        htmlspecialchars(
+            $commande['prenom']
+        );
+
+
+    $menuTitre =
+        htmlspecialchars(
+            $commande['menu_titre']
+        );
+
+
+    $lienAvisHtml =
+        htmlspecialchars(
+            $lienAvis,
+            ENT_QUOTES
+        );
+
+
+    $contenuEmail = "
+        <h2>Votre avis compte pour nous</h2>
+
+        <p>
+            Bonjour {$prenom},
+        </p>
+
+        <p>
+            Votre commande pour le menu
+            <strong>{$menuTitre}</strong>
+            est maintenant terminée.
+        </p>
+
+        <p>
+            Nous espérons que votre expérience
+            avec Vite & Gourmand vous a plu.
+        </p>
+
+        <p>
+            Vous pouvez maintenant laisser
+            une note et un commentaire.
+        </p>
+
+        <p>
+            <a href=\"{$lienAvisHtml}\">
+                Laisser mon avis
+            </a>
+        </p>
+
+        <p>
+            Merci pour votre confiance.
+        </p>
+
+        <p>
+            À bientôt,<br>
+            L'équipe Vite & Gourmand
+        </p>
+    ";
+
+
+    envoyerEmail(
+
+        $commande['email'],
+
+        $commande['prenom']
+            . ' '
+            . $commande['nom'],
+
+        'Donnez votre avis sur votre commande',
+
+        $contenuEmail
+    );
+}
+
+
+// Redirection finale
+header(
+    "Location: admin-commandes.php"
+);
+
+exit;

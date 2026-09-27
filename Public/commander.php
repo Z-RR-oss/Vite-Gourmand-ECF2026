@@ -2,6 +2,7 @@
 
 session_start();
 require_once '../Config/database.php';
+require_once '../Config/mail.php';
 
 
 // --------------------------------------------------
@@ -739,15 +740,101 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
 
 
-            $pdo->commit();
+           $pdo->commit();
 
 
-            header(
-                "Location: mes-commandes.php"
-            );
+// --------------------------------------------------
+// EMAIL DE CONFIRMATION DE COMMANDE
+// --------------------------------------------------
 
-            exit;
+$contenuEmail = "
+    <h2>Votre commande est confirmée</h2>
 
+    <p>
+        Bonjour "
+        . htmlspecialchars($user['prenom'])
+        . ",
+    </p>
+
+    <p>
+        Votre commande Vite & Gourmand
+        a bien été enregistrée.
+    </p>
+
+    <p>
+        <strong>Menu :</strong> "
+        . htmlspecialchars($menuConfirmation['titre'])
+        . "
+    </p>
+
+    <p>
+        <strong>Date :</strong> "
+        . htmlspecialchars($datePrestation)
+        . "
+    </p>
+
+    <p>
+        <strong>Heure :</strong> "
+        . htmlspecialchars($heurePrestation)
+        . "
+    </p>
+
+    <p>
+        <strong>Nombre de personnes :</strong> "
+        . (int) $nbPersonnes
+        . "
+    </p>
+
+    <p>
+        <strong>Lieu :</strong> "
+        . htmlspecialchars($lieuPrestation)
+        . "
+    </p>
+
+    <p>
+        <strong>Adresse :</strong> "
+        . htmlspecialchars($adressePrestation)
+        . "
+    </p>
+
+    <p>
+        <strong>Total :</strong> "
+        . number_format(
+            $prixTotal,
+            2,
+            ',',
+            ' '
+        )
+        . " €
+    </p>
+
+    <p>
+        Vous pouvez suivre votre commande
+        depuis votre espace client.
+    </p>
+
+    <p>
+        À bientôt,<br>
+        L'équipe Vite & Gourmand
+    </p>
+";
+
+
+envoyerEmail(
+    $user['email'],
+    $user['prenom']
+        . ' '
+        . $user['nom'],
+    'Confirmation de votre commande',
+    $contenuEmail
+);
+
+
+header(
+    "Location: mes-commandes.php"
+);
+
+exit;
 
         } catch (Throwable $e) {
 
