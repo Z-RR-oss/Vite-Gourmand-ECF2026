@@ -372,8 +372,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 
             <p class="oubli">
-                Mot de passe oublié ?
-            </p>
+    <a href="mot-de-passe-oublie.php">
+        Mot de passe oublié ?
+    </a>
+</p>
 
 
             <button type="submit">

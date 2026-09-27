@@ -1,1 +1,6 @@
 .DS_Store
+Config/mail.local.php
+
+# Composer
+/vendor/
+composer.phar
