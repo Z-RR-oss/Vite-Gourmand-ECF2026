@@ -1,15 +1,36 @@
 <?php
+declare(strict_types=1);
 
-$host = 'localhost';
-$dbname = 'vite_gourmand';
-$username = 'root';
-$password = '';
+require_once __DIR__ . '/bootstrap.php';
+
+$databaseConfig = is_file(__DIR__ . '/database.local.php')
+    ? require __DIR__ . '/database.local.php' : [];
+$databaseConfig = is_array($databaseConfig) ? $databaseConfig : [];
+$databaseValue = static function (string $key, string $default = '') use ($databaseConfig): string {
+    $value = getenv($key);
+    return $value !== false ? $value : (string) ($databaseConfig[$key] ?? $default);
+};
 
 try {
-    $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $username, $password);
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-   
-} catch (PDOException $e) {
-    echo "Erreur : " . $e->getMessage();
+    $host = $databaseValue('DB_HOST', 'localhost');
+    $port = $databaseValue('DB_PORT', '3306');
+    $name = $databaseValue('DB_NAME', 'vite_gourmand');
+    $socket = $databaseValue('DB_SOCKET');
+    $dsn = $socket !== '' ? "mysql:unix_socket=$socket;dbname=$name;charset=utf8mb4"
+        : "mysql:host=$host;port=$port;dbname=$name;charset=utf8mb4";
+    $pdo = new PDO($dsn, $databaseValue('DB_USER', 'root'), $databaseValue('DB_PASSWORD'), [
+        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+        PDO::ATTR_EMULATE_PREPARES => false,
+    ]);
+    $timezone = $databaseValue('DB_TIMEZONE');
+    if ($timezone !== '') {
+        $timezoneStatement = $pdo->prepare('SET time_zone = ?');
+        $timezoneStatement->execute([$timezone]);
+    }
+    refreshAuthentication($pdo);
+} catch (PDOException $exception) {
+    error_log('Connexion base de données indisponible (code ' . $exception->getCode() . ').');
+    http_response_code(503);
+    exit('Le service est temporairement indisponible. Réessayez dans quelques instants.');
 }

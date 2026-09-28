@@ -1,31 +1,15 @@
 <?php
 
-session_start();
-require_once '../Config/database.php';
+require_once __DIR__ . '/../Config/database.php';
+require_once __DIR__ . '/../Services/OrderRules.php';
 
+requireLogin();
 
-// 1. Vérifier que l'utilisateur est connecté
-if (!isset($_SESSION['user_id'], $_SESSION['role'])) {
-    header("Location: login.php");
-    exit;
-}
+requireAdminOrEmployee();
 
-
-// 2. Autoriser uniquement admin et employé
-if (
-    $_SESSION['role'] !== 'admin'
-    && $_SESSION['role'] !== 'employe'
-) {
-    exit("Accès refusé.");
-}
-
-
-// 3. Récupérer les filtres
 $client = trim($_GET['client'] ?? '');
 $statut = trim($_GET['statut'] ?? '');
 
-
-// 4. Construire la requête
 $sql = "
     SELECT
         commandes.*,
@@ -45,21 +29,21 @@ $sql = "
 $conditions = [];
 $params = [];
 
-
 // Filtre client
 if ($client !== '') {
 
     $conditions[] = "
         (
             users.nom LIKE :client
-            OR users.prenom LIKE :client
-            OR users.email LIKE :client
+            OR users.prenom LIKE :client_prenom
+            OR users.email LIKE :client_email
         )
     ";
 
     $params[':client'] = '%' . $client . '%';
+    $params[':client_prenom'] = $params[':client'];
+    $params[':client_email'] = $params[':client'];
 }
-
 
 // Filtre statut
 if ($statut !== '') {
@@ -70,7 +54,6 @@ if ($statut !== '') {
 
     $params[':statut'] = $statut;
 }
-
 
 // Ajouter WHERE si nécessaire
 if (!empty($conditions)) {
@@ -83,13 +66,10 @@ if (!empty($conditions)) {
         );
 }
 
-
 $sql .= "
     ORDER BY commandes.created_at DESC
 ";
 
-
-// 5. Exécuter la requête
 $stmt = $pdo->prepare($sql);
 $stmt->execute($params);
 
@@ -97,296 +77,13 @@ $commandes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 ?>
 
-<!DOCTYPE html>
+<?php require_once __DIR__ . '/../Templates/layout.php'; renderHeader('Gestion des commandes'); ?>
 
-<html lang="fr">
-
-<head>
-
-    <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
-
-    <title>
-        Gestion des commandes - Vite & Gourmand
-    </title>
-
-    <style>
-
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            padding: 20px;
-        }
-
-        h1 {
-            color: #333;
-        }
-
-        .navbar {
-            background-color: #111;
-            color: white;
-
-            padding: 15px 20px;
-            border-radius: 10px;
-            margin-bottom: 30px;
-
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .navbar a {
-            color: white;
-            text-decoration: none;
-            margin-left: 10px;
-        }
-
-        .navbar a:hover {
-            color: orange;
-        }
-
-        .filtres {
-            background: white;
-
-            padding: 20px;
-            margin-bottom: 25px;
-
-            border-radius: 10px;
-
-            box-shadow:
-                0 2px 5px rgba(0, 0, 0, 0.08);
-        }
-
-        .filtres form {
-            display: flex;
-            flex-wrap: wrap;
-
-            gap: 10px;
-
-            align-items: end;
-        }
-
-        .champ {
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-        }
-
-        .champ label {
-            font-weight: bold;
-        }
-
-        .champ input,
-        .champ select {
-            padding: 10px;
-
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-
-        .filtres button {
-            padding: 10px 15px;
-
-            border: none;
-            border-radius: 5px;
-
-            background: black;
-            color: white;
-
-            cursor: pointer;
-        }
-
-        .filtres button:hover {
-            background: #444;
-        }
-
-        .reset {
-            display: inline-block;
-
-            padding: 10px 15px;
-
-            text-decoration: none;
-
-            background: #ddd;
-            color: black;
-
-            border-radius: 5px;
-        }
-
-        .commande {
-            background: white;
-
-            padding: 20px;
-            margin-bottom: 20px;
-
-            border-radius: 10px;
-
-            box-shadow:
-                0 2px 5px rgba(0, 0, 0, 0.1);
-
-            transition: 0.2s;
-        }
-
-        .commande:hover {
-            transform: translateY(-3px);
-        }
-
-        .statut {
-            font-weight: bold;
-
-            padding: 5px 10px;
-
-            border-radius: 5px;
-
-            display: inline-block;
-
-            background: #eeeeee;
-        }
-
-        .actions {
-            margin-top: 15px;
-        }
-
-        .actions a {
-            display: inline-block;
-
-            margin-top: 8px;
-            margin-right: 8px;
-
-            text-decoration: none;
-
-            background: black;
-            color: white;
-
-            padding: 8px 12px;
-
-            border-radius: 5px;
-        }
-
-        .actions a:hover {
-            background: #444;
-        }
-
-        .actions .annuler {
-            background: #b00020;
-        }
-
-        .actions .annuler:hover {
-            background: #800018;
-        }
-
-        .actions .retour-materiel {
-            background: #176b3a;
-        }
-
-        .actions .retour-materiel:hover {
-            background: #10502b;
-        }
-
-        .info-annulation {
-            background: #fff0f0;
-
-            padding: 12px;
-            margin-top: 15px;
-
-            border-radius: 8px;
-        }
-
-        footer {
-            text-align: center;
-
-            margin-top: 50px;
-
-            color: gray;
-        }
-
-        @media (max-width: 768px) {
-
-            .navbar {
-                flex-direction: column;
-                gap: 10px;
-                text-align: center;
-            }
-
-            .filtres form {
-                flex-direction: column;
-                align-items: stretch;
-            }
-
-            .champ input,
-            .champ select {
-                width: 100%;
-                box-sizing: border-box;
-            }
-
-            .commande {
-                padding: 12px;
-            }
-
-            .actions a {
-                display: block;
-                margin-top: 10px;
-            }
-        }
-
-    </style>
-
-</head>
-
-
-<body>
-
-
-<nav class="navbar">
-
-    <div>
-
-        <h2>
-            🍽️ Vite & Gourmand
-        </h2>
-
-        <p>
-            Connecté :
-
-            <?php
-            echo htmlspecialchars(
-                $_SESSION['email'] ?? ''
-            );
-            ?>
-        </p>
-
-    </div>
-
-
-    <div>
-
-        <a href="index.php">
-            Accueil
-        </a>
-
-        <a href="admin-commandes.php">
-            Gestion commandes
-        </a>
-
-        <a href="admin-avis.php">
-            Gestion avis
-        </a>
-
-    </div>
-
-</nav>
-
-
-<main>
+<section class="content-panel">
 
     <h1>
         Gestion des commandes
     </h1>
-
 
     <!-- Filtres -->
 
@@ -395,7 +92,6 @@ $commandes = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <h2>
             Rechercher une commande
         </h2>
-
 
         <form
             method="GET"
@@ -422,7 +118,6 @@ $commandes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
             </div>
 
-
             <div class="champ">
 
                 <label for="statut">
@@ -438,7 +133,6 @@ $commandes = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         Tous les statuts
                     </option>
 
-
                     <option
                         value="en attente"
                         <?php
@@ -449,7 +143,6 @@ $commandes = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     >
                         En attente
                     </option>
-
 
                     <option
                         value="accepté"
@@ -462,7 +155,6 @@ $commandes = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         Accepté
                     </option>
 
-
                     <option
                         value="en préparation"
                         <?php
@@ -473,7 +165,6 @@ $commandes = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     >
                         En préparation
                     </option>
-
 
                     <option
                         value="en cours de livraison"
@@ -489,7 +180,6 @@ $commandes = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         En cours de livraison
                     </option>
 
-
                     <option
                         value="livré"
                         <?php
@@ -500,7 +190,6 @@ $commandes = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     >
                         Livré
                     </option>
-
 
                     <option
                         value="en attente du retour de matériel"
@@ -516,7 +205,6 @@ $commandes = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         En attente du retour de matériel
                     </option>
 
-
                     <option
                         value="terminée"
                         <?php
@@ -527,7 +215,6 @@ $commandes = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     >
                         Terminée
                     </option>
-
 
                     <option
                         value="annulée"
@@ -544,11 +231,9 @@ $commandes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
             </div>
 
-
             <button type="submit">
                 Filtrer
             </button>
-
 
             <a
                 class="reset"
@@ -561,7 +246,6 @@ $commandes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     </section>
 
-
     <!-- Commandes -->
 
     <?php if (empty($commandes)): ?>
@@ -570,9 +254,7 @@ $commandes = $stmt->fetchAll(PDO::FETCH_ASSOC);
             Aucune commande ne correspond à votre recherche.
         </p>
 
-
     <?php else: ?>
-
 
         <p>
 
@@ -584,12 +266,9 @@ $commandes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         </p>
 
-
         <?php foreach ($commandes as $commande): ?>
 
-
             <div class="commande">
-
 
                 <h2>
 
@@ -600,7 +279,6 @@ $commandes = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     ?>
 
                 </h2>
-
 
                 <h3>
 
@@ -613,7 +291,6 @@ $commandes = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     ?>
 
                 </h3>
-
 
                 <p>
 
@@ -629,7 +306,6 @@ $commandes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                 </p>
 
-
                 <p>
 
                     Email :
@@ -642,7 +318,6 @@ $commandes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                 </p>
 
-
                 <p>
 
                     Nombre de personnes :
@@ -653,7 +328,6 @@ $commandes = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     ?>
 
                 </p>
-
 
                 <p>
 
@@ -671,7 +345,6 @@ $commandes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                 </p>
 
-
                 <p>
 
                     Heure :
@@ -687,7 +360,6 @@ $commandes = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     ?>
 
                 </p>
-
 
                 <p>
 
@@ -705,7 +377,6 @@ $commandes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                 </p>
 
-
                 <p>
 
                     Adresse :
@@ -721,7 +392,6 @@ $commandes = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     ?>
 
                 </p>
-
 
                 <p>
 
@@ -740,7 +410,6 @@ $commandes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                 </p>
 
-
                 <p class="statut">
 
                     Statut :
@@ -752,7 +421,6 @@ $commandes = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     ?>
 
                 </p>
-
 
                 <?php
                 if (
@@ -778,7 +446,6 @@ $commandes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                 <?php endif; ?>
 
-
                 <?php
                 if (
                     (int) $commande['materiel_retourne']
@@ -796,7 +463,6 @@ $commandes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                     </p>
 
-
                     <p>
 
                         Date du retour :
@@ -810,7 +476,6 @@ $commandes = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         ?>
 
                     </p>
-
 
                     <?php
                     if (
@@ -846,7 +511,6 @@ $commandes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                 <?php endif; ?>
 
-
                 <!-- Actions -->
 
                 <?php
@@ -858,66 +522,21 @@ $commandes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                     <div class="actions">
 
-
-                        <a
-                            href="changer-statut.php?id=<?php
-                            echo (int) $commande['id'];
-                            ?>&statut=<?php
-                            echo urlencode('accepté');
-                            ?>"
-                        >
-                            Accepter
-                        </a>
+                        <?php foreach (allowedOrderTransitions($commande['statut']) as $nextStatus): ?>
+                        <form method="post" action="changer-statut.php" class="inline-form">
+                            <?= csrfInput() ?>
+                            <input type="hidden" name="id" value="<?= (int) $commande['id'] ?>">
+                            <input type="hidden" name="statut" value="<?= e($nextStatus) ?>">
+                            <button type="submit"><?= $nextStatus === 'terminée' ? 'Terminer sans prêt de matériel' : e(ucfirst($nextStatus)) ?></button>
+                        </form>
+                        <?php endforeach; ?>
 
 
-                        <a
-                            href="changer-statut.php?id=<?php
-                            echo (int) $commande['id'];
-                            ?>&statut=<?php
-                            echo urlencode(
-                                'en préparation'
-                            );
-                            ?>"
-                        >
-                            Préparer
-                        </a>
 
 
-                        <a
-                            href="changer-statut.php?id=<?php
-                            echo (int) $commande['id'];
-                            ?>&statut=<?php
-                            echo urlencode(
-                                'en cours de livraison'
-                            );
-                            ?>"
-                        >
-                            En cours de livraison
-                        </a>
 
 
-                        <a
-                            href="changer-statut.php?id=<?php
-                            echo (int) $commande['id'];
-                            ?>&statut=<?php
-                            echo urlencode('livré');
-                            ?>"
-                        >
-                            Livré
-                        </a>
 
-
-                        <a
-                            href="changer-statut.php?id=<?php
-                            echo (int) $commande['id'];
-                            ?>&statut=<?php
-                            echo urlencode(
-                                'en attente du retour de matériel'
-                            );
-                            ?>"
-                        >
-                            Attente retour matériel
-                        </a>
 
 
                         <?php
@@ -940,16 +559,6 @@ $commandes = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         <?php endif; ?>
 
 
-                        <a
-                            href="changer-statut.php?id=<?php
-                            echo (int) $commande['id'];
-                            ?>&statut=<?php
-                            echo urlencode('terminée');
-                            ?>"
-                        >
-                            Terminer
-                        </a>
-
 
                         <a
                             class="annuler"
@@ -960,11 +569,9 @@ $commandes = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             Annuler la commande
                         </a>
 
-
                     </div>
 
                 <?php endif; ?>
-
 
                 <!-- Informations d'annulation -->
 
@@ -981,7 +588,6 @@ $commandes = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             </strong>
 
                         </p>
-
 
                         <?php
                         if (
@@ -1009,7 +615,6 @@ $commandes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                         <?php endif; ?>
 
-
                         <?php
                         if (
                             !empty(
@@ -1035,7 +640,6 @@ $commandes = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             </p>
 
                         <?php endif; ?>
-
 
                         <?php
                         if (
@@ -1067,18 +671,13 @@ $commandes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                 <?php endif; ?>
 
-
             </div>
-
 
         <?php endforeach; ?>
 
-
     <?php endif; ?>
 
-
-</main>
-
+</section>
 
 <footer>
 
@@ -1089,7 +688,4 @@ $commandes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 </footer>
 
-
-</body>
-
-</html>
+<?php renderFooter($pdo); ?>

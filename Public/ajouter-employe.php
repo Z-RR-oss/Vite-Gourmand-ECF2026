@@ -1,24 +1,15 @@
 <?php
 
-session_start();
-require_once '../Config/database.php';
-
+require_once __DIR__ . '/../Config/database.php';
+require_once __DIR__ . '/../Config/mail.php';
 
 // Vérifier la connexion
-if (!isset($_SESSION['user_id'], $_SESSION['role'])) {
-    header("Location: login.php");
-    exit;
-}
-
+requireLogin();
 
 // Seul l'administrateur peut créer un employé
-if ($_SESSION['role'] !== 'admin') {
-    exit("Accès refusé.");
-}
-
+requireRole('admin');
 
 $erreur = '';
-
 
 // Traitement du formulaire
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -46,108 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $password =
         $_POST['password'] ?? '';
 
-
-    // Validation des champs
-    if (
-        $nom === ''
-        || $prenom === ''
-        || $email === ''
-        || $gsm === ''
-        || $adresse === ''
-        || $password === ''
-    ) {
-
-        $erreur =
-            "Tous les champs sont obligatoires.";
-
-    } elseif (
-        !filter_var(
-            $email,
-            FILTER_VALIDATE_EMAIL
-        )
-    ) {
-
-        $erreur =
-            "L'adresse email n'est pas valide.";
-    }
-
-
-    // Vérification du mot de passe
-    $majuscule = false;
-    $minuscule = false;
-    $chiffre = false;
-    $special = false;
-
-
-    for (
-        $i = 0;
-        $i < strlen($password);
-        $i++
-    ) {
-
-        $caractere = $password[$i];
-
-
-        if (ctype_upper($caractere)) {
-
-            $majuscule = true;
-
-        } elseif (ctype_lower($caractere)) {
-
-            $minuscule = true;
-
-        } elseif (ctype_digit($caractere)) {
-
-            $chiffre = true;
-
-        } else {
-
-            $special = true;
-        }
-    }
-
-
-    if (
-        $erreur === ''
-        && strlen($password) < 10
-    ) {
-
-        $erreur =
-            "Le mot de passe doit contenir au moins 10 caractères.";
-
-    } elseif (
-        $erreur === ''
-        && !$majuscule
-    ) {
-
-        $erreur =
-            "Le mot de passe doit contenir au moins une majuscule.";
-
-    } elseif (
-        $erreur === ''
-        && !$minuscule
-    ) {
-
-        $erreur =
-            "Le mot de passe doit contenir au moins une minuscule.";
-
-    } elseif (
-        $erreur === ''
-        && !$chiffre
-    ) {
-
-        $erreur =
-            "Le mot de passe doit contenir au moins un chiffre.";
-
-    } elseif (
-        $erreur === ''
-        && !$special
-    ) {
-
-        $erreur =
-            "Le mot de passe doit contenir au moins un caractère spécial.";
-    }
-
+    $erreur = identityValidationError(compact('nom', 'prenom', 'email', 'gsm', 'adresse')) ?? passwordValidationError($password) ?? '';
 
     // Création du compte
     if ($erreur === '') {
@@ -157,7 +47,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $password,
                 PASSWORD_DEFAULT
             );
-
 
         try {
 
@@ -204,19 +93,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 ':adresse' => $adresse
             ]);
 
-
+            envoyerEmail($email, $prenom . ' ' . $nom, 'Votre compte employé Vite & Gourmand', '<p>Bonjour ' . e($prenom) . ',</p><p>Votre compte employé a été créé. Contactez votre administrateur pour obtenir votre mot de passe. Aucun mot de passe n’est envoyé par email.</p>');
             header(
                 "Location: admin-employes.php"
             );
 
             exit;
 
-
         } catch (PDOException $e) {
 
             $errorInfo =
                 $e->errorInfo;
-
 
             if (
                 isset($errorInfo[1])
@@ -242,128 +129,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 ?>
 
-<!DOCTYPE html>
+<?php require_once __DIR__ . '/../Templates/layout.php'; renderHeader('Créer un employé'); ?>
 
-<html lang="fr">
-
-<head>
-
-    <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
-
-    <title>
-        Créer un employé - Vite & Gourmand
-    </title>
-
-    <style>
-
-        body {
-            font-family: Arial, sans-serif;
-
-            background: #f4f4f4;
-
-            padding: 20px;
-        }
-
-        main {
-            max-width: 650px;
-
-            margin: auto;
-
-            background: white;
-
-            padding: 30px;
-
-            border-radius: 10px;
-
-            box-shadow:
-                0 2px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        label {
-            display: block;
-
-            margin-top: 15px;
-
-            margin-bottom: 5px;
-
-            font-weight: bold;
-        }
-
-        input {
-            width: 100%;
-
-            box-sizing: border-box;
-
-            padding: 10px;
-
-            border: 1px solid #ccc;
-
-            border-radius: 5px;
-        }
-
-        button {
-            width: 100%;
-
-            margin-top: 25px;
-
-            padding: 13px;
-
-            border: none;
-
-            border-radius: 6px;
-
-            background: black;
-
-            color: white;
-
-            font-weight: bold;
-
-            cursor: pointer;
-        }
-
-        .erreur {
-            background: #ffdede;
-
-            color: #8b0000;
-
-            padding: 12px;
-
-            border-radius: 5px;
-        }
-
-        .retour {
-            display: block;
-
-            margin-top: 20px;
-
-            text-align: center;
-        }
-
-    </style>
-
-</head>
-
-
-<body>
-
-<main>
-
+<section class="content-panel">
 
     <h1>
         Créer un compte employé
     </h1>
 
-
     <p>
         Le rôle attribué sera automatiquement
         <strong>employé</strong>.
     </p>
-
 
     <?php if ($erreur !== ''): ?>
 
@@ -379,9 +156,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <?php endif; ?>
 
-
     <form method="POST">
-
+        <?= csrfInput() ?>
 
         <label for="nom">
             Nom
@@ -399,7 +175,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             required
         >
 
-
         <label for="prenom">
             Prénom
         </label>
@@ -415,7 +190,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             ?>"
             required
         >
-
 
         <label for="email">
             Email
@@ -433,7 +207,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             required
         >
 
-
         <label for="gsm">
             Téléphone
         </label>
@@ -449,7 +222,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             ?>"
             required
         >
-
 
         <label for="adresse">
             Adresse
@@ -467,7 +239,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             required
         >
 
-
         <label for="password">
             Mot de passe
         </label>
@@ -479,20 +250,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             required
         >
 
-
         <p>
             Minimum 10 caractères avec une majuscule,
             une minuscule, un chiffre et un caractère spécial.
         </p>
 
-
         <button type="submit">
             Créer le compte employé
         </button>
 
-
     </form>
-
 
     <a
         class="retour"
@@ -501,9 +268,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         ← Retour aux employés
     </a>
 
+</section>
 
-</main>
-
-</body>
-
-</html>
+<?php renderFooter($pdo); ?>

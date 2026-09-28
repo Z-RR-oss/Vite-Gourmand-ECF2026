@@ -1,29 +1,14 @@
 <?php
 
-session_start();
-require_once '../Config/database.php';
+require_once __DIR__ . '/../Config/database.php';
+require_once __DIR__ . '/../Services/CatalogueValidation.php';
 
+requireLogin();
 
-// 1. Vérifier la connexion
-if (!isset($_SESSION['user_id'], $_SESSION['role'])) {
-    header("Location: login.php");
-    exit;
-}
-
-
-// 2. Autoriser uniquement admin / employé
-if (
-    $_SESSION['role'] !== 'admin'
-    && $_SESSION['role'] !== 'employe'
-) {
-    exit("Accès refusé.");
-}
-
+requireAdminOrEmployee();
 
 $erreur = '';
 
-
-// 3. Traiter le formulaire
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $titre = trim($_POST['titre'] ?? '');
@@ -54,8 +39,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         ? 1
         : 0;
 
-
-    // 4. Validation
     if (
         $titre === ''
         || $description === ''
@@ -85,8 +68,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             "Le délai de commande ne peut pas être négatif.";
     }
 
+    $erreur = menuValidationError($_POST) ?? $erreur;
 
-    // 5. Insérer le menu
     if ($erreur === '') {
 
         $sql = "
@@ -133,7 +116,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             ':actif' => $actif
         ]);
 
-
         header(
             "Location: admin-menus.php"
         );
@@ -144,144 +126,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 ?>
 
-<!DOCTYPE html>
+<?php require_once __DIR__ . '/../Templates/layout.php'; renderHeader('Ajouter un menu'); ?>
 
-<html lang="fr">
-
-<head>
-
-    <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
-
-    <title>
-        Ajouter un menu - Vite & Gourmand
-    </title>
-
-    <style>
-
-        body {
-            font-family: Arial, sans-serif;
-
-            background-color: #f4f4f4;
-
-            padding: 20px;
-        }
-
-        main {
-            max-width: 700px;
-
-            margin: auto;
-
-            background: white;
-
-            padding: 25px;
-
-            border-radius: 10px;
-
-            box-shadow:
-                0 2px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        label {
-            display: block;
-
-            margin-top: 15px;
-            margin-bottom: 5px;
-
-            font-weight: bold;
-        }
-
-        input,
-        textarea,
-        select {
-            width: 100%;
-
-            padding: 10px;
-
-            box-sizing: border-box;
-
-            border: 1px solid #ccc;
-
-            border-radius: 5px;
-        }
-
-        textarea {
-            min-height: 100px;
-
-            resize: vertical;
-        }
-
-        .checkbox {
-            display: flex;
-
-            align-items: center;
-
-            gap: 10px;
-
-            margin-top: 20px;
-        }
-
-        .checkbox input {
-            width: auto;
-        }
-
-        .checkbox label {
-            margin: 0;
-        }
-
-        button {
-            margin-top: 20px;
-
-            padding: 10px 18px;
-
-            border: none;
-
-            border-radius: 5px;
-
-            background: black;
-
-            color: white;
-
-            cursor: pointer;
-        }
-
-        button:hover {
-            background: #444;
-        }
-
-        .erreur {
-            background: #ffdede;
-
-            color: #8b0000;
-
-            padding: 10px;
-
-            border-radius: 5px;
-        }
-
-        .retour {
-            display: inline-block;
-
-            margin-top: 20px;
-        }
-
-    </style>
-
-</head>
-
-
-<body>
-
-<main>
+<section class="content-panel">
 
     <h1>
         Ajouter un menu
     </h1>
-
 
     <?php if ($erreur !== ''): ?>
 
@@ -297,9 +148,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <?php endif; ?>
 
-
     <form method="POST">
-
+        <?= csrfInput() ?>
 
         <label for="titre">
             Titre *
@@ -317,7 +167,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             required
         >
 
-
         <label for="description">
             Description *
         </label>
@@ -331,7 +180,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_POST['description'] ?? ''
         );
         ?></textarea>
-
 
         <label for="prix">
             Prix correspondant au minimum de personnes (€) *
@@ -351,7 +199,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             required
         >
 
-
         <label for="nb_personnes_min">
             Nombre minimum de personnes *
         </label>
@@ -368,7 +215,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             ?>"
             required
         >
-
 
         <label for="theme">
             Thème *
@@ -387,7 +233,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             required
         >
 
-
         <label for="regime">
             Régime alimentaire *
         </label>
@@ -404,7 +249,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             ?>"
             required
         >
-
 
         <label for="stock_disponible">
             Stock disponible
@@ -423,7 +267,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             required
         >
 
-
         <label for="conditions_menu">
             Conditions particulières
         </label>
@@ -437,7 +280,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_POST['conditions_menu'] ?? ''
         );
         ?></textarea>
-
 
         <label for="delai_commande_heures">
             Délai minimum de commande en heures
@@ -455,7 +297,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             ?>"
             required
         >
-
 
         <div class="checkbox">
 
@@ -481,14 +322,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         </div>
 
-
         <button type="submit">
             Ajouter le menu
         </button>
 
-
     </form>
-
 
     <a
         class="retour"
@@ -497,8 +335,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         Retour à la gestion des menus
     </a>
 
-</main>
+</section>
 
-</body>
-
-</html>
+<?php renderFooter($pdo); ?>

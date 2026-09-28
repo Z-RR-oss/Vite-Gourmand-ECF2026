@@ -1,24 +1,12 @@
 <?php
 
-session_start();
-require_once '../Config/database.php';
-
+require_once __DIR__ . '/../Config/database.php';
 
 // Vérifier la connexion
-if (!isset($_SESSION['user_id'], $_SESSION['role'])) {
-    header("Location: login.php");
-    exit;
-}
-
+requireLogin();
 
 // Autoriser admin / employé
-if (
-    $_SESSION['role'] !== 'admin'
-    && $_SESSION['role'] !== 'employe'
-) {
-    exit("Accès refusé.");
-}
-
+requireAdminOrEmployee();
 
 // Vérifier l'identifiant
 $id = $_GET['id'] ?? null;
@@ -28,7 +16,6 @@ if (!$id || !is_numeric($id)) {
 }
 
 $id = (int) $id;
-
 
 // Récupérer le plat
 $sql = "
@@ -45,11 +32,9 @@ $stmt->execute([
 
 $plat = $stmt->fetch(PDO::FETCH_ASSOC);
 
-
 if (!$plat) {
     exit("Plat introuvable.");
 }
-
 
 // Vérifier combien de menus utilisent ce plat
 $sqlMenus = "
@@ -69,14 +54,12 @@ $stmtMenus->execute([
 $nombreMenus = (int)
     $stmtMenus->fetchColumn();
 
-
 // Suppression après confirmation
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     try {
 
         $pdo->beginTransaction();
-
 
         // Supprimer les liens avec les menus
         $sqlMenuPlat = "
@@ -92,7 +75,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             ':plat_id' => $id
         ]);
 
-
         // Supprimer les liens avec les allergènes
         $sqlAllergenes = "
             DELETE FROM plat_allergene
@@ -106,7 +88,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmtAllergenes->execute([
             ':plat_id' => $id
         ]);
-
 
         // Supprimer le plat
         $sqlDelete = "
@@ -122,9 +103,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             ':id' => $id
         ]);
 
-
         $pdo->commit();
-
 
         header(
             "Location: admin-plats.php"
@@ -132,19 +111,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         exit;
 
-
     } catch (Throwable $e) {
 
         if ($pdo->inTransaction()) {
             $pdo->rollBack();
         }
 
-
         error_log(
             "Erreur suppression plat : "
             . $e->getMessage()
         );
-
 
         exit(
             "Une erreur est survenue lors de la suppression du plat."
@@ -154,89 +130,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 ?>
 
-<!DOCTYPE html>
+<?php require_once __DIR__ . '/../Templates/layout.php'; renderHeader('Supprimer un plat'); ?>
 
-<html lang="fr">
-
-<head>
-
-    <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
-
-    <title>
-        Supprimer un plat - Vite & Gourmand
-    </title>
-
-    <style>
-
-        body {
-            font-family: Arial, sans-serif;
-
-            background-color: #f4f4f4;
-
-            padding: 20px;
-        }
-
-        main {
-            max-width: 600px;
-
-            margin: auto;
-
-            background: white;
-
-            padding: 25px;
-
-            border-radius: 10px;
-
-            box-shadow:
-                0 2px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        .alerte {
-            background: #fff0f0;
-
-            padding: 15px;
-
-            margin: 20px 0;
-
-            border-radius: 8px;
-        }
-
-        button {
-            padding: 10px 16px;
-
-            border: none;
-
-            border-radius: 5px;
-
-            background: #b00020;
-            color: white;
-
-            cursor: pointer;
-        }
-
-        .retour {
-            display: inline-block;
-            margin-left: 15px;
-        }
-
-    </style>
-
-</head>
-
-
-<body>
-
-<main>
+<section class="content-panel">
 
     <h1>
         Supprimer le plat
     </h1>
-
 
     <h2>
 
@@ -247,7 +147,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         ?>
 
     </h2>
-
 
     <div class="alerte">
 
@@ -280,13 +179,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     </div>
 
-
     <form method="POST">
+        <?= csrfInput() ?>
 
         <button type="submit">
             Confirmer la suppression
         </button>
-
 
         <a
             class="retour"
@@ -297,8 +195,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     </form>
 
-</main>
+</section>
 
-</body>
-
-</html>
+<?php renderFooter($pdo); ?>

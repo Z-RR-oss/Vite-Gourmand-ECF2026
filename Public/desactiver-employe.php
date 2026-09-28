@@ -1,28 +1,18 @@
 <?php
 
-session_start();
-require_once '../Config/database.php';
-
+require_once __DIR__ . '/../Config/database.php';
 
 // Vérifier la connexion
-if (!isset($_SESSION['user_id'], $_SESSION['role'])) {
-    header("Location: login.php");
-    exit;
-}
-
+requireLogin();
 
 // Seul l'administrateur peut modifier un employé
-if ($_SESSION['role'] !== 'admin') {
-    exit("Accès refusé.");
-}
-
+requireRole('admin');
 
 // Cette page ne doit être appelée qu'en POST
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     header("Location: admin-employes.php");
     exit;
 }
-
 
 // Récupérer les informations
 $id = $_POST['id'] ?? null;
@@ -31,13 +21,11 @@ $action = trim(
     $_POST['action'] ?? ''
 );
 
-
 if (!$id || !is_numeric($id)) {
     exit("Employé invalide.");
 }
 
 $id = (int) $id;
-
 
 if (
     $action !== 'desactiver'
@@ -45,7 +33,6 @@ if (
 ) {
     exit("Action invalide.");
 }
-
 
 // Vérifier que le compte existe
 // et qu'il s'agit bien d'un employé
@@ -72,18 +59,15 @@ $employe = $stmtEmploye->fetch(
     PDO::FETCH_ASSOC
 );
 
-
 if (!$employe) {
     exit("Compte employé introuvable.");
 }
-
 
 // Déterminer le nouvel état
 $nouvelEtat =
     $action === 'activer'
         ? 1
         : 0;
-
 
 // Mise à jour
 $sqlUpdate = "
@@ -103,7 +87,6 @@ $stmtUpdate->execute([
     ':actif' => $nouvelEtat,
     ':id' => $id
 ]);
-
 
 header(
     "Location: admin-employes.php"

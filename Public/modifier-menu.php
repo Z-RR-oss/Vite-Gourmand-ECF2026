@@ -1,24 +1,13 @@
 <?php
 
-session_start();
-require_once '../Config/database.php';
-
+require_once __DIR__ . '/../Config/database.php';
+require_once __DIR__ . '/../Services/CatalogueValidation.php';
 
 // Vérifier la connexion
-if (!isset($_SESSION['user_id'], $_SESSION['role'])) {
-    header("Location: login.php");
-    exit;
-}
-
+requireLogin();
 
 // Autoriser admin / employé
-if (
-    $_SESSION['role'] !== 'admin'
-    && $_SESSION['role'] !== 'employe'
-) {
-    exit("Accès refusé.");
-}
-
+requireAdminOrEmployee();
 
 // Vérifier l'identifiant
 $id = $_GET['id'] ?? null;
@@ -28,7 +17,6 @@ if (!$id || !is_numeric($id)) {
 }
 
 $id = (int) $id;
-
 
 // Récupérer le menu
 $sql = "
@@ -45,14 +33,11 @@ $stmt->execute([
 
 $menu = $stmt->fetch(PDO::FETCH_ASSOC);
 
-
 if (!$menu) {
     exit("Menu introuvable.");
 }
 
-
 $erreur = '';
-
 
 // Traitement du formulaire
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -84,7 +69,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $actif = isset($_POST['actif'])
         ? 1
         : 0;
-
 
     // Validation
     if (
@@ -118,8 +102,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             "Le délai de commande ne peut pas être négatif.";
     }
 
-
     // Mise à jour
+    $erreur = menuValidationError($_POST) ?? $erreur;
+
     if ($erreur === '') {
 
         $sqlUpdate = "
@@ -159,14 +144,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             ':id' => $id
         ]);
 
-
         header(
             "Location: admin-menus.php"
         );
 
         exit;
     }
-
 
     // Réafficher les nouvelles valeurs si erreur
     $menu['titre'] = $titre;
@@ -183,132 +166,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 ?>
 
-<!DOCTYPE html>
+<?php require_once __DIR__ . '/../Templates/layout.php'; renderHeader('Modifier un menu'); ?>
 
-<html lang="fr">
-
-<head>
-
-    <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
-
-    <title>
-        Modifier un menu - Vite & Gourmand
-    </title>
-
-    <style>
-
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            padding: 20px;
-        }
-
-        main {
-            max-width: 700px;
-            margin: auto;
-
-            background: white;
-
-            padding: 25px;
-
-            border-radius: 10px;
-
-            box-shadow:
-                0 2px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        label {
-            display: block;
-
-            margin-top: 15px;
-            margin-bottom: 5px;
-
-            font-weight: bold;
-        }
-
-        input,
-        textarea {
-            width: 100%;
-
-            padding: 10px;
-
-            box-sizing: border-box;
-
-            border: 1px solid #ccc;
-
-            border-radius: 5px;
-        }
-
-        textarea {
-            min-height: 100px;
-            resize: vertical;
-        }
-
-        .checkbox {
-            display: flex;
-            align-items: center;
-
-            gap: 10px;
-
-            margin-top: 20px;
-        }
-
-        .checkbox input {
-            width: auto;
-        }
-
-        .checkbox label {
-            margin: 0;
-        }
-
-        button {
-            margin-top: 20px;
-
-            padding: 10px 18px;
-
-            border: none;
-
-            border-radius: 5px;
-
-            background: black;
-            color: white;
-
-            cursor: pointer;
-        }
-
-        .erreur {
-            background: #ffdede;
-
-            color: #8b0000;
-
-            padding: 10px;
-
-            border-radius: 5px;
-        }
-
-        .retour {
-            display: inline-block;
-            margin-top: 20px;
-        }
-
-    </style>
-
-</head>
-
-
-<body>
-
-<main>
+<section class="content-panel">
+<p><a class="button button-secondary" href="gerer-menu-images.php?id=<?= (int) $id ?>">Gérer les images de ce menu</a></p>
 
     <h1>
         Modifier le menu
     </h1>
-
 
     <?php if ($erreur !== ''): ?>
 
@@ -324,9 +189,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <?php endif; ?>
 
-
     <form method="POST">
-
+        <?= csrfInput() ?>
 
         <label for="titre">
             Titre *
@@ -344,7 +208,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             required
         >
 
-
         <label for="description">
             Description *
         </label>
@@ -358,7 +221,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $menu['description']
         );
         ?></textarea>
-
 
         <label for="prix">
             Prix (€) *
@@ -378,7 +240,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             required
         >
 
-
         <label for="nb_personnes_min">
             Nombre minimum de personnes *
         </label>
@@ -394,7 +255,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             ?>"
             required
         >
-
 
         <label for="theme">
             Thème *
@@ -412,7 +272,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             required
         >
 
-
         <label for="regime">
             Régime alimentaire *
         </label>
@@ -428,7 +287,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             ?>"
             required
         >
-
 
         <label for="stock_disponible">
             Stock disponible
@@ -446,7 +304,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             required
         >
 
-
         <label for="conditions_menu">
             Conditions particulières
         </label>
@@ -459,7 +316,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $menu['conditions_menu'] ?? ''
         );
         ?></textarea>
-
 
         <label for="delai_commande_heures">
             Délai minimum de commande en heures
@@ -476,7 +332,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             ?>"
             required
         >
-
 
         <div class="checkbox">
 
@@ -497,13 +352,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         </div>
 
-
         <button type="submit">
             Enregistrer les modifications
         </button>
 
     </form>
-
 
     <a
         class="retour"
@@ -512,8 +365,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         Retour aux menus
     </a>
 
-</main>
+</section>
 
-</body>
-
-</html>
+<?php renderFooter($pdo); ?>

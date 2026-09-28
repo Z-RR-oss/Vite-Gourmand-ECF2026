@@ -1,26 +1,11 @@
 <?php
 
-session_start();
-require_once '../Config/database.php';
+require_once __DIR__ . '/../Config/database.php';
 
+requireLogin();
 
-// 1. Vérifier la connexion
-if (!isset($_SESSION['user_id'], $_SESSION['role'])) {
-    header("Location: login.php");
-    exit;
-}
+requireAdminOrEmployee();
 
-
-// 2. Autoriser uniquement admin / employé
-if (
-    $_SESSION['role'] !== 'admin'
-    && $_SESSION['role'] !== 'employe'
-) {
-    exit("Accès refusé.");
-}
-
-
-// 3. Récupérer les menus
 $sql = "
     SELECT *
     FROM menus
@@ -34,214 +19,13 @@ $menus = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 ?>
 
-<!DOCTYPE html>
+<?php require_once __DIR__ . '/../Templates/layout.php'; renderHeader('Gestion des menus'); ?>
 
-<html lang="fr">
-
-<head>
-
-    <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
-
-    <title>
-        Gestion des menus - Vite & Gourmand
-    </title>
-
-    <style>
-
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            padding: 20px;
-        }
-
-        .navbar {
-            background: #111;
-            color: white;
-
-            padding: 15px 20px;
-            margin-bottom: 30px;
-
-            border-radius: 10px;
-
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .navbar a {
-            color: white;
-            text-decoration: none;
-            margin-left: 10px;
-        }
-
-        .navbar a:hover {
-            color: orange;
-        }
-
-        .header-actions {
-            margin-bottom: 25px;
-        }
-
-        .bouton {
-            display: inline-block;
-
-            padding: 10px 15px;
-
-            background: black;
-            color: white;
-
-            text-decoration: none;
-
-            border-radius: 5px;
-        }
-
-        .bouton:hover {
-            background: #444;
-        }
-
-        .menu {
-            background: white;
-
-            padding: 20px;
-            margin-bottom: 20px;
-
-            border-radius: 10px;
-
-            box-shadow:
-                0 2px 5px rgba(0, 0, 0, 0.1);
-        }
-
-        .statut-actif {
-            display: inline-block;
-
-            padding: 5px 10px;
-
-            border-radius: 5px;
-
-            background: #e3f5e3;
-        }
-
-        .statut-inactif {
-            display: inline-block;
-
-            padding: 5px 10px;
-
-            border-radius: 5px;
-
-            background: #f5dddd;
-        }
-
-        .actions {
-            margin-top: 15px;
-        }
-
-        .actions a {
-            display: inline-block;
-
-            margin-right: 10px;
-            margin-top: 8px;
-
-            padding: 8px 12px;
-
-            text-decoration: none;
-
-            border-radius: 5px;
-
-            background: black;
-            color: white;
-        }
-
-        .actions a:hover {
-            background: #444;
-        }
-
-        .actions .plats {
-            background: #176b3a;
-        }
-
-        .actions .plats:hover {
-            background: #10502b;
-        }
-
-        .actions .supprimer {
-            background: #b00020;
-        }
-
-        .actions .supprimer:hover {
-            background: #800018;
-        }
-
-        @media (max-width: 768px) {
-
-            .navbar {
-                flex-direction: column;
-                gap: 10px;
-                text-align: center;
-            }
-
-            .actions a {
-                display: block;
-                margin-right: 0;
-            }
-        }
-
-    </style>
-
-</head>
-
-
-<body>
-
-
-<nav class="navbar">
-
-    <div>
-
-        <strong>
-            🍽️ Vite & Gourmand
-        </strong>
-
-    </div>
-
-
-    <div>
-
-        <a href="admin-commandes.php">
-            Commandes
-        </a>
-
-        <a href="admin-menus.php">
-            Menus
-        </a>
-
-        <a href="admin-plats.php">
-            Plats
-        </a>
-
-        <a href="admin-avis.php">
-            Avis
-        </a>
-
-        <a href="index.php">
-            Accueil
-        </a>
-
-    </div>
-
-</nav>
-
-
-<main>
+<section class="content-panel">
 
     <h1>
         Gestion des menus
     </h1>
-
 
     <div class="header-actions">
 
@@ -254,22 +38,17 @@ $menus = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     </div>
 
-
     <?php if (empty($menus)): ?>
 
         <p>
             Aucun menu enregistré.
         </p>
 
-
     <?php else: ?>
-
 
         <?php foreach ($menus as $menu): ?>
 
-
             <article class="menu">
-
 
                 <h2>
 
@@ -280,7 +59,6 @@ $menus = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     ?>
 
                 </h2>
-
 
                 <p>
 
@@ -293,7 +71,6 @@ $menus = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     ?>
 
                 </p>
-
 
                 <p>
 
@@ -312,7 +89,6 @@ $menus = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                 </p>
 
-
                 <p>
 
                     <strong>
@@ -326,7 +102,6 @@ $menus = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                 </p>
 
-
                 <p>
 
                     <strong>Thème :</strong>
@@ -338,7 +113,6 @@ $menus = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     ?>
 
                 </p>
-
 
                 <p>
 
@@ -352,7 +126,6 @@ $menus = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                 </p>
 
-
                 <p>
 
                     <strong>
@@ -365,7 +138,6 @@ $menus = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     ?>
 
                 </p>
-
 
                 <p>
 
@@ -381,7 +153,6 @@ $menus = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     heure(s)
 
                 </p>
-
 
                 <p>
 
@@ -401,7 +172,6 @@ $menus = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                 </p>
 
-
                 <p>
 
                     <?php if ((int) $menu['actif'] === 1): ?>
@@ -420,9 +190,7 @@ $menus = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                 </p>
 
-
                 <div class="actions">
-
 
                     <a
                         href="menu.php?id=<?php
@@ -432,7 +200,6 @@ $menus = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         Voir
                     </a>
 
-
                     <a
                         class="plats"
                         href="gerer-menu-plats.php?id=<?php
@@ -441,7 +208,7 @@ $menus = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     >
                         Gérer les plats
                     </a>
-
+                    <a href="gerer-menu-images.php?id=<?= (int) $menu['id'] ?>">Images</a>
 
                     <a
                         href="modifier-menu.php?id=<?php
@@ -450,7 +217,6 @@ $menus = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     >
                         Modifier
                     </a>
-
 
                     <a
                         class="supprimer"
@@ -461,22 +227,14 @@ $menus = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         Supprimer
                     </a>
 
-
                 </div>
-
 
             </article>
 
-
         <?php endforeach; ?>
-
 
     <?php endif; ?>
 
+</section>
 
-</main>
-
-
-</body>
-
-</html>
+<?php renderFooter($pdo); ?>

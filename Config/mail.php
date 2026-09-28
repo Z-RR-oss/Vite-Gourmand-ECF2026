@@ -1,140 +1,68 @@
 <?php
+declare(strict_types=1);
 
 use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
 
 require_once __DIR__ . '/../vendor/autoload.php';
-
-
-// Charger les identifiants SMTP locaux
-$fichierLocal =
-    __DIR__ . '/mail.local.php';
-
-if (file_exists($fichierLocal)) {
-    require_once $fichierLocal;
+if (is_file(__DIR__ . '/mail.local.php')) {
+    require_once __DIR__ . '/mail.local.php';
 }
 
+function mailSetting(string $key, mixed $default = ''): mixed
+{
+    $environment = getenv($key);
+    return $environment !== false ? $environment : (defined($key) ? constant($key) : $default);
+}
 
-/**
- * Envoyer un email avec PHPMailer.
- */
+// URL canonique, jamais dérivée de l'en-tête Host fourni par le navigateur.
+function applicationUrl(): string
+{
+    return rtrim((string) mailSetting('APP_URL', 'http://vite-gourmand.local'), '/');
+}
+
 function envoyerEmail(
     string $emailDestinataire,
     string $nomDestinataire,
     string $sujet,
-    string $contenuHtml
+    string $contenuHtml,
+    ?string $replyTo = null
 ): bool {
-
-    $constantesRequises = [
-        'SMTP_HOST',
-        'SMTP_PORT',
-        'SMTP_USERNAME',
-        'SMTP_PASSWORD',
-        'SMTP_FROM_EMAIL',
-        'SMTP_FROM_NAME'
-    ];
-
-
-    foreach ($constantesRequises as $constante) {
-
-        if (!defined($constante)) {
-
-            throw new RuntimeException(
-                "Configuration email manquante : "
-                . $constante
-            );
-        }
-    }
-
-
-    $mail = new PHPMailer(true);
-
-
     try {
-
-        $mail->isSMTP();
-
-        $mail->Host =
-            SMTP_HOST;
-
-        $mail->SMTPAuth =
-            true;
-
-        $mail->Username =
-            SMTP_USERNAME;
-
-        $mail->Password =
-            SMTP_PASSWORD;
-
-        $mail->Port =
-            SMTP_PORT;
-
-
-        /*
-         * Port 465 :
-         * chiffrement implicite SMTPS.
-         *
-         * Autres ports courants comme 587 :
-         * STARTTLS.
-         */
-        if ((int) SMTP_PORT === 465) {
-
-            $mail->SMTPSecure =
-                PHPMailer::ENCRYPTION_SMTPS;
-
-        } else {
-
-            $mail->SMTPSecure =
-                PHPMailer::ENCRYPTION_STARTTLS;
+        $host = (string) mailSetting('SMTP_HOST');
+        $from = (string) mailSetting('SMTP_FROM_EMAIL');
+        if ($host === '' || !filter_var($from, FILTER_VALIDATE_EMAIL)) {
+            throw new RuntimeException('Configuration SMTP absente.');
         }
-
-
+        $mail = new PHPMailer(true);
+        $mail->isSMTP();
+        $mail->Host = $host;
+        $mail->Port = (int) mailSetting('SMTP_PORT', 587);
+        $mail->SMTPAuth = filter_var(mailSetting('SMTP_AUTH', true), FILTER_VALIDATE_BOOLEAN);
+        $mail->Username = (string) mailSetting('SMTP_USERNAME');
+        $mail->Password = (string) mailSetting('SMTP_PASSWORD');
+        $encryption = (string) mailSetting('SMTP_ENCRYPTION', $mail->Port === 465 ? 'ssl' : 'tls');
+        // Le transport sans TLS est réservé aux boîtes de capture sur loopback.
+        if ($encryption === 'none' && in_array($host, ['127.0.0.1', 'localhost', '::1'], true)) {
+            $mail->SMTPSecure = '';
+            $mail->SMTPAutoTLS = false;
+        } else {
+            $mail->SMTPSecure = $encryption === 'ssl' ? PHPMailer::ENCRYPTION_SMTPS : PHPMailer::ENCRYPTION_STARTTLS;
+        }
+        $mail->Timeout = 10;
         $mail->CharSet = 'UTF-8';
-
-
-        $mail->setFrom(
-            SMTP_FROM_EMAIL,
-            SMTP_FROM_NAME
-        );
-
-
-        $mail->addAddress(
-            $emailDestinataire,
-            $nomDestinataire
-        );
-
-
+        $mail->setFrom($from, (string) mailSetting('SMTP_FROM_NAME', 'Vite & Gourmand'));
+        $mail->addAddress($emailDestinataire, $nomDestinataire);
+        if ($replyTo !== null) {
+            $mail->addReplyTo($replyTo);
+        }
         $mail->isHTML(true);
-
-        $mail->Subject =
-            $sujet;
-
-        $mail->Body =
-            $contenuHtml;
-
-
-        $mail->AltBody =
-            strip_tags(
-                str_replace(
-                    ['<br>', '<br/>', '<br />'],
-                    PHP_EOL,
-                    $contenuHtml
-                )
-            );
-
-
-        $mail->send();
-
-        return true;
-
-
-    } catch (Exception $e) {
-
-        error_log(
-            "Erreur envoi email : "
-            . $mail->ErrorInfo
-        );
-
+        $mail->Subject = $sujet;
+        $mail->Body = $contenuHtml;
+        $mail->AltBody = html_entity_decode(strip_tags(str_replace(['<br>', '<br/>', '<br />', '</p>'], "\n", $contenuHtml)), ENT_QUOTES, 'UTF-8');
+        return $mail->send();
+    } catch (Throwable $exception) {
+        // Ne pas journaliser adresses, corps, jetons ou identifiants de connexion.
+        error_log('Envoi email échoué (' . get_class($exception) . '). Vérifier le transport SMTP.');
         return false;
     }
 }

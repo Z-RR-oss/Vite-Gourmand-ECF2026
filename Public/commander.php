@@ -1,1000 +1,71 @@
 <?php
-
-session_start();
-require_once '../Config/database.php';
-require_once '../Config/mail.php';
-
-
-// --------------------------------------------------
-// FONCTIONS
-// --------------------------------------------------
-
-
-// Construire une date/heure de prestation valide
-function creerDatePrestation(
-    string $date,
-    string $heure
-): ?DateTime {
-
-    $datePrestation = DateTime::createFromFormat(
-        'Y-m-d H:i',
-        $date . ' ' . $heure
-    );
-
-    if ($datePrestation === false) {
-        return null;
-    }
-
-    $erreurs = DateTime::getLastErrors();
-
-    if (
-        $erreurs !== false
-        && (
-            $erreurs['warning_count'] > 0
-            || $erreurs['error_count'] > 0
-        )
-    ) {
-        return null;
-    }
-
-    return $datePrestation;
+require_once __DIR__ . '/../Config/database.php';
+require_once __DIR__ . '/../Services/OrderService.php';
+require_once __DIR__ . '/../Services/OrderNotifications.php';
+requireLogin();
+$id = positiveId($_GET['id'] ?? null);
+$stmt = $pdo->prepare('SELECT * FROM menus WHERE id = ?');
+$stmt->execute([$id]);
+$menu = $stmt->fetch(PDO::FETCH_ASSOC);
+if (!$menu || !(int) $menu['actif'] || (int) $menu['stock_disponible'] <= 0) {
+    abortRequest(409, 'Ce menu est indisponible ou épuisé.');
 }
-
-
-// Calculer le prix de la commande
-function calculerPrixCommande(
-    array $menu,
-    int $nbPersonnes,
-    float $distanceKm
-): array {
-
-    $minimum = (int) $menu['nb_personnes_min'];
-    $prixMenu = (float) $menu['prix'];
-
-
-    $prixParPersonne =
-        $prixMenu / $minimum;
-
-
-    $prixRepas =
-        $prixParPersonne
-        * $nbPersonnes;
-
-
-    // Remise de 10 %
-    // si minimum + 5 personnes
-    $remisePourcentage = 0;
-
-    if (
-        $nbPersonnes
-        >= $minimum + 5
-    ) {
-        $remisePourcentage = 10;
-    }
-
-
-    $montantRemise =
-        $prixRepas
-        * ($remisePourcentage / 100);
-
-
-    $prixApresRemise =
-        $prixRepas
-        - $montantRemise;
-
-
-    // Frais de livraison hors Bordeaux
-    $fraisLivraison = 0;
-
-    if ($distanceKm > 0) {
-
-        $fraisLivraison =
-            5
-            + (0.59 * $distanceKm);
-    }
-
-
-    $prixTotal =
-        $prixApresRemise
-        + $fraisLivraison;
-
-
-    return [
-        'prix_repas' =>
-            round($prixRepas, 2),
-
-        'remise_pourcentage' =>
-            $remisePourcentage,
-
-        'montant_remise' =>
-            round($montantRemise, 2),
-
-        'frais_livraison' =>
-            round($fraisLivraison, 2),
-
-        'prix_total' =>
-            round($prixTotal, 2)
-    ];
-}
-
-
-// Vérifier le délai minimum avant prestation
-function verifierDelaiCommande(
-    string $date,
-    string $heure,
-    int $delaiHeures
-): ?string {
-
-    $datePrestation =
-        creerDatePrestation(
-            $date,
-            $heure
-        );
-
-
-    if (!$datePrestation) {
-
-        return
-            "La date ou l'heure de prestation est invalide.";
-    }
-
-
-    $maintenant = new DateTime();
-
-    $dateMinimum =
-        clone $maintenant;
-
-
-    if ($delaiHeures > 0) {
-
-        $dateMinimum->modify(
-            '+' . $delaiHeures . ' hours'
-        );
-    }
-
-
-    if ($datePrestation < $dateMinimum) {
-
-        return
-            "Ce menu doit être commandé au moins "
-            . $delaiHeures
-            . " heure(s) avant la prestation.";
-    }
-
-
-    return null;
-}
-
-
-// --------------------------------------------------
-// CONNEXION
-// --------------------------------------------------
-
-
-// Vérifier que l'utilisateur est connecté
-if (!isset($_SESSION['user_id'])) {
-
-    header("Location: login.php");
-    exit;
-}
-
-
-// --------------------------------------------------
-// MENU
-// --------------------------------------------------
-
-
-$id = $_GET['id'] ?? null;
-
-
-if (!$id || !is_numeric($id)) {
-
-    exit("Menu invalide.");
-}
-
-
-$id = (int) $id;
-
-
-// Récupérer le menu
-$sql = "
-    SELECT *
-    FROM menus
-    WHERE id = :id
-";
-
-$stmt = $pdo->prepare($sql);
-
-$stmt->execute([
-    ':id' => $id
-]);
-
-$menu = $stmt->fetch(
-    PDO::FETCH_ASSOC
-);
-
-
-if (!$menu) {
-
-    exit("Menu introuvable.");
-}
-
-
-// Vérifier que le menu est actif
-if ((int) $menu['actif'] !== 1) {
-
-    exit(
-        "Ce menu n'est actuellement pas disponible à la commande."
-    );
-}
-
-
-// Vérifier le stock dès l'arrivée sur la page
-if ((int) $menu['stock_disponible'] <= 0) {
-
-    exit(
-        "Ce menu est actuellement épuisé."
-    );
-}
-
-
-// --------------------------------------------------
-// UTILISATEUR
-// --------------------------------------------------
-
-
-$sqlUser = "
-    SELECT *
-    FROM users
-    WHERE id = :id
-";
-
-$stmtUser = $pdo->prepare(
-    $sqlUser
-);
-
-$stmtUser->execute([
-    ':id' => $_SESSION['user_id']
-]);
-
-$user = $stmtUser->fetch(
-    PDO::FETCH_ASSOC
-);
-
-
-if (!$user) {
-
-    exit(
-        "Utilisateur introuvable."
-    );
-}
-
-
-// --------------------------------------------------
-// VALEURS PAR DÉFAUT
-// --------------------------------------------------
-
-
-$adressePrestation =
-    $user['adresse'];
-
-$datePrestation = '';
-
-$heurePrestation = '';
-
-$lieuPrestation = '';
-
-$nbPersonnes =
-    (int) $menu['nb_personnes_min'];
-
-$distanceKm = 0;
-
-
+$stmt = $pdo->prepare('SELECT nom, prenom, email, gsm, adresse FROM users WHERE id = ?');
+$stmt->execute([$_SESSION['user_id']]);
+$user = $stmt->fetch(PDO::FETCH_ASSOC);
+$adressePrestation = $user['adresse'];
+$datePrestation = $heurePrestation = $lieuPrestation = $erreur = '';
+$nbPersonnes = (int) $menu['nb_personnes_min'];
+$distanceKm = $prixRepas = $remisePourcentage = $montantRemise = $fraisLivraison = $prixTotal = 0;
 $recap = false;
-
-$erreur = '';
-
-
-// Variables prix
-$prixRepas = 0;
-
-$remisePourcentage = 0;
-
-$montantRemise = 0;
-
-$fraisLivraison = 0;
-
-$prixTotal = 0;
-
-
-// --------------------------------------------------
-// TRAITEMENT DU FORMULAIRE
-// --------------------------------------------------
-
-
+$quoteToken = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
-
-    $adressePrestation = trim(
-        $_POST['adresse_prestation']
-        ?? ''
-    );
-
-
-    $datePrestation = trim(
-        $_POST['date_prestation']
-        ?? ''
-    );
-
-
-    $heurePrestation = trim(
-        $_POST['heure_prestation']
-        ?? ''
-    );
-
-
-    $lieuPrestation = trim(
-        $_POST['lieu_prestation']
-        ?? ''
-    );
-
-
-    $nbPersonnes = (int) (
-        $_POST['nb_personnes']
-        ?? 0
-    );
-
-
-    $distanceKm = (float) (
-        $_POST['distance_km']
-        ?? 0
-    );
-
-
-    $action =
-        $_POST['action']
-        ?? 'recap';
-
-
-    // --------------------------------------------------
-    // VALIDATIONS
-    // --------------------------------------------------
-
-
-    if (
-        $adressePrestation === ''
-        || $datePrestation === ''
-        || $heurePrestation === ''
-        || $lieuPrestation === ''
-    ) {
-
-        $erreur =
-            "Tous les champs sont obligatoires.";
-    }
-
-
-    if (
-        $erreur === ''
-        && $nbPersonnes
-        < (int) $menu['nb_personnes_min']
-    ) {
-
-        $erreur =
-            "Le nombre de personnes doit être au minimum de "
-            . (int) $menu['nb_personnes_min']
-            . ".";
-    }
-
-
-    if (
-        $erreur === ''
-        && $distanceKm < 0
-    ) {
-
-        $erreur =
-            "La distance ne peut pas être négative.";
-    }
-
-
-    // Vérifier le stock
-    if (
-        $erreur === ''
-        && (int) $menu['stock_disponible'] <= 0
-    ) {
-
-        $erreur =
-            "Ce menu est actuellement épuisé.";
-    }
-
-
-    // Vérifier le délai
-    if ($erreur === '') {
-
-        $erreurDelai =
-            verifierDelaiCommande(
-                $datePrestation,
-                $heurePrestation,
-                (int) $menu[
-                    'delai_commande_heures'
-                ]
-            );
-
-
-        if ($erreurDelai !== null) {
-
-            $erreur = $erreurDelai;
+    try {
+        $action = $_POST['action'] ?? 'recap';
+        $input = $_POST;
+        if ($action === 'confirm') {
+            $quoteToken = $_POST['quote_token'] ?? '';
+            $quote = $_SESSION['order_quotes'][$quoteToken] ?? null;
+            if (!$quote || $quote['menu_id'] !== $id || $quote['expires'] < time()) {
+                throw new DomainException('Ce récapitulatif a expiré ou a déjà été confirmé. Recommencez la commande.');
+            }
+            $input = $quote['input'];
         }
-    }
-
-
-    // --------------------------------------------------
-    // CALCUL DU PRIX
-    // --------------------------------------------------
-
-
-    if ($erreur === '') {
-
-        $prix =
-            calculerPrixCommande(
-                $menu,
-                $nbPersonnes,
-                $distanceKm
-            );
-
-
-        $prixRepas =
-            $prix['prix_repas'];
-
-        $remisePourcentage =
-            $prix['remise_pourcentage'];
-
-        $montantRemise =
-            $prix['montant_remise'];
-
-        $fraisLivraison =
-            $prix['frais_livraison'];
-
-        $prixTotal =
-            $prix['prix_total'];
-    }
-
-
-    // --------------------------------------------------
-    // ÉTAPE 1 : RÉCAPITULATIF
-    // --------------------------------------------------
-
-
-    if (
-        $erreur === ''
-        && $action === 'recap'
-    ) {
-
-        $recap = true;
-    }
-
-
-    // --------------------------------------------------
-    // ÉTAPE 2 : CONFIRMATION
-    // --------------------------------------------------
-
-
-    if (
-        $erreur === ''
-        && $action === 'confirm'
-    ) {
-
-
-        try {
-
-            /*
-             * Transaction :
-             * - verrouiller le menu
-             * - revérifier stock et délai
-             * - créer la commande
-             * - diminuer le stock
-             */
-
-            $pdo->beginTransaction();
-
-
-            // Relire et verrouiller le menu
-            $sqlMenuConfirmation = "
-                SELECT *
-                FROM menus
-                WHERE id = :id
-                FOR UPDATE
-            ";
-
-            $stmtMenuConfirmation =
-                $pdo->prepare(
-                    $sqlMenuConfirmation
-                );
-
-
-            $stmtMenuConfirmation->execute([
-                ':id' => $id
-            ]);
-
-
-            $menuConfirmation =
-                $stmtMenuConfirmation->fetch(
-                    PDO::FETCH_ASSOC
-                );
-
-
-            if (!$menuConfirmation) {
-
-                throw new Exception(
-                    "Menu introuvable."
-                );
-            }
-
-
-            if (
-                (int) $menuConfirmation['actif']
-                !== 1
-            ) {
-
-                throw new Exception(
-                    "Ce menu n'est plus disponible."
-                );
-            }
-
-
-            // Revérifier le stock
-            if (
-                (int)
-                $menuConfirmation[
-                    'stock_disponible'
-                ]
-                <= 0
-            ) {
-
-                throw new Exception(
-                    "Ce menu vient d'être épuisé. "
-                    . "La commande n'a pas été enregistrée."
-                );
-            }
-
-
-            // Revérifier le minimum
-            if (
-                $nbPersonnes
-                < (int)
-                    $menuConfirmation[
-                        'nb_personnes_min'
-                    ]
-            ) {
-
-                throw new Exception(
-                    "Le nombre de personnes est insuffisant."
-                );
-            }
-
-
-            // Revérifier le délai
-            $erreurDelaiConfirmation =
-                verifierDelaiCommande(
-                    $datePrestation,
-                    $heurePrestation,
-                    (int)
-                    $menuConfirmation[
-                        'delai_commande_heures'
-                    ]
-                );
-
-
-            if (
-                $erreurDelaiConfirmation
-                !== null
-            ) {
-
-                throw new Exception(
-                    $erreurDelaiConfirmation
-                );
-            }
-
-
-            // Recalculer le prix
-            $prixConfirmation =
-                calculerPrixCommande(
-                    $menuConfirmation,
-                    $nbPersonnes,
-                    $distanceKm
-                );
-
-
-            $prixRepas =
-                $prixConfirmation[
-                    'prix_repas'
-                ];
-
-            $remisePourcentage =
-                $prixConfirmation[
-                    'remise_pourcentage'
-                ];
-
-            $montantRemise =
-                $prixConfirmation[
-                    'montant_remise'
-                ];
-
-            $fraisLivraison =
-                $prixConfirmation[
-                    'frais_livraison'
-                ];
-
-            $prixTotal =
-                $prixConfirmation[
-                    'prix_total'
-                ];
-
-
-            // Créer la commande
-            $sqlCommande = "
-                INSERT INTO commandes (
-                    user_id,
-                    menu_id,
-                    nb_personnes,
-                    prix_total,
-                    date_prestation,
-                    heure_prestation,
-                    lieu_prestation,
-                    adresse_prestation,
-                    distance_km,
-                    frais_livraison,
-                    remise_pourcentage
-                )
-
-                VALUES (
-                    :user_id,
-                    :menu_id,
-                    :nb_personnes,
-                    :prix_total,
-                    :date_prestation,
-                    :heure_prestation,
-                    :lieu_prestation,
-                    :adresse_prestation,
-                    :distance_km,
-                    :frais_livraison,
-                    :remise_pourcentage
-                )
-            ";
-
-
-            $stmtCommande =
-                $pdo->prepare(
-                    $sqlCommande
-                );
-
-
-            $stmtCommande->execute([
-
-                ':user_id' =>
-                    $_SESSION['user_id'],
-
-                ':menu_id' =>
-                    $menuConfirmation['id'],
-
-                ':nb_personnes' =>
-                    $nbPersonnes,
-
-                ':prix_total' =>
-                    $prixTotal,
-
-                ':date_prestation' =>
-                    $datePrestation,
-
-                ':heure_prestation' =>
-                    $heurePrestation,
-
-                ':lieu_prestation' =>
-                    $lieuPrestation,
-
-                ':adresse_prestation' =>
-                    $adressePrestation,
-
-                ':distance_km' =>
-                    $distanceKm,
-
-                ':frais_livraison' =>
-                    $fraisLivraison,
-
-                ':remise_pourcentage' =>
-                    $remisePourcentage
-            ]);
-
-
-            // Diminuer le stock de 1
-            $sqlStock = "
-                UPDATE menus
-
-                SET stock_disponible =
-                    stock_disponible - 1
-
-                WHERE id = :id
-                AND stock_disponible > 0
-            ";
-
-
-            $stmtStock =
-                $pdo->prepare(
-                    $sqlStock
-                );
-
-
-            $stmtStock->execute([
-                ':id' =>
-                    $menuConfirmation['id']
-            ]);
-
-
-            if (
-                $stmtStock->rowCount()
-                !== 1
-            ) {
-
-                throw new Exception(
-                    "Le stock de ce menu n'est plus disponible."
-                );
-            }
-
-
-           $pdo->commit();
-
-
-// --------------------------------------------------
-// EMAIL DE CONFIRMATION DE COMMANDE
-// --------------------------------------------------
-
-$contenuEmail = "
-    <h2>Votre commande est confirmée</h2>
-
-    <p>
-        Bonjour "
-        . htmlspecialchars($user['prenom'])
-        . ",
-    </p>
-
-    <p>
-        Votre commande Vite & Gourmand
-        a bien été enregistrée.
-    </p>
-
-    <p>
-        <strong>Menu :</strong> "
-        . htmlspecialchars($menuConfirmation['titre'])
-        . "
-    </p>
-
-    <p>
-        <strong>Date :</strong> "
-        . htmlspecialchars($datePrestation)
-        . "
-    </p>
-
-    <p>
-        <strong>Heure :</strong> "
-        . htmlspecialchars($heurePrestation)
-        . "
-    </p>
-
-    <p>
-        <strong>Nombre de personnes :</strong> "
-        . (int) $nbPersonnes
-        . "
-    </p>
-
-    <p>
-        <strong>Lieu :</strong> "
-        . htmlspecialchars($lieuPrestation)
-        . "
-    </p>
-
-    <p>
-        <strong>Adresse :</strong> "
-        . htmlspecialchars($adressePrestation)
-        . "
-    </p>
-
-    <p>
-        <strong>Total :</strong> "
-        . number_format(
-            $prixTotal,
-            2,
-            ',',
-            ' '
-        )
-        . " €
-    </p>
-
-    <p>
-        Vous pouvez suivre votre commande
-        depuis votre espace client.
-    </p>
-
-    <p>
-        À bientôt,<br>
-        L'équipe Vite & Gourmand
-    </p>
-";
-
-
-envoyerEmail(
-    $user['email'],
-    $user['prenom']
-        . ' '
-        . $user['nom'],
-    'Confirmation de votre commande',
-    $contenuEmail
-);
-
-
-header(
-    "Location: mes-commandes.php"
-);
-
-exit;
-
-        } catch (Throwable $e) {
-
-
-            if ($pdo->inTransaction()) {
-
-                $pdo->rollBack();
-            }
-
-
-            error_log(
-                "Erreur confirmation commande : "
-                . $e->getMessage()
-            );
-
-
-            $erreur =
-                $e->getMessage();
+        $data = validateOrderInput($input, $menu);
+        $adressePrestation = $data['adresse_prestation'];
+        $datePrestation = $data['date_prestation'];
+        $heurePrestation = $data['heure_prestation'];
+        $lieuPrestation = $data['lieu_prestation'];
+        $nbPersonnes = $data['nb_personnes'];
+        $distanceKm = $data['distance_km'];
+        $prixRepas = $data['prix_repas'];
+        $remisePourcentage = $data['remise_pourcentage'];
+        $montantRemise = $data['montant_remise'];
+        $fraisLivraison = $data['frais_livraison'];
+        $prixTotal = $data['prix_total'];
+        if ($action === 'recap') {
+            $recap = true;
+            $quoteToken = bin2hex(random_bytes(24));
+            $input['_quoted_total'] = $prixTotal;
+            $_SESSION['order_quotes'][$quoteToken] = ['menu_id' => $id, 'input' => $input, 'expires' => time() + 1800];
+            $_SESSION['order_quotes'] = array_slice($_SESSION['order_quotes'], -10, null, true);
+        } elseif ($action === 'confirm') {
+            $orderId = (new OrderService($pdo))->create((int) $_SESSION['user_id'], $id, $input);
+            unset($_SESSION['order_quotes'][$quoteToken]);
+            notifyOrderStatus($pdo, $orderId, 'en attente');
+            header('Location: mes-commandes.php', true, 303);
+            exit;
+        } else {
+            throw new DomainException('Action invalide.');
         }
+    } catch (DomainException $error) {
+        $erreur = $error->getMessage();
     }
 }
-
 ?>
+<?php require_once __DIR__ . '/../Templates/layout.php'; renderHeader('Commander'); ?>
 
-<!DOCTYPE html>
-
-<html lang="fr">
-
-<head>
-
-    <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
-
-    <title>
-        Commander - Vite & Gourmand
-    </title>
-
-
-    <style>
-
-        body {
-            font-family: Arial, sans-serif;
-
-            background: #f4f4f4;
-
-            padding: 20px;
-        }
-
-
-        main {
-            max-width: 750px;
-
-            margin: auto;
-
-            padding: 30px;
-
-            background: white;
-
-            border-radius: 10px;
-
-            box-shadow:
-                0 2px 8px rgba(0, 0, 0, 0.1);
-        }
-
-
-        label {
-            display: block;
-
-            margin-top: 15px;
-            margin-bottom: 5px;
-
-            font-weight: bold;
-        }
-
-
-        input {
-            width: 100%;
-
-            padding: 10px;
-
-            box-sizing: border-box;
-
-            border: 1px solid #ccc;
-
-            border-radius: 5px;
-        }
-
-
-        button {
-            width: 100%;
-
-            margin-top: 25px;
-
-            padding: 13px;
-
-            border: none;
-
-            border-radius: 6px;
-
-            background: black;
-            color: white;
-
-            font-size: 16px;
-
-            cursor: pointer;
-        }
-
-
-        .erreur {
-            padding: 12px;
-
-            margin-bottom: 20px;
-
-            background: #ffdede;
-            color: #8b0000;
-
-            border-radius: 6px;
-        }
-
-
-        .infos-menu {
-            padding: 15px;
-
-            margin-bottom: 20px;
-
-            background: #f5f5f5;
-
-            border-radius: 8px;
-        }
-
-
-        .stock {
-            font-weight: bold;
-        }
-
-
-        .recap {
-            margin-top: 30px;
-
-            padding: 20px;
-
-            background: #f5f5f5;
-
-            border-radius: 8px;
-        }
-
-    </style>
-
-</head>
-
-
-<body>
-
-
-<main>
-
+<section class="content-panel">
 
     <h1>
 
@@ -1006,7 +77,6 @@ exit;
 
     </h1>
 
-
     <p>
 
         <?php
@@ -1017,9 +87,7 @@ exit;
 
     </p>
 
-
     <div class="infos-menu">
-
 
         <p>
 
@@ -1040,7 +108,6 @@ exit;
 
         </p>
 
-
         <p>
 
             <strong>
@@ -1056,7 +123,6 @@ exit;
 
         </p>
 
-
         <p class="stock">
 
             Commandes encore disponibles :
@@ -1067,7 +133,6 @@ exit;
             ?>
 
         </p>
-
 
         <p>
 
@@ -1084,9 +149,7 @@ exit;
 
         </p>
 
-
     </div>
-
 
     <?php if ($erreur !== ''): ?>
 
@@ -1102,14 +165,13 @@ exit;
 
     <?php endif; ?>
 
-
     <form method="post">
-
+        <?= csrfInput() ?>
+        <input type="hidden" name="quote_token" value="<?= e($quoteToken) ?>">
 
         <h2>
             Votre commande
         </h2>
-
 
         <label for="nom">
             Nom
@@ -1126,7 +188,6 @@ exit;
             disabled
         >
 
-
         <label for="prenom">
             Prénom
         </label>
@@ -1142,6 +203,11 @@ exit;
             disabled
         >
 
+        <label for="client-email">Adresse email du compte</label>
+        <input id="client-email" type="email" value="<?= e($user['email']) ?>" disabled>
+        <label for="client-gsm">Téléphone du compte</label>
+        <input id="client-gsm" type="tel" value="<?= e($user['gsm']) ?>" disabled>
+        <p class="small-note">Pour les corriger, rendez-vous dans <a href="mon-profil.php">Mon profil</a>.</p>
 
         <label for="adresse_prestation">
             Adresse de prestation
@@ -1159,7 +225,6 @@ exit;
             required
         >
 
-
         <label for="date_prestation">
             Date de prestation
         </label>
@@ -1175,7 +240,6 @@ exit;
             ?>"
             required
         >
-
 
         <label for="heure_prestation">
             Heure de prestation
@@ -1193,7 +257,6 @@ exit;
             required
         >
 
-
         <label for="lieu_prestation">
             Lieu de prestation
         </label>
@@ -1209,7 +272,6 @@ exit;
             ?>"
             required
         >
-
 
         <label for="nb_personnes">
             Nombre de personnes
@@ -1229,7 +291,6 @@ exit;
             required
         >
 
-
         <label for="distance_km">
             Distance hors Bordeaux en km
         </label>
@@ -1246,7 +307,6 @@ exit;
             required
         >
 
-
         <button
             type="submit"
             name="action"
@@ -1255,20 +315,15 @@ exit;
             Voir le récapitulatif
         </button>
 
-
     </form>
-
 
     <?php if ($recap): ?>
 
-
         <section class="recap">
-
 
             <h2>
                 Récapitulatif de votre commande
             </h2>
-
 
             <p>
 
@@ -1283,7 +338,6 @@ exit;
                 </strong>
 
             </p>
-
 
             <p>
 
@@ -1305,7 +359,6 @@ exit;
 
             </p>
 
-
             <p>
 
                 Nombre de personnes :
@@ -1315,7 +368,6 @@ exit;
                 ?>
 
             </p>
-
 
             <p>
 
@@ -1334,7 +386,6 @@ exit;
 
             </p>
 
-
             <p>
 
                 Remise :
@@ -1346,7 +397,6 @@ exit;
                 %
 
             </p>
-
 
             <p>
 
@@ -1365,7 +415,6 @@ exit;
 
             </p>
 
-
             <p>
 
                 Frais de livraison :
@@ -1382,7 +431,6 @@ exit;
                 €
 
             </p>
-
 
             <h3>
 
@@ -1401,9 +449,9 @@ exit;
 
             </h3>
 
-
             <form method="post">
-
+        <?= csrfInput() ?>
+        <input type="hidden" name="quote_token" value="<?= e($quoteToken) ?>">
 
                 <input
                     type="hidden"
@@ -1415,7 +463,6 @@ exit;
                     ?>"
                 >
 
-
                 <input
                     type="hidden"
                     name="date_prestation"
@@ -1425,7 +472,6 @@ exit;
                     );
                     ?>"
                 >
-
 
                 <input
                     type="hidden"
@@ -1437,7 +483,6 @@ exit;
                     ?>"
                 >
 
-
                 <input
                     type="hidden"
                     name="lieu_prestation"
@@ -1448,7 +493,6 @@ exit;
                     ?>"
                 >
 
-
                 <input
                     type="hidden"
                     name="nb_personnes"
@@ -1456,7 +500,6 @@ exit;
                     echo $nbPersonnes;
                     ?>"
                 >
-
 
                 <input
                     type="hidden"
@@ -1466,7 +509,6 @@ exit;
                     ?>"
                 >
 
-
                 <button
                     type="submit"
                     name="action"
@@ -1475,19 +517,12 @@ exit;
                     Confirmer la commande
                 </button>
 
-
             </form>
-
 
         </section>
 
-
     <?php endif; ?>
 
+</section>
 
-</main>
-
-
-</body>
-
-</html>
+<?php renderFooter($pdo); ?>

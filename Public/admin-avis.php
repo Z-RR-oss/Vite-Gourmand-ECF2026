@@ -1,26 +1,11 @@
 <?php
 
-session_start();
-require_once '../Config/database.php';
+require_once __DIR__ . '/../Config/database.php';
 
+requireLogin();
 
-// 1. Vérifier que l'utilisateur est connecté
-if (!isset($_SESSION['user_id'], $_SESSION['role'])) {
-    header("Location: login.php");
-    exit;
-}
+requireAdminOrEmployee();
 
-
-// 2. Autoriser uniquement admin et employé
-if (
-    $_SESSION['role'] !== 'admin'
-    && $_SESSION['role'] !== 'employe'
-) {
-    exit("Accès refusé.");
-}
-
-
-// 3. Récupérer tous les avis
 $sql = "
     SELECT
         avis.id,
@@ -53,173 +38,13 @@ $avis = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 ?>
 
-<!DOCTYPE html>
+<?php require_once __DIR__ . '/../Templates/layout.php'; renderHeader('Gestion des avis'); ?>
 
-<html lang="fr">
-
-<head>
-
-    <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
-
-    <title>
-        Gestion des avis - Vite & Gourmand
-    </title>
-
-    <style>
-
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            padding: 20px;
-        }
-
-        h1 {
-            color: #333;
-        }
-
-        .navbar {
-            background-color: #111;
-            color: white;
-
-            padding: 15px 20px;
-            border-radius: 10px;
-            margin-bottom: 30px;
-
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .navbar a {
-            color: white;
-            text-decoration: none;
-            margin-left: 10px;
-        }
-
-        .navbar a:hover {
-            color: orange;
-        }
-
-        .avis {
-            background-color: white;
-
-            padding: 20px;
-            margin-bottom: 20px;
-
-            border-radius: 10px;
-
-            box-shadow:
-                0 2px 5px rgba(0, 0, 0, 0.1);
-        }
-
-        .note {
-            font-size: 20px;
-            font-weight: bold;
-        }
-
-        .statut {
-            display: inline-block;
-
-            margin-top: 10px;
-            padding: 6px 10px;
-
-            background-color: #eeeeee;
-
-            border-radius: 5px;
-
-            font-weight: bold;
-        }
-
-        .actions {
-            margin-top: 15px;
-        }
-
-        .actions a {
-            display: inline-block;
-
-            text-decoration: none;
-
-            padding: 8px 14px;
-            margin-right: 10px;
-
-            border-radius: 5px;
-
-            color: white;
-        }
-
-        .valider {
-            background-color: green;
-        }
-
-        .refuser {
-            background-color: #b00020;
-        }
-
-        .actions a:hover {
-            opacity: 0.8;
-        }
-
-        @media (max-width: 768px) {
-
-            .navbar {
-                flex-direction: column;
-                gap: 10px;
-                text-align: center;
-            }
-
-            .actions a {
-                display: block;
-                margin-top: 10px;
-                margin-right: 0;
-            }
-        }
-
-    </style>
-
-</head>
-
-
-<body>
-
-    <nav class="navbar">
-
-        <div>
-            <strong>
-                Vite & Gourmand
-            </strong>
-        </div>
-
-
-        <div>
-
-            <a href="admin-commandes.php">
-                Commandes
-            </a>
-
-            <a href="admin-avis.php">
-                Avis
-            </a>
-
-            <a href="index.php">
-                Accueil
-            </a>
-
-        </div>
-
-    </nav>
-
-
-    <main>
+    <section class="content-panel">
 
         <h1>
             Gestion des avis clients
         </h1>
-
 
         <?php if (empty($avis)): ?>
 
@@ -227,9 +52,7 @@ $avis = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 Aucun avis pour le moment.
             </p>
 
-
         <?php else: ?>
-
 
             <?php foreach ($avis as $unAvis): ?>
 
@@ -242,7 +65,6 @@ $avis = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         );
                         ?>
                     </h2>
-
 
                     <p>
                         Client :
@@ -261,7 +83,6 @@ $avis = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         </strong>
                     </p>
 
-
                     <p>
                         Email :
                         <?php
@@ -270,7 +91,6 @@ $avis = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         );
                         ?>
                     </p>
-
 
                     <p class="note">
 
@@ -284,11 +104,9 @@ $avis = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                     </p>
 
-
                     <p>
                         Commentaire :
                     </p>
-
 
                     <p>
                         <?php
@@ -300,7 +118,6 @@ $avis = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         ?>
                     </p>
 
-
                     <p>
                         Avis envoyé le :
                         <?php
@@ -309,7 +126,6 @@ $avis = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         );
                         ?>
                     </p>
-
 
                     <p class="statut">
 
@@ -323,7 +139,6 @@ $avis = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                     </p>
 
-
                     <?php
                     if (
                         $unAvis['statut_validation']
@@ -333,24 +148,19 @@ $avis = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                         <div class="actions">
 
-                            <a
-                                class="valider"
-                                href="changer-avis.php?id=<?php
-                                echo (int) $unAvis['id'];
-                                ?>&statut=validé"
-                            >
-                                Valider
-                            </a>
+                            <form method="post" action="changer-avis.php" class="inline-form">
+                                <?= csrfInput() ?>
+                                <input type="hidden" name="id" value="<?= (int) $unAvis['id'] ?>">
+                                <input type="hidden" name="statut" value="validé">
+                                <button type="submit">Valider</button>
+                            </form>
 
-
-                            <a
-                                class="refuser"
-                                href="changer-avis.php?id=<?php
-                                echo (int) $unAvis['id'];
-                                ?>&statut=refusé"
-                            >
-                                Refuser
-                            </a>
+                            <form method="post" action="changer-avis.php" class="inline-form">
+                                <?= csrfInput() ?>
+                                <input type="hidden" name="id" value="<?= (int) $unAvis['id'] ?>">
+                                <input type="hidden" name="statut" value="refusé">
+                                <button type="submit">Refuser</button>
+                            </form>
 
                         </div>
 
@@ -366,11 +176,8 @@ $avis = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
             <?php endforeach; ?>
 
-
         <?php endif; ?>
 
-    </main>
+    </section>
 
-</body>
-
-</html>
+<?php renderFooter($pdo); ?>

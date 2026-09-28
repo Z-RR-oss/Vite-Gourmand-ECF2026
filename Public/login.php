@@ -1,10 +1,10 @@
 <?php
 
-session_start();
-require_once '../Config/database.php';
+require_once __DIR__ . '/../Config/database.php';
 
 $erreur = '';
-
+$loginAttempts = $_SESSION['login_attempts'] ?? [];
+$loginAttempts = array_filter($loginAttempts, static fn ($at) => $at > time() - 900);
 
 // Si l'utilisateur est déjà connecté,
 // on peut le rediriger directement.
@@ -19,11 +19,9 @@ if (isset($_SESSION['user_id'], $_SESSION['role'])) {
         exit;
     }
 
-
     header("Location: mes-commandes.php");
     exit;
 }
-
 
 // Traitement du formulaire
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -35,9 +33,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $password =
         $_POST['password'] ?? '';
 
-
     // Vérification des champs
-    if ($email === '' || $password === '') {
+    if (count($loginAttempts) >= 8) {
+        $erreur = 'Trop de tentatives. Réessayez dans 15 minutes.';
+    } elseif ($email === '' || $password === '') {
 
         $erreur =
             "Veuillez renseigner votre email et votre mot de passe.";
@@ -53,7 +52,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             "L'adresse email n'est pas valide.";
 
     } else {
-
 
         // Chercher l'utilisateur
         $sql = "
@@ -78,12 +76,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             ':email' => $email
         ]);
 
-
         $user = $stmt->fetch(
             PDO::FETCH_ASSOC
         );
 
-
+        $_SESSION['login_attempts'] = [...$loginAttempts, time()];
         // Vérifier email + mot de passe
         if (
             !$user
@@ -105,7 +102,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         } else {
 
-
             /*
              * La connexion est valide.
              *
@@ -113,7 +109,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
              * pour éviter de conserver l'ancien ID.
              */
             session_regenerate_id(true);
-
+            unset($_SESSION['login_attempts']);
+            $_SESSION['auth_version'] = hash('sha256', $user['password']);
+            $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 
             $_SESSION['user_id'] =
                 (int) $user['id'];
@@ -130,6 +128,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['nom'] =
                 $user['nom'];
 
+            $returnTo = $_SESSION['return_to'] ?? '';
+            unset($_SESSION['return_to']);
+            if (preg_match('/^commander\.php\?id=[1-9][0-9]*$/D', $returnTo)) {
+                header('Location: ' . $returnTo, true, 303); exit;
+            }
 
             // Redirection selon le rôle
             if (
@@ -144,7 +147,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 exit;
             }
 
-
             header(
                 "Location: mes-commandes.php"
             );
@@ -156,169 +158,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 ?>
 
-<!DOCTYPE html>
+<?php require_once __DIR__ . '/../Templates/layout.php'; renderHeader('Connexion'); ?>
 
-<html lang="fr">
-
-<head>
-
-    <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
-
-    <title>
-        Connexion - Vite & Gourmand
-    </title>
-
-
-    <style>
-
-        body {
-            font-family: Arial, sans-serif;
-
-            background-color: #f4f4f4;
-
-            margin: 0;
-
-            padding: 20px;
-        }
-
-
-        main {
-            min-height: 90vh;
-
-            display: flex;
-
-            justify-content: center;
-            align-items: center;
-        }
-
-
-        .container {
-            width: 100%;
-            max-width: 450px;
-
-            background: white;
-
-            padding: 30px;
-
-            border-radius: 12px;
-
-            box-shadow:
-                0 2px 10px rgba(0, 0, 0, 0.1);
-        }
-
-
-        h1 {
-            margin-top: 0;
-
-            text-align: center;
-        }
-
-
-        label {
-            display: block;
-
-            margin-top: 15px;
-            margin-bottom: 6px;
-
-            font-weight: bold;
-        }
-
-
-        input {
-            width: 100%;
-
-            padding: 12px;
-
-            box-sizing: border-box;
-
-            border: 1px solid #ccc;
-
-            border-radius: 6px;
-
-            font-size: 16px;
-        }
-
-
-        button {
-            width: 100%;
-
-            margin-top: 25px;
-
-            padding: 13px;
-
-            border: none;
-
-            border-radius: 6px;
-
-            background: black;
-            color: white;
-
-            font-size: 16px;
-            font-weight: bold;
-
-            cursor: pointer;
-        }
-
-
-        button:hover {
-            background: #333;
-        }
-
-
-        .erreur {
-            background: #ffdede;
-
-            color: #8b0000;
-
-            padding: 12px;
-
-            margin-bottom: 20px;
-
-            border-radius: 6px;
-        }
-
-
-        .oubli {
-            margin-top: 15px;
-
-            text-align: center;
-
-            color: #555;
-        }
-
-
-        .retour {
-            display: block;
-
-            margin-top: 20px;
-
-            text-align: center;
-        }
-
-
-    </style>
-
-</head>
-
-
-<body>
-
-
-<main>
-
+<section class="content-panel">
 
     <div class="container">
-
 
         <h1>
             Connexion
         </h1>
-
 
         <?php if ($erreur !== ''): ?>
 
@@ -334,14 +182,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         <?php endif; ?>
 
-
         <form method="POST">
-
+        <?= csrfInput() ?>
 
             <label for="email">
                 Adresse email
             </label>
-
 
             <input
                 type="email"
@@ -356,11 +202,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 required
             >
 
-
             <label for="password">
                 Mot de passe
             </label>
-
 
             <input
                 type="password"
@@ -370,22 +214,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 required
             >
 
-
             <p class="oubli">
     <a href="mot-de-passe-oublie.php">
         Mot de passe oublié ?
     </a>
 </p>
 
-
             <button type="submit">
                 Connexion
             </button>
 
-
         </form>
 
-
+        <p class="retour">Première visite ? <a href="register.php">Créer mon compte</a></p>
         <a
             class="retour"
             href="index.php"
@@ -393,13 +234,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             ← Retour à l'accueil
         </a>
 
-
     </div>
 
+</section>
 
-</main>
-
-
-</body>
-
-</html>
+<?php renderFooter($pdo); ?>

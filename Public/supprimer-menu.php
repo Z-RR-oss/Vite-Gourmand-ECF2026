@@ -1,24 +1,12 @@
 <?php
 
-session_start();
-require_once '../Config/database.php';
-
+require_once __DIR__ . '/../Config/database.php';
 
 // Vérifier la connexion
-if (!isset($_SESSION['user_id'], $_SESSION['role'])) {
-    header("Location: login.php");
-    exit;
-}
-
+requireLogin();
 
 // Autoriser admin / employé
-if (
-    $_SESSION['role'] !== 'admin'
-    && $_SESSION['role'] !== 'employe'
-) {
-    exit("Accès refusé.");
-}
-
+requireAdminOrEmployee();
 
 // Vérifier l'identifiant
 $id = $_GET['id'] ?? null;
@@ -28,7 +16,6 @@ if (!$id || !is_numeric($id)) {
 }
 
 $id = (int) $id;
-
 
 // Récupérer le menu
 $sqlMenu = "
@@ -45,11 +32,9 @@ $stmtMenu->execute([
 
 $menu = $stmtMenu->fetch(PDO::FETCH_ASSOC);
 
-
 if (!$menu) {
     exit("Menu introuvable.");
 }
-
 
 // Vérifier si des commandes utilisent ce menu
 $sqlCommandes = "
@@ -69,11 +54,16 @@ $stmtCommandes->execute([
 $nombreCommandes = (int)
     $stmtCommandes->fetchColumn();
 
-
 // Confirmation de suppression
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     try {
+        $pdo->beginTransaction();
+        $lock = $pdo->prepare('SELECT id FROM menus WHERE id = ? FOR UPDATE');
+        $lock->execute([$id]);
+        $count = $pdo->prepare('SELECT COUNT(*) FROM commandes WHERE menu_id = ?');
+        $count->execute([$id]);
+        $nombreCommandes = (int) $count->fetchColumn();
 
         /*
          * Si le menu est déjà utilisé dans une commande,
@@ -112,15 +102,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             ]);
         }
 
-
+        $pdo->commit();
         header(
             "Location: admin-menus.php"
         );
 
         exit;
 
-
     } catch (PDOException $e) {
+        if ($pdo->inTransaction()) { $pdo->rollBack(); }
 
         error_log(
             "Erreur suppression menu : "
@@ -135,91 +125,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 ?>
 
-<!DOCTYPE html>
+<?php require_once __DIR__ . '/../Templates/layout.php'; renderHeader('Supprimer un menu'); ?>
 
-<html lang="fr">
-
-<head>
-
-    <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
-
-    <title>
-        Supprimer un menu - Vite & Gourmand
-    </title>
-
-    <style>
-
-        body {
-            font-family: Arial, sans-serif;
-
-            background-color: #f4f4f4;
-
-            padding: 20px;
-        }
-
-        main {
-            max-width: 600px;
-
-            margin: auto;
-
-            background: white;
-
-            padding: 25px;
-
-            border-radius: 10px;
-
-            box-shadow:
-                0 2px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        .alerte {
-            background: #fff0f0;
-
-            padding: 15px;
-
-            border-radius: 8px;
-
-            margin: 20px 0;
-        }
-
-        button {
-            padding: 10px 16px;
-
-            border: none;
-
-            border-radius: 5px;
-
-            background: #b00020;
-
-            color: white;
-
-            cursor: pointer;
-        }
-
-        .retour {
-            display: inline-block;
-
-            margin-left: 15px;
-        }
-
-    </style>
-
-</head>
-
-
-<body>
-
-<main>
+<section class="content-panel">
 
     <h1>
         Supprimer le menu
     </h1>
-
 
     <h2>
 
@@ -230,7 +142,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         ?>
 
     </h2>
-
 
     <?php if ($nombreCommandes > 0): ?>
 
@@ -263,8 +174,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <?php endif; ?>
 
-
     <form method="POST">
+        <?= csrfInput() ?>
 
         <button type="submit">
             Confirmer la suppression
@@ -279,8 +190,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     </form>
 
-</main>
+</section>
 
-</body>
-
-</html>
+<?php renderFooter($pdo); ?>

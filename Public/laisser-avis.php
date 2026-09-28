@@ -1,17 +1,9 @@
 <?php
 
-session_start();
-require_once '../Config/database.php';
+require_once __DIR__ . '/../Config/database.php';
 
+requireLogin();
 
-// 1. Vérifier que l'utilisateur est connecté
-if (!isset($_SESSION['user_id'])) {
-    header("Location: login.php");
-    exit;
-}
-
-
-// 2. Récupérer l'id de la commande
 $id = $_GET['id'] ?? null;
 
 if (!$id || !is_numeric($id)) {
@@ -20,8 +12,6 @@ if (!$id || !is_numeric($id)) {
 
 $id = (int) $id;
 
-
-// 3. Vérifier que la commande appartient bien à l'utilisateur
 $sql = "
     SELECT
         commandes.*,
@@ -48,16 +38,12 @@ if (!$commande) {
     exit("Commande introuvable.");
 }
 
-
-// 4. Vérifier que la commande est terminée
 if ($commande['statut'] !== 'terminée') {
     exit(
         "Vous pourrez laisser un avis lorsque la commande sera terminée."
     );
 }
 
-
-// 5. Vérifier qu'un avis n'existe pas déjà
 $sqlAvis = "
     SELECT id
     FROM avis
@@ -78,96 +64,31 @@ if ($avisExistant) {
     );
 }
 
-
-// 6. Traiter le formulaire
+$erreur = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
-    $note = (int) ($_POST['note'] ?? 0);
+    $note = filter_var($_POST['note'] ?? null, FILTER_VALIDATE_INT);
     $commentaire = trim($_POST['commentaire'] ?? '');
-
-
-    // Vérifier la note
-    if ($note < 1 || $note > 5) {
-        exit(
-            "La note doit être comprise entre 1 et 5."
-        );
+    if ($note === false || $note < 1 || $note > 5 || $commentaire === '' || mb_strlen($commentaire) > 3000) {
+        $erreur = 'Indiquez une note entière de 1 à 5 et un commentaire de 1 à 3 000 caractères.';
+    } else {
+        try {
+            $stmt = $pdo->prepare("INSERT INTO avis (commande_id, user_id, note, commentaire, statut_validation) VALUES (?, ?, ?, ?, 'en attente')");
+            $stmt->execute([$id, $_SESSION['user_id'], $note, $commentaire]);
+            header('Location: mes-commandes.php', true, 303); exit;
+        } catch (PDOException $exception) {
+            if ((int) ($exception->errorInfo[1] ?? 0) !== 1062) { throw $exception; }
+            $erreur = 'Vous avez déjà laissé un avis pour cette commande.';
+        }
     }
-
-
-    // Vérifier le commentaire
-    if ($commentaire === '') {
-        exit(
-            "Le commentaire est obligatoire."
-        );
-    }
-
-
-    // 7. Enregistrer l'avis
-    $sqlInsertAvis = "
-        INSERT INTO avis (
-            commande_id,
-            user_id,
-            note,
-            commentaire,
-            statut_validation
-        )
-        VALUES (
-            :commande_id,
-            :user_id,
-            :note,
-            :commentaire,
-            'en attente'
-        )
-    ";
-
-    $stmtInsertAvis = $pdo->prepare(
-        $sqlInsertAvis
-    );
-
-    $stmtInsertAvis->execute([
-        ':commande_id' => $id,
-        ':user_id' => $_SESSION['user_id'],
-        ':note' => $note,
-        ':commentaire' => $commentaire
-    ]);
-
-
-    // 8. Retourner vers les commandes
-    header(
-        "Location: mes-commandes.php"
-    );
-
-    exit;
 }
 
 ?>
 
-<!DOCTYPE html>
-
-<html lang="fr">
-
-<head>
-
-    <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
-
-    <title>
-        Laisser un avis - Vite & Gourmand
-    </title>
-
-</head>
-
-
-<body>
+<?php require_once __DIR__ . '/../Templates/layout.php'; renderHeader('Laisser un avis'); ?>
 
     <h1>
         Laisser un avis
     </h1>
-
 
     <p>
         Menu :
@@ -178,7 +99,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         ?>
     </p>
 
-
     <p>
         Commande n°
         <?php
@@ -186,8 +106,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         ?>
     </p>
 
-
     <form method="post">
+        <?= csrfInput() ?>
 
         <label for="note">
             Note
@@ -225,14 +145,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         </select>
 
-
         <br><br>
-
 
         <label for="commentaire">
             Commentaire
         </label>
-
 
         <textarea
             id="commentaire"
@@ -242,9 +159,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             required
         ></textarea>
 
-
         <br><br>
-
 
         <button type="submit">
             Envoyer mon avis
@@ -252,6 +167,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     </form>
 
-</body>
-
-</html>
+<?php renderFooter($pdo); ?>
