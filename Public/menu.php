@@ -1,106 +1,32 @@
 <?php
-require_once '../Config/database.php';
-
-$id = $_GET['id'] ?? null;
-
-if (!$id) {
-    exit("Menu introuvable.");
-}
-
-// 1. Récupérer le menu
-$sql = "SELECT * FROM menus WHERE id = :id";
-$stmt = $pdo->prepare($sql);
-
-$stmt->execute([
-    ':id' => $id
-]);
-
-$menu = $stmt->fetch(PDO::FETCH_ASSOC);
-
-// 2. Vérifier que le menu existe
+require_once __DIR__ . '/../Config/database.php';
+require_once __DIR__ . '/../Templates/layout.php';
+require_once __DIR__ . '/../Templates/catalogue.php';
+$id = filter_var($_GET['id'] ?? null, FILTER_VALIDATE_INT, ['options' => ['min_range' => 1]]);
+$query = $pdo->prepare('SELECT * FROM menus WHERE id = :id AND actif = 1');
+$query->execute(['id' => $id ?: 0]);
+$menu = $query->fetch(PDO::FETCH_ASSOC);
 if (!$menu) {
-    exit("Menu introuvable.");
+    http_response_code(404);
+    renderHeader('Menu introuvable');
+    echo '<div class="empty-state"><h1>Ce menu n’est pas disponible.</h1><p>Retrouvez nos autres propositions dans la carte.</p><a class="button" href="menus.php">Voir les menus</a></div>';
+    renderFooter($pdo);
+    exit;
 }
-
-// 3. Récupérer les plats liés à ce menu
-$sqlPlats = "
-    SELECT
-        plats.id,
-        plats.nom,
-        plats.description,
-        plats.type_plat,
-        GROUP_CONCAT(allergenes.nom ORDER BY allergenes.nom SEPARATOR ', ') AS allergenes
-    FROM plats
-    JOIN menu_plat ON plats.id = menu_plat.plat_id
-    LEFT JOIN plat_allergene ON plats.id = plat_allergene.plat_id
-    LEFT JOIN allergenes ON plat_allergene.allergene_id = allergenes.id
-    WHERE menu_plat.menu_id = :menu_id
-    GROUP BY plats.id, plats.nom, plats.description, plats.type_plat, menu_plat.ordre_affichage
-    ORDER BY menu_plat.ordre_affichage
-";
-$stmtPlats = $pdo->prepare($sqlPlats);
-
-$stmtPlats->execute([
-    ':menu_id' => $id
-]);
-
-$plats = $stmtPlats->fetchAll(PDO::FETCH_ASSOC);
-// 4. Récupérer les images du menu
-$sqlImages = "SELECT * FROM menu_images WHERE menu_id = :menu_id";
-
-$stmtImages = $pdo->prepare($sqlImages);
-
-$stmtImages->execute([
-    ':menu_id' => $id
-]);
-
-$images = $stmtImages->fetchAll(PDO::FETCH_ASSOC);
-
-// 4. Affichage
-echo "<h1>" . $menu['titre'] . "</h1>";
-echo "<p>" . $menu['description'] . "</p>";
-echo "<p>Prix : " . $menu['prix'] . " €</p>";
-echo "<p>Thème : " . $menu['theme'] . "</p>";
-echo "<p>Régime : " . $menu['regime'] . "</p>";
-echo "<p>Minimum : " . $menu['nb_personnes_min'] . " personnes</p>";
-echo "<p>Stock disponible : " . $menu['stock_disponible'] . "</p>";
-echo "<p>Conditions : " . $menu['conditions_menu'] . "</p>";
-echo "<p>Délai de commande : " . $menu['delai_commande_heures'] . " heures</p>";
+$query = $pdo->prepare("SELECT p.id, p.nom, p.description, p.type_plat, GROUP_CONCAT(a.nom ORDER BY a.nom SEPARATOR ', ') AS allergenes
+    FROM plats p JOIN menu_plat mp ON p.id = mp.plat_id LEFT JOIN plat_allergene pa ON p.id = pa.plat_id LEFT JOIN allergenes a ON pa.allergene_id = a.id
+    WHERE mp.menu_id = :menu_id GROUP BY p.id, p.nom, p.description, p.type_plat, mp.ordre_affichage ORDER BY mp.ordre_affichage, p.id");
+$query->execute(['menu_id' => $id]);
+$plats = $query->fetchAll(PDO::FETCH_ASSOC);
+$query = $pdo->prepare('SELECT chemin_image, texte_alternatif FROM menu_images WHERE menu_id = :menu_id ORDER BY id');
+$query->execute(['menu_id' => $id]);
+$images = $query->fetchAll(PDO::FETCH_ASSOC);
+renderHeader($menu['titre']);
 ?>
-
-<h2>Galerie</h2>
-
-<?php if (empty($images)): ?>
-    <p>Aucune image disponible.</p>
-<?php else: ?>
-
-    <?php foreach ($images as $image): ?>
-        <img
-            src="<?php echo $image['chemin_image']; ?>"
-            alt="<?php echo $image['texte_alternatif']; ?>"
-            width="300"
-        >
-    <?php endforeach; ?>
-
-<?php endif; ?>
-
-
-<h2>Plats du menu</h2>
-
-<?php if (empty($plats)): ?>
-    <p>Aucun plat associé à ce menu.</p>
-<?php else: ?>
-
-    <?php foreach ($plats as $plat): ?>
-        <div>
-            <h3><?php echo $plat['nom']; ?></h3>
-            <p><?php echo $plat['description']; ?></p>
-            <p>Type : <?php echo $plat['type_plat']; ?></p>
-            <p>Allergènes :<?php echo $plat['allergenes'] ?: 'Aucun allergène renseigné'; ?></p>
-        </div>
-    <?php endforeach; ?>
-
-<?php endif; ?>
-<a href="commander.php?id=<?php echo $menu['id']; ?>">
-    Commander ce menu
-</a>
+<nav class="breadcrumbs" aria-label="Fil d’Ariane"><a href="index.php">Accueil</a><span aria-hidden="true">/</span><a href="menus.php">Nos menus</a><span aria-hidden="true">/</span><span><?= e($menu['titre']) ?></span></nav>
+<section class="menu-detail">
+    <div class="menu-gallery"><img class="detail-cover" src="<?= e(catalogueImage($images[0]['chemin_image'] ?? null)) ?>" alt="<?= e($images[0]['texte_alternatif'] ?? 'Illustration de notre table à partager') ?>" width="800" height="650"><?php if (count($images) > 1): ?><div class="gallery-thumbnails"><?php foreach (array_slice($images, 1) as $image): ?><a href="<?= e(catalogueImage($image['chemin_image'])) ?>"><img src="<?= e(catalogueImage($image['chemin_image'])) ?>" alt="<?= e($image['texte_alternatif']) ?>" width="220" height="170" loading="lazy"></a><?php endforeach; ?></div><?php endif; ?><p class="small-note">Visuels de présentation. Retrouvez la composition ci-dessous.</p></div>
+    <div class="menu-detail-copy"><p class="eyebrow"><?= e($menu['theme']) ?> <span aria-hidden="true">·</span> <?= e($menu['regime']) ?></p><h1><?= e($menu['titre']) ?></h1><p class="lead"><?= nl2br(e($menu['description'])) ?></p><div class="detail-price"><strong><?= number_format((float) $menu['prix'], 2, ',', ' ') ?> €</strong><span>pour <?= (int) $menu['nb_personnes_min'] ?> personnes minimum</span></div><dl class="menu-facts"><div><dt>À partir de</dt><dd><?= number_format((float) $menu['prix'] / max(1, (int) $menu['nb_personnes_min']), 2, ',', ' ') ?> € / personne</dd></div><div><dt>Disponibilités</dt><dd><?= (int) $menu['stock_disponible'] ?> commande(s)</dd></div><div><dt>Anticipation</dt><dd><?= (int) $menu['delai_commande_heures'] ?> heures minimum</dd></div></dl><aside class="menu-conditions"><h2>Avant de commander</h2><p><?= nl2br(e($menu['conditions_menu'] ?: 'Consultez notre équipe pour les conditions de conservation.')) ?></p><p>À commander au moins <?= (int) $menu['delai_commande_heures'] ?> heures avant la prestation.</p></aside><?php if ((int) $menu['stock_disponible'] > 0): ?><a class="button button-wide" href="commander.php?id=<?= (int) $menu['id'] ?>">Commander ce menu <span aria-hidden="true">↗</span></a><?php else: ?><button class="button-wide" disabled>Momentanément indisponible</button><?php endif; ?><p class="small-note">10 % de remise dès <?= (int) $menu['nb_personnes_min'] + 5 ?> convives. Livraison hors Bordeaux : 5 € + 0,59 €/km.</p></div>
+</section>
+<section class="dishes-section"><p class="eyebrow">LE PLAISIR, DE L’ENTRÉE AU DESSERT</p><h2>À votre menu.</h2><?php if (!$plats): ?><p>La composition sera précisée par notre équipe. <a href="contact.php">Contactez-nous pour en savoir plus.</a></p><?php endif; ?><div class="dish-list"><?php foreach ($plats as $plat): ?><article class="dish"><span class="dish-type"><?= e(['entree' => 'Entrée', 'plat' => 'Plat', 'dessert' => 'Dessert'][$plat['type_plat']] ?? $plat['type_plat']) ?></span><div><h3><?= e($plat['nom']) ?></h3><p><?= e($plat['description']) ?></p><p class="allergens"><strong>Allergènes :</strong> <?= e($plat['allergenes'] ?: 'Non renseignés — contactez-nous en cas d’allergie.') ?></p></div></article><?php endforeach; ?></div></section>
+<?php renderFooter($pdo); ?>
