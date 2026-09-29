@@ -2,7 +2,7 @@
 
 Application de traiteur bordelais : catalogue filtrable, commandes, suivi, avis modérés et gestion par rôle. PHP 8.2, PDO/MariaDB, HTML/CSS/JavaScript et PHPMailer. Les statistiques sont synchronisées vers Firebase Realtime Database puis lues depuis Firebase.
 
-**Recette locale et intégration Firebase réelle validées le 29 septembre 2026. La mise en ligne, le SMTP distant et les cron restent à finaliser.** Le compte alwaysdata existe; le retour au forfait gratuit doit être confirmé après reconnexion. Voir la [checklist](docs/checklist-finale.md) et le [rapport](docs/rapport-final.md).
+**Recette locale et intégration Firebase réelle validées le 29 septembre 2026. La mise en ligne, le SMTP distant et les cron restent à finaliser.** Le forfait alwaysdata Free (0 €), la base MySQL et HTTPS sont configurés; le transfert attend l'accès SSH. Voir la [checklist](docs/checklist-finale.md) et le [rapport](docs/rapport-final.md).
 
 ## Installation locale
 

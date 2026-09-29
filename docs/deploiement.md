@@ -2,7 +2,15 @@
 
 ## État de livraison
 
-Le code est préparé pour un hébergement PHP/MariaDB. Au 29 septembre 2026, le projet Firebase `vite-gourmand-ecf2026` et sa Realtime Database en Belgique sont créés; les règles publiques de lecture et d'écriture sont fermées. La clé serveur est configurée et la synchronisation/lecture réelle a réussi sur les données de démonstration. Le compte alwaysdata `vite-gourmandecf2026` existe à Paris, mais affiche Medium (240 € HT/an). Le propriétaire a demandé son retour à Free : la tentative de validation a redirigé vers la connexion, donc le changement n'est pas encore confirmé. La reconnexion Google aboutit à un profil sans abonnement : retrouver le profil propriétaire de cet hébergement avant de reprendre le déploiement, sans créer de compte supplémentaire. **Aucune URL publique de production n'est disponible et aucun déploiement réel n'est revendiqué.** Le lien local est `http://vite-gourmand.local`.
+Le code est préparé pour un hébergement PHP/MariaDB. Au 29 septembre 2026, le projet Firebase `vite-gourmand-ecf2026` et sa Realtime Database en Belgique sont créés; les règles publiques de lecture et d'écriture sont fermées. La clé serveur est configurée et la synchronisation/lecture réelle a réussi sur les données de démonstration. Au 30 septembre 2026, le forfait **Free à 0 €** est confirmé pour `vite-gourmandecf2026` à Paris. La base MariaDB 11.4 `vite-gourmandecf2026_app` est créée. Le site est réglé sur PHP 8.2, Europe/Paris et HTTPS obligatoire : HTTP renvoie 301 vers HTTPS, qui répond 200 avec un certificat accepté. Il s'agit encore de la page par défaut de l'hébergeur. **L'application n'est pas encore transférée : connexion SSH requise.** Le lien local reste `http://vite-gourmand.local`.
+
+Paramètres vérifiés dans l'administration :
+
+- adresse prévue : `https://vite-gourmandecf2026.alwaysdata.net` ;
+- SSH/SFTP : `ssh-vite-gourmandecf2026.alwaysdata.net`, utilisateur `vite-gourmandecf2026` ;
+- MySQL : `mysql-vite-gourmandecf2026.alwaysdata.net`, base `vite-gourmandecf2026_app` ;
+- racine HTTP actuelle : `/home/vite-gourmandecf2026/www/` (page d'accueil de l'hébergeur). Ne la remplacer par le dossier `Public/` de l'application qu'après installation des fichiers et de la configuration privée.
+
 
 ## Prérequis
 

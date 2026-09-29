@@ -76,6 +76,6 @@ Sources : Prompt_Maitre_Vite_Gourmand_Transfert_IA.pdf (12 pages) relu intégral
 | Documentation technique et déploiement | OK | docs/documentation-technique.md; docs/deploiement.md | Configuration,extensions,permissions,cron,rollback | Vérifié localement. |
 | Plan et preuves des tests | OK | docs/plan-tests.md; tests | 196 contrôles automatisés, captures et recette | Vérifié localement. |
 | Lint PHP,JS,diff,liens,logs | OK | docs/plan-tests.md | 68 PHP OK;2 JS OK;diff check;22 ressources sans erreur | Ancienne erreur GD corrigée;503 Firebase attendu. |
-| Application publique déployée et fonctionnelle | BLOQUÉE | docs/deploiement.md | Local200; aucune URL publique | Compte alwaysdata créé; forfait gratuit à confirmer après reconnexion, application non déployée. |
+| Application publique déployée et fonctionnelle | BLOQUÉE | docs/deploiement.md | Local200; HTTPS hébergeur200, page par défaut | Forfait Free 0 €, base MySQL et HTTPS configurés; accès SSH requis pour le transfert. |
 | Cron installé et recette finale en ligne | BLOQUÉE | Scripts/verifier-retards-materiel.php; Scripts/synchroniser-statistiques.php | Scripts testés; commandes cron documentées | Installation et observation nécessaires sur futur hébergement. |
 | Commits thématiques sans fusion aveugle | OK | docs/rapport-final.md | Commits sur branche de fonctionnalité | main et develop non fusionnés pendant cette intervention. |

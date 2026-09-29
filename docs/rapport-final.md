@@ -40,7 +40,7 @@ Huit familles vérifiées par capture SMTP : bienvenue, reset, confirmation, att
 
 ## 10. Déploiement
 
-Projet préparé pour PHP 8.2/MariaDB standard, DocumentRoot Public, Composer, extensions, TLS, secrets, permissions, sauvegardes et rollback documentés. Firebase est configuré. Le compte alwaysdata existe; le retour demandé de Medium à Free reste à confirmer après reconnexion. L'application publique et les cron distants ne sont pas encore déployés.
+Projet préparé pour PHP 8.2/MariaDB standard, DocumentRoot Public, Composer, extensions, TLS, secrets, permissions, sauvegardes et rollback documentés. Firebase est configuré. Le forfait alwaysdata Free (0 €), la base MySQL et HTTPS sont configurés; l'accès SSH manque encore pour transférer l'application. L'application publique et les cron distants ne sont pas encore déployés.
 
 ## 11. Livrables créés
 
