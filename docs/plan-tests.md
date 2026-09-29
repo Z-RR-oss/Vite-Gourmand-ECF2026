@@ -50,6 +50,8 @@ Le dernier test doit sortir 77 / NON EXÉCUTÉ sans activation explicite. L'URL 
 | integration_http.py | 126 assertions réussies | HTTP réel + MariaDB + capture SMTP, trois rôles, parcours et attaques basiques |
 | images.php | 4 contrôles réussis | SVG refusé, PNG réencodé avec nom sûr, alt modifié, retrait galerie |
 | statistics-live.php | Réussi le 29 septembre 2026 | Lecture réelle Firebase après PUT de 5 menus/2 jours, code0 |
+| Apache XAMPP et Firebase | Réussi le 29 septembre 2026 | Lecture sous le compte daemon, HTTP200 et 5 menus; sonde locale supprimée |
+| Archive de livraison | Réussie le 29 septembre 2026 | 164 fichiers + manifeste; dépendances, permissions 644, empreintes et exclusions contrôlées; deux générations de même SHA-256 |
 
 La première recette upload a révélé l'absence de imagewebp dans GD XAMPP. Le réencodage a été changé en PNG et les quatre contrôles ont ensuite réussi. Les anciennes erreurs du journal restent des traces de diagnostic, pas des erreurs persistantes.
 
@@ -77,6 +79,8 @@ La première recette upload a révélé l'absence de imagewebp dans GD XAMPP. Le
 ## Recette navigateur
 
 Les 22 pages principales publiques/client/admin ont été contrôlées à 390, 768 et 1 440 px, avec captures dans `captures/` et mesures dans `recette-responsive.json`. Largeur du document contrôlée, h1 unique, labels et alternatives images. Navigation mobile et filtres fetch vérifiés. Lecture visuelle des captures : identité cohérente, champs utilisables et absence de chevauchement sur les vues inspectées.
+
+Complément du 29 septembre : graphique Firebase réel contrôlé en desktop et à 390 px. Les barres natives utilisent désormais les couleurs sauge/bordeaux et affichent les valeurs nulles sur un fond neutre. Le graphique du CA et les valeurs textuelles restent cohérents; largeur document 390 px pour un viewport de 390 px. Captures `statistiques-firebase-reel.png` et `statistiques-firebase-mobile.png`.
 
 Les six mockups (accueil, détail menu, contact en desktop et mobile) sont des captures de l'interface implémentée. Les wireframes sont reconstruits pour documenter l'organisation finale, pas présentés comme une preuve de conception antérieure au code.
 

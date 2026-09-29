@@ -96,6 +96,7 @@ Différence par rapport au commit de départ e7f6cee, configurations privées et
 - `Repositories/StatisticsRepository.php`
 - `Scripts/generer-documents.py`
 - `Scripts/migrer-schema.php`
+- `Scripts/preparer-livraison.py`
 - `Scripts/synchroniser-statistiques.php`
 - `Services/CatalogueValidation.php`
 - `Services/MenuImages.php`
@@ -130,6 +131,8 @@ Différence par rapport au commit de départ e7f6cee, configurations privées et
 - `docs/captures/mon-profil.png`
 - `docs/captures/mot-de-passe-oublie.png`
 - `docs/captures/register.png`
+- `docs/captures/statistiques-firebase-reel.png`
+- `docs/captures/statistiques-firebase-mobile.png`
 - `docs/charte-graphique.md`
 - `docs/charte-graphique.pdf`
 - `docs/checklist-finale.md`

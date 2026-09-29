@@ -2,13 +2,19 @@
 
 ## État de livraison
 
-Le code est préparé pour un hébergement PHP/MariaDB. Au 29 septembre 2026, le projet Firebase `vite-gourmand-ecf2026` et sa Realtime Database en Belgique sont créés; les règles publiques de lecture et d'écriture sont fermées. La clé serveur est configurée et la synchronisation/lecture réelle a réussi sur les données de démonstration. Le compte alwaysdata `vite-gourmandecf2026` existe à Paris, mais affiche Medium (240 € HT/an). Le propriétaire a demandé son retour à Free : la tentative de validation a redirigé vers la connexion, donc le changement n'est pas encore confirmé. Reconnexion nécessaire avant de reprendre le déploiement. **Aucune URL publique de production n'est disponible et aucun déploiement réel n'est revendiqué.** Le lien local est `http://vite-gourmand.local`.
+Le code est préparé pour un hébergement PHP/MariaDB. Au 29 septembre 2026, le projet Firebase `vite-gourmand-ecf2026` et sa Realtime Database en Belgique sont créés; les règles publiques de lecture et d'écriture sont fermées. La clé serveur est configurée et la synchronisation/lecture réelle a réussi sur les données de démonstration. Le compte alwaysdata `vite-gourmandecf2026` existe à Paris, mais affiche Medium (240 € HT/an). Le propriétaire a demandé son retour à Free : la tentative de validation a redirigé vers la connexion, donc le changement n'est pas encore confirmé. La reconnexion Google aboutit à un profil sans abonnement : retrouver le profil propriétaire de cet hébergement avant de reprendre le déploiement, sans créer de compte supplémentaire. **Aucune URL publique de production n'est disponible et aucun déploiement réel n'est revendiqué.** Le lien local est `http://vite-gourmand.local`.
 
 ## Prérequis
 
 PHP 8.2 ou supérieur avec PDO/MySQL, mbstring, cURL, OpenSSL, GD, sessions et JSON; MySQL 8 ou MariaDB 10.4+; Composer 2; serveur Apache 2.4 ou Nginx/PHP-FPM; certificat HTTPS; sorties réseau HTTPS/443 et SMTP autorisées. Les tests ont utilisé PHP 8.2.4 et MariaDB XAMPP.
 
 Le serveur SQL doit utiliser Europe/Paris, comme PHP. `DB_TIMEZONE=Europe/Paris` peut fixer la session lorsque les tables de fuseaux MySQL sont disponibles. Sinon configurer le fuseau système du serveur SQL; ne pas utiliser un simple décalage fixe qui serait faux lors des changements d'heure. Vérifier les dates d'un historique et `SELECT @@session.time_zone, NOW()` après installation.
+
+## Archive de livraison
+
+Après `composer install --no-dev` et enregistrement des changements dans Git, exécuter `python3 Scripts/preparer-livraison.py` depuis le poste de développement. Le script refuse un dépôt modifié ou des dépendances qui ne correspondent pas au fichier de verrouillage. Il crée dans `var/releases/` une archive ZIP nommée d'après le commit, un manifeste des fichiers et une empreinte SHA-256. Les dates des entrées ZIP sont fixées à celle du commit.
+
+L'archive inclut le code d'exécution, les dépendances Composer, les scripts PHP et le dump fictif. Elle exclut les configurations locales, clés, données métier, images téléversées, tests et documents. Décompresser dans le répertoire privé de l'application, puis configurer le site avec `Public/` comme racine HTTP. Le dump comporte des `DROP TABLE` et reste réservé à une base vide ou jetable. La génération de l'archive ne réalise aucun déploiement.
 
 ## Installation sur base vide
 
@@ -63,6 +69,8 @@ Vérifier la réception réelle avec une adresse de recette contrôlée : bienve
 ## Firebase
 
 Suivre `nosql.md` : créer une Realtime Database, règles fermées au public, compte de service autorisé, clé privée hors DocumentRoot, URL HTTPS dans la configuration serveur. Exécuter la synchronisation avant de visiter le dashboard. Un service indisponible produit une erreur 503 explicite, jamais des chiffres SQL présentés comme des chiffres NoSQL.
+
+Sur le Mac XAMPP, Apache utilise le compte système `daemon`, distinct du compte qui lance PHP en terminal. Après accord du propriétaire, la clé a été placée hors du dépôt et de la racine HTTP : dossier privé mode 700 et fichier mode 600, avec une ACL autorisant uniquement la traversée du dossier et la lecture du fichier à `daemon`. Une lecture Firebase par Apache a été vérifiée (HTTP 200, 5 menus) le 29 septembre; la sonde temporaire limitée au localhost a été supprimée. Sur l'hébergement, adapter ces droits au compte PHP réel plutôt que recopier un nom de compte propre au Mac.
 
 ## Tâches planifiées
 
