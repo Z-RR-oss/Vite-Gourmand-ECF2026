@@ -1,6 +1,6 @@
 # Rapport final de réalisation et de recette locale
 
-Édition du 28 septembre 2026. **Le travail local est livré; la conformité finale en ligne n'est pas acquise.** Firebase, hébergement, recette SMTP distante et cron restent à configurer. Ce rapport ne déclare donc pas le projet ECF entièrement terminé.
+Édition du 29 septembre 2026. **Le travail local est livré; la conformité finale en ligne n'est pas acquise.** Firebase réel est validé; hébergement, recette SMTP distante et cron restent à finaliser. Ce rapport ne déclare donc pas le projet ECF entièrement terminé.
 
 ## 1. Résumé
 
@@ -28,11 +28,11 @@ Public = contrôleurs/vues et assets; Templates = présentation commune; Config 
 
 ## 7. Fonctionnement du NoSQL
 
-MySQL conserve le métier. La synchronisation agrège quotidiennement par menu puis publie un instantané par PUT HTTPS dans Firebase Realtime Database. Le dashboard effectue un GET de cet instantané; SQL n'y fournit que l'authentification et les horaires. OAuth RS256 avec compte de service, TLS vérifié et erreurs neutralisées. Aucun fichier JSON local ni repli SQL ne simule NoSQL. L'intégration distante n'a pas été exécutée faute de configuration Firebase.
+MySQL conserve le métier. La synchronisation agrège quotidiennement par menu puis publie un instantané par PUT HTTPS dans Firebase Realtime Database. Le dashboard effectue un GET de cet instantané; SQL n'y fournit que l'authentification et les horaires. OAuth RS256 avec compte de service, TLS vérifié et erreurs neutralisées. Aucun fichier JSON local ni repli SQL ne simule NoSQL. L'intégration distante a réussi le 29 septembre : PUT puis GET authentifiés, 5 menus et 2 jours de données fictives; lecture anonyme refusée (HTTP401).
 
 ## 8. Statistiques administrateur
 
-Nombre de commandes non annulées, annulations séparées, convives et CA livré. CA après remise, livraison incluse, pénalités exclues; états livré/attente matériel/terminée. Période par date de création des commandes, pas date de facturation. Filtres menu et 7/30/90/365 jours, tout ou dates libres. Graphique responsive et tableau. Les agrégats/filtres sont testés localement; le dashboard réel reste en 503 explicite jusqu'à la configuration et synchronisation Firebase.
+Nombre de commandes non annulées, annulations séparées, convives et CA livré. CA après remise, livraison incluse, pénalités exclues; états livré/attente matériel/terminée. Période par date de création des commandes, pas date de facturation. Filtres menu et 7/30/90/365 jours, tout ou dates libres. Graphique responsive et tableau. Le dashboard de recette lit réellement Firebase : 3 commandes, 19 convives, 120 € de CA livré. Filtres menu/dates et changement de mesure du graphique vérifiés dans le navigateur.
 
 ## 9. Emails
 
@@ -40,7 +40,7 @@ Huit familles vérifiées par capture SMTP : bienvenue, reset, confirmation, att
 
 ## 10. Déploiement
 
-Projet préparé pour PHP 8.2/MariaDB standard, DocumentRoot Public, Composer, extensions, TLS, secrets, permissions, sauvegardes et rollback documentés. L'utilisateur a confirmé l'absence d'hébergement et de Firebase. Aucun serveur public, aucune URL de production et aucun cron distant ne sont annoncés comme configurés.
+Projet préparé pour PHP 8.2/MariaDB standard, DocumentRoot Public, Composer, extensions, TLS, secrets, permissions, sauvegardes et rollback documentés. Firebase est configuré. Le compte alwaysdata existe; le retour demandé de Medium à Free reste à confirmer après reconnexion. L'application publique et les cron distants ne sont pas encore déployés.
 
 ## 11. Livrables créés
 
@@ -58,13 +58,13 @@ README complet; SQL complet et données fictives; manuel PDF de 4 pages; charte 
 | JavaScript | Deux fichiers passent node --check; console de recette sans erreur observée |
 | git diff --check | Propre avant commits |
 | Import SQL | Réel et réussi dans une base jetable; douze tables; toute la suite HTTP sur ce dump |
-| Fonctionnel | 196 contrôles réussis; tests distants distincts et non exécutés |
+| Fonctionnel | 196 contrôles locaux réussis, complétés par synchronisation/lecture Firebase réelles et recette navigateur |
 | Liens publics | 22 liens/ressources, aucune erreur HTTP |
 | Secrets HTTP | .git/HEAD403; Config/mail.local.php, dump SQL et vendor404 |
 | Logs | Dernière recette sans500;503 Firebase attendu; ancienne erreur GD corrigée et retestée |
 | Composer | Validation réussie, avertissement licence absente; audit sans vulnérabilité signalée |
 | PDF | Toutes les pages rendues et inspectées; sources et exports présents |
-| Firebase distant | NON EXÉCUTÉ, code77 du test; configuration absente |
+| Firebase distant | PUT réussi, test de lecture code0, dashboard/filtres/graphique vérifiés, accès anonyme HTTP401 |
 
 ## 14. Liste exacte des fichiers ajoutés
 
@@ -219,7 +219,7 @@ Différence par rapport au commit de départ e7f6cee, configurations privées et
 
 ## 16. Configuration externe encore nécessaire
 
-- Firebase : créer Realtime Database, règles publiques fermées, compte de service, clé privée hors Public et configuration locale. Synchroniser puis exécuter RUN_FIREBASE_TEST=1 php tests/statistics-live.php; vérifier graphique et filtres avec les données distantes.
+- Firebase : intégration locale validée; installer la configuration et la clé privée protégée sur l'hébergement final, puis revalider depuis ce serveur.
 - Hébergement : choisir/configurer PHP/MariaDB et HTTPS, importer une base appropriée, DocumentRoot Public, compte SQL restreint et permissions.
 - SMTP : reporter les réglages du serveur et l'adresse réelle de contact, définir APP_URL; autoriser une adresse de recette puis vérifier réception effective des huit emails.
 - Cron : installer les deux tâches documentées et vérifier leurs journaux/résultats sur le serveur.
@@ -233,6 +233,6 @@ Démarrer Apache/MySQL XAMPP puis ouvrir http://vite-gourmand.local. Pour une in
 
 ## 18. Checklist finale et Git
 
-La [checklist complète](checklist-finale.md) contient 73 lignes avec exigence, statut OK/BLOQUÉE, fichiers, test et commentaire. Cinq lignes sont bloquées par la preuve distante manquante; aucune donnée Firebase simulée n'est présentée comme une réussite d'intégration.
+La [checklist complète](checklist-finale.md) contient 73 lignes avec exigence, statut OK/BLOQUÉE, fichiers, test et commentaire. Trois lignes restent bloquées par la recette sur l'hébergement final; aucune donnée Firebase simulée n'est présentée comme une réussite d'intégration.
 
 Commits applicatifs sur feature/statistiques-admin : 6310334 (métier/sécurité/gestion), 42ccd6e (interface/pages publiques), d8d9015 (Firebase/statistiques), suivis du commit de documentation et preuves. Aucun merge de main ou develop. Leur état distant a été contrôlé avant livraison; la branche de fonctionnalité porte le travail à relire avant intégration.

@@ -2,7 +2,7 @@
 
 ## État de livraison
 
-Le code est préparé pour un hébergement PHP/MariaDB. L'hébergement et Firebase ne sont pas encore configurés (confirmation du propriétaire pendant la recette). **Aucune URL publique de production n'est disponible et aucun déploiement réel n'est revendiqué.** Le lien local est `http://vite-gourmand.local`.
+Le code est préparé pour un hébergement PHP/MariaDB. Au 29 septembre 2026, le projet Firebase `vite-gourmand-ecf2026` et sa Realtime Database en Belgique sont créés; les règles publiques de lecture et d'écriture sont fermées. La clé serveur est configurée et la synchronisation/lecture réelle a réussi sur les données de démonstration. Le compte alwaysdata `vite-gourmandecf2026` existe à Paris, mais affiche Medium (240 € HT/an). Le propriétaire a demandé son retour à Free : la tentative de validation a redirigé vers la connexion, donc le changement n'est pas encore confirmé. Reconnexion nécessaire avant de reprendre le déploiement. **Aucune URL publique de production n'est disponible et aucun déploiement réel n'est revendiqué.** Le lien local est `http://vite-gourmand.local`.
 
 ## Prérequis
 

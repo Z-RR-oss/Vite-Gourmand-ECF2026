@@ -1,8 +1,8 @@
 # Checklist finale confrontée au sujet
 
-Statuts : **OK** = périmètre précisément vérifié dans la colonne test; **BLOQUÉE** = condition externe empêchant la preuve finale. Une ligne code OK ne signifie pas que l’intégration distante voisine est validée. La livraison ECF complète reste bloquée par Firebase et la mise en ligne.
+Statuts : **OK** = périmètre précisément vérifié dans la colonne test; **BLOQUÉE** = condition externe empêchant la preuve finale. Une ligne code OK ne signifie pas que l’intégration distante voisine est validée. Firebase réel est validé depuis le serveur local de recette; la livraison ECF complète reste bloquée par la mise en ligne, le SMTP distant et les cron.
 
-Sources : Prompt_Maitre_Vite_Gourmand_Transfert_IA.pdf (12 pages) relu intégralement et Sujet Studi.pdf (12 pages, annexe visuelle comprise). Vérification finale du 28 septembre 2026.
+Sources : Prompt_Maitre_Vite_Gourmand_Transfert_IA.pdf (12 pages) relu intégralement et Sujet Studi.pdf (12 pages, annexe visuelle comprise). Recette locale du 28 septembre 2026, complétée par la recette Firebase réelle du 29 septembre 2026.
 
 | Exigence | Statut | Fichier(s) | Test effectué | Commentaire |
 | --- | --- | --- | --- | --- |
@@ -54,8 +54,8 @@ Sources : Prompt_Maitre_Vite_Gourmand_Transfert_IA.pdf (12 pages) relu intégral
 | SQL complet : douze tables, FK,index,UNIQUE,INSERT | OK | vite_gourmand.sql.sql; Scripts/migrer-schema.php | Import propre + recette HTTP sur base importée | Vérifié localement. |
 | Véritable accès NoSQL REST, sans JSON local | OK | Repositories/StatisticsRepository.php; Config/nosql.php | 41 vérifications locales; revue chemin GET/PUT | Code réel Firebase; tests transport explicitement simulés. |
 | Agrégation MySQL -> instantané NoSQL | OK | Services/StatisticsService.php; Scripts/synchroniser-statistiques.php | Agrégats/filtres/centimes/OAuth testés localement | Vérifié localement. |
-| Synchro Firebase réelle et lecture distante | BLOQUÉE | docs/nosql.md; tests/statistics-live.php | Test distant sort77 NON EXÉCUTÉ | Utilisateur : Firebase pas encore configuré; URL et compte de service requis. |
-| Graphique, commandes/menu, CA et filtres sur données Firebase réelles | BLOQUÉE | Public/admin-statistiques.php; Public/assets/js/statistics.js | Code et agrégats testés; état503 inspecté | Recette intégrée impossible sans Firebase; aucun faux résultat affiché. |
+| Synchro Firebase réelle et lecture distante | OK | docs/nosql.md; tests/statistics-live.php | PUT réel puis test distant code0, 5 menus et 2 jours | Clé privée hors dépôt; données fictives uniquement; lecture anonyme HTTP401. |
+| Graphique, commandes/menu, CA et filtres sur données Firebase réelles | OK | Public/admin-statistiques.php; Public/assets/js/statistics.js | Navigateur : 3 commandes/19 convives/120 €; menu Vegan 1/9/0 €; journée 2/15/0 €; graphique CA | Capture statistiques-firebase-reel.png; PHP local connecté à la vraie base Firebase. |
 | Emails métier et absence de mot de passe dans email employé | OK | Config/mail.php; Services/OrderNotifications.php | Huit familles SMTP capturées | Pas de mail réel envoyé pendant la recette. |
 | Délivrabilité des emails sur hébergement final | BLOQUÉE | docs/deploiement.md | Capture locale seulement | Configurer le SMTP du serveur puis vérifier réception avec adresse de recette autorisée. |
 | CSRF central, mutations POST et requêtes préparées | OK | Config/bootstrap.php; Config/security.php; Public | CSRF absent/falsifié, GET405, SQLi, rôles/IDs | Vérifié localement. |
@@ -76,6 +76,6 @@ Sources : Prompt_Maitre_Vite_Gourmand_Transfert_IA.pdf (12 pages) relu intégral
 | Documentation technique et déploiement | OK | docs/documentation-technique.md; docs/deploiement.md | Configuration,extensions,permissions,cron,rollback | Vérifié localement. |
 | Plan et preuves des tests | OK | docs/plan-tests.md; tests | 196 contrôles automatisés, captures et recette | Vérifié localement. |
 | Lint PHP,JS,diff,liens,logs | OK | docs/plan-tests.md | 68 PHP OK;2 JS OK;diff check;22 ressources sans erreur | Ancienne erreur GD corrigée;503 Firebase attendu. |
-| Application publique déployée et fonctionnelle | BLOQUÉE | docs/deploiement.md | Local200; aucune URL publique | Utilisateur : hébergement pas encore configuré. |
+| Application publique déployée et fonctionnelle | BLOQUÉE | docs/deploiement.md | Local200; aucune URL publique | Compte alwaysdata créé; forfait gratuit à confirmer après reconnexion, application non déployée. |
 | Cron installé et recette finale en ligne | BLOQUÉE | Scripts/verifier-retards-materiel.php; Scripts/synchroniser-statistiques.php | Scripts testés; commandes cron documentées | Installation et observation nécessaires sur futur hébergement. |
 | Commits thématiques sans fusion aveugle | OK | docs/rapport-final.md | Commits sur branche de fonctionnalité | main et develop non fusionnés pendant cette intervention. |

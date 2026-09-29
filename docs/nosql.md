@@ -1,5 +1,9 @@
 # Statistiques : MySQL → Firebase → administration
 
+## État de la configuration distante — 29 septembre 2026
+
+La console confirme la base `https://vite-gourmand-ecf2026-default-rtdb.europe-west1.firebasedatabase.app`, située en Belgique (`europe-west1`), avec les règles `.read: false` et `.write: false`. La clé téléchargée par le propriétaire est conservée hors du dépôt et de Public, dans un fichier privé de mode 600. La synchronisation réelle et `RUN_FIREBASE_TEST=1 php tests/statistics-live.php` ont réussi : 5 menus, 2 jours, instantané du 29 septembre à 13:46:43 UTC. Le dashboard de recette affiche 3 commandes, 19 convives et 120 € de CA livré; filtres menu/dates et mesure du graphique vérifiés. Une lecture REST sans authentification reçoit HTTP 401. Ces vérifications utilisent uniquement le dump de démonstration dans la base SQL jetable.
+
 ## Circuit réellement implémenté
 
 1. `Scripts/synchroniser-statistiques.php`, accessible uniquement en CLI, ouvre une transaction SQL en lecture.
@@ -93,7 +97,7 @@ Pour le volume ECF, un instantané complet permet un code simple à défendre. U
 - `php tests/statistics.php` : tests locaux déterministes avec transport injecté, OAuth RS256 vérifié cryptographiquement et agrégation SQL sur SQLite en mémoire. Ils ne contactent pas Firebase.
 - `php tests/statistics-live.php` : retourne **77 / NON EXÉCUTÉ** tant que l’activation explicite `RUN_FIREBASE_TEST=1` manque. Une fois activé, effectue une vraie lecture HTTPS et échoue si la configuration, l’accès ou l’instantané sont absents. Aucun faux succès, aucune donnée de remplacement.
 - Parcours d’intégration : configurer une vraie base → synchroniser → confirmer le nœud en console Firebase → exécuter le test distant → comparer totaux MySQL de contrôle et dashboard → filtrer menu/dates → rendre temporairement l’accès indisponible et vérifier le message d’erreur → rétablir l’accès.
-- **Validation distante encore bloquée au moment de l’implémentation : aucun projet Firebase ni clé de compte de service fourni.** Le code, les tests locaux et la procédure sont disponibles ; la connexion distante doit être validée avec les vrais accès avant d’annoncer la fonctionnalité intégrée en production.
+- **Validation distante réussie le 29 septembre 2026** depuis PHP local : publication réelle, lecture HTTPS et tableau de bord alimenté par Firebase. Capture : `captures/statistiques-firebase-reel.png`. Le déploiement et l'exécution automatique sur l'hébergement restent à vérifier.
 
 ## Références officielles consultées
 

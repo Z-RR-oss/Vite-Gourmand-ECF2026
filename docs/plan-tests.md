@@ -26,6 +26,7 @@ DB_NAME=vite_gourmand_test_20260928 \
 SMTP_HOST=127.0.0.1 SMTP_PORT=1025 SMTP_AUTH=false SMTP_ENCRYPTION=none \
 SMTP_FROM_EMAIL=robot@example.com CONTACT_EMAIL=contact@example.com \
 APP_URL=http://127.0.0.1:8091 \
+FIREBASE_DATABASE_URL='' \
 php -d error_log=/tmp/vg-test-php.log -S 127.0.0.1:8091 -t Public
 ```
 
@@ -37,7 +38,7 @@ DB_NAME=vite_gourmand_test_20260928 php tests/images.php
 php tests/statistics-live.php
 ```
 
-Le dernier test doit sortir 77 / NON EXÉCUTÉ sans activation explicite. La configuration SMTP loopback est autorisée uniquement pour cette recette; aucun message ne quitte la machine. Réimporter le dump avant une nouvelle suite HTTP : elle conserve ses fixtures dans la base jetable.
+Le dernier test doit sortir 77 / NON EXÉCUTÉ sans activation explicite. L'URL Firebase vide du serveur de cette suite force volontairement le scénario d'indisponibilité, même si une configuration locale réelle existe. Pour la recette Firebase réelle, relancer le serveur sans cette surcharge. La configuration SMTP loopback est autorisée uniquement pour cette recette; aucun message ne quitte la machine. Réimporter le dump avant une nouvelle suite HTTP : elle conserve ses fixtures dans la base jetable.
 
 ## Résultats obtenus
 
@@ -48,7 +49,7 @@ Le dernier test doit sortir 77 / NON EXÉCUTÉ sans activation explicite. La con
 | statistics.php | 41 vérifications réussies | SQL SQLite en mémoire, agrégats, filtres, erreurs REST, OAuth signé; transport simulé |
 | integration_http.py | 126 assertions réussies | HTTP réel + MariaDB + capture SMTP, trois rôles, parcours et attaques basiques |
 | images.php | 4 contrôles réussis | SVG refusé, PNG réencodé avec nom sûr, alt modifié, retrait galerie |
-| statistics-live.php | Non exécuté | Firebase absent : blocage externe assumé |
+| statistics-live.php | Réussi le 29 septembre 2026 | Lecture réelle Firebase après PUT de 5 menus/2 jours, code0 |
 
 La première recette upload a révélé l'absence de imagewebp dans GD XAMPP. Le réencodage a été changé en PNG et les quatre contrôles ont ensuite réussi. Les anciennes erreurs du journal restent des traces de diagnostic, pas des erreurs persistantes.
 
@@ -81,7 +82,7 @@ Les six mockups (accueil, détail menu, contact en desktop et mobile) sont des c
 
 ## À recetter après configuration externe
 
-Configurer Firebase réel, synchroniser, vérifier le nœud dans la console, lancer RUN_FIREBASE_TEST=1, comparer commandes/CA à SQL de contrôle, filtrer menu/dates, inspecter graphique, tester panne/reprise. Vérifier la délivrabilité réelle des huit emails et l'exécution des deux cron. En production HTTPS, vérifier cookies Secure, fichiers privés inaccessibles, mentions légales complétées et comptes démo supprimés.
+Firebase réel est configuré et le PUT puis RUN_FIREBASE_TEST=1 ont réussi le 29 septembre. Le dashboard affiche les valeurs du dump de recette : 3 commandes, 19 convives, 120 €; menu Vegan : 1/9/0 €; journée du 29 : 2/15/0 €. Graphique commandes/CA et filtres vérifiés dans le navigateur; accès REST anonyme HTTP401. Capture : captures/statistiques-firebase-reel.png. Le scénario d'indisponibilité 503 a été validé avant configuration; le rétablissement affiche maintenant les données réelles. Vérifier la délivrabilité réelle des huit emails et l'exécution des deux cron. En production HTTPS, vérifier cookies Secure, fichiers privés inaccessibles, mentions légales complétées et comptes démo supprimés.
 
 Une revue RGAA exhaustive avec lecteur d'écran, zoom navigateur, toutes les erreurs et tous les états n'a pas été réalisée. Ne pas transformer les tests pragmatiques en certificat de conformité.
 
