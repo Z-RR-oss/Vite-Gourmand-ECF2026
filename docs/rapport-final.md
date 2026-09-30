@@ -1,6 +1,6 @@
 # Rapport final de réalisation et de recette locale
 
-Édition du 29 septembre 2026. **Le travail local est livré; la conformité finale en ligne n'est pas acquise.** Firebase réel est validé; hébergement, recette SMTP distante et cron restent à finaliser. Ce rapport ne déclare donc pas le projet ECF entièrement terminé.
+Édition du 30 septembre 2026. **Le site est publié : https://vite-gourmandecf2026.alwaysdata.net.** MySQL et Firebase réels sont vérifiés sur alwaysdata, avec 29 contrôles en ligne. Les tâches sont installées et l’email de test est indiqué « Envoyé ». La réception en boîte et la première exécution automatique restent à observer.
 
 ## 1. Résumé
 
@@ -40,7 +40,7 @@ Huit familles vérifiées par capture SMTP : bienvenue, reset, confirmation, att
 
 ## 10. Déploiement
 
-Projet préparé pour PHP 8.2/MariaDB standard, DocumentRoot Public, Composer, extensions, TLS, secrets, permissions, sauvegardes et rollback documentés. Firebase est configuré. Le forfait alwaysdata Free (0 €), la base MySQL et HTTPS sont configurés; l'accès SSH manque encore pour transférer l'application. L'application publique et les cron distants ne sont pas encore déployés.
+Site publié sur alwaysdata Free (0 €), PHP web 8.2, MySQL, racine app/Public et HTTPS obligatoire. Import fictif sur base vide : 12 tables, 5 menus et 3 commandes. Clé Firebase privée transférée après accord; PUT/GET réels réussis avec le réglage IPv4 propre à l’hébergement. Les trois mots de passe de démonstration ont été remplacés et remis dans un fichier privé. SMTP STARTTLS opérationnel; test autorisé indiqué Envoyé sans rebond dans le journal #499997354. Deux tâches actives #33622/#33623; leurs scripts réussissent en CLI. Réception en boîte et première exécution automatique à confirmer.
 
 ## 11. Livrables créés
 
@@ -220,13 +220,12 @@ Différence par rapport au commit de départ e7f6cee, configurations privées et
 - `composer.lock`
 - `vite_gourmand.sql.sql`
 
-## 16. Configuration externe encore nécessaire
+## 16. Vérifications et remise restantes
 
-- Firebase : intégration locale validée; installer la configuration et la clé privée protégée sur l'hébergement final, puis revalider depuis ce serveur.
-- Hébergement : choisir/configurer PHP/MariaDB et HTTPS, importer une base appropriée, DocumentRoot Public, compte SQL restreint et permissions.
-- SMTP : reporter les réglages du serveur et l'adresse réelle de contact, définir APP_URL; autoriser une adresse de recette puis vérifier réception effective des huit emails.
-- Cron : installer les deux tâches documentées et vérifier leurs journaux/résultats sur le serveur.
-- Remise : compléter les vraies mentions légales, changer les comptes démo, reporter l'URL publique et les preuves dans la copie officielle; actualiser le Trello existant. La copie d'examen et son dépôt restent à l'étudiante.
+- SMTP : confirmer la réception en boîte du message de test autorisé. L'acceptation SMTP et l'état Envoyé sont constatés; ils ne prouvent pas le placement en boîte principale chez tous les fournisseurs.
+- Cron : observer les journaux des premières exécutions automatiques. Les deux tâches sont installées et les scripts testés sur le serveur.
+- Remise : reporter l'URL publique et fournir les identifiants privés au jury; actualiser le Trello existant. La copie d'examen et son dépôt restent à l'étudiante.
+- Avant une exploitation commerciale : remplacer les mentions pédagogiques par les données juridiques validées de l'exploitant, et limiter davantage les droits du compte SQL. Le site livré est une démonstration ECF.
 
 Les hypothèses métier sont explicites : distance déclarative, zéro à Bordeaux; jours ouvrés lundi-vendredi sans calendrier des fériés; CA de gestion par cohorte de création. Elles sont documentées dans l'interface, le manuel et la documentation.
 
@@ -236,6 +235,6 @@ Démarrer Apache/MySQL XAMPP puis ouvrir http://vite-gourmand.local. Pour une in
 
 ## 18. Checklist finale et Git
 
-La [checklist complète](checklist-finale.md) contient 73 lignes avec exigence, statut OK/BLOQUÉE, fichiers, test et commentaire. Trois lignes restent bloquées par la recette sur l'hébergement final; aucune donnée Firebase simulée n'est présentée comme une réussite d'intégration.
+La [checklist complète](checklist-finale.md) contient 73 lignes avec exigence, statut OK/BLOQUÉE, fichiers, test et commentaire. Deux lignes attendent la confirmation de réception en boîte et la première exécution automatique; aucune donnée Firebase simulée n'est présentée comme une réussite d'intégration.
 
 Commits applicatifs sur feature/statistiques-admin : 6310334 (métier/sécurité/gestion), 42ccd6e (interface/pages publiques), d8d9015 (Firebase/statistiques), suivis du commit de documentation et preuves. Aucun merge de main ou develop. Leur état distant a été contrôlé avant livraison; la branche de fonctionnalité porte le travail à relire avant intégration.

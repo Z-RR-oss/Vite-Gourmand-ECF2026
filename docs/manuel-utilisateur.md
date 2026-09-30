@@ -1,16 +1,16 @@
 # Manuel utilisateur
 
-Vite & Gourmand • ECF DWWM • Édition du 28 septembre 2026
+Vite & Gourmand • ECF DWWM • Édition du 30 septembre 2026
 
 ## Présentation et accès
 
 Julie et José proposent les menus de leur maison bordelaise, créée depuis 25 ans dans le scénario de l'épreuve. Le site permet de découvrir les menus, préparer une commande et suivre sa réalisation. Aucun paiement en ligne n'est effectué.
 
-L'adresse locale est http://vite-gourmand.local. L'URL publique n'existe pas encore : hébergement et Firebase restent à configurer. Les écrans reproduits viennent d'une base de démonstration isolée.
+Le site public est https://vite-gourmandecf2026.alwaysdata.net. L'adresse locale reste http://vite-gourmand.local. Le site en ligne utilise une base fictive dédiée, avec Firebase réel. Les écrans reproduits illustrent la démonstration.
 
 ## Comptes de démonstration
 
-Après import du dump, utiliser Demo-Vg2026! avec quentin@example.com (client), charlie@example.com (employé), ou corentin@example.com (administrateur). Ces comptes sont exclusivement pédagogiques; l'exploitant doit les remplacer avant publication.
+Après import du dump, utiliser Demo-Vg2026! avec quentin@example.com (client), charlie@example.com (employé), ou corentin@example.com (administrateur). Ce mot de passe concerne seulement une installation locale neuve du dump. Sur le site public, les trois mots de passe ont été remplacés; ils sont remis séparément dans un fichier privé, sans être publiés dans ce manuel.
 
 ## Visiteur : découvrir et contacter
 
@@ -48,7 +48,7 @@ Après clôture, l'email invite à déposer une note de 1 à 5 et un commentaire
 
 Commandes : filtrer par client ou statut. Suivre l'ordre proposé dans le sélecteur; les étapes impossibles sont refusées. Pour annuler, contacter le client puis enregistrer le mode de contact et le motif. L'historique et la commande sont conservés.
 
-Après livraison sans prêt, terminer. Avec prêt, passer en attente du retour de matériel : un email décrit immédiatement le délai et les 600 €. À la restitution, utiliser Retour matériel; la commande se termine et l'invitation à donner un avis part. Le contrôle automatique des retards est une tâche serveur à installer.
+Après livraison sans prêt, terminer. Avec prêt, passer en attente du retour de matériel : un email décrit immédiatement le délai et les 600 €. À la restitution, utiliser Retour matériel; la commande se termine et l'invitation à donner un avis part. Le contrôle des retards est installé chaque jour à 09:00 sur alwaysdata.
 
 ## Employé : catalogue et horaires
 
@@ -64,7 +64,7 @@ L'administrateur dispose de toutes les fonctions employé. Dans Équipe, créer 
 
 Statistiques lit Firebase après synchronisation serveur. Filtrer par menu, durée ou dates, puis afficher. Comparer les commandes et le CA dans le graphique et le tableau. Le CA livré comprend remise et livraison, exclut annulations et pénalités, et est groupé par date de création des commandes. Vérifier l'heure de synchronisation.
 
-À ce jour Firebase n'est pas configuré : une erreur explicite remplace les indicateurs. La connexion réelle et le graphique alimenté par Firebase restent à recetter; les chiffres ne sont jamais simulés sur cette page.
+Firebase est configuré et sa lecture réelle est vérifiée sur le site public. Les statistiques sont synchronisées toutes les 15 minutes. En cas d'indisponibilité de Firebase, une erreur explicite remplace les indicateurs; aucun chiffre simulé n'est présenté.
 
 ## Aide et limites
 

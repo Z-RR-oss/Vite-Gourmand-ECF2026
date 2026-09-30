@@ -2,14 +2,20 @@
 
 ## État de livraison
 
-Le code est préparé pour un hébergement PHP/MariaDB. Au 29 septembre 2026, le projet Firebase `vite-gourmand-ecf2026` et sa Realtime Database en Belgique sont créés; les règles publiques de lecture et d'écriture sont fermées. La clé serveur est configurée et la synchronisation/lecture réelle a réussi sur les données de démonstration. Au 30 septembre 2026, le forfait **Free à 0 €** est confirmé pour `vite-gourmandecf2026` à Paris. La base MariaDB 11.4 `vite-gourmandecf2026_app` est créée. Le site est réglé sur PHP 8.2, Europe/Paris et HTTPS obligatoire : HTTP renvoie 301 vers HTTPS, qui répond 200 avec un certificat accepté. Il s'agit encore de la page par défaut de l'hébergeur. **L'application n'est pas encore transférée : connexion SSH requise.** Le lien local reste `http://vite-gourmand.local`.
+Le site de démonstration est publié depuis le 30 septembre 2026 : https://vite-gourmandecf2026.alwaysdata.net. Le forfait **Free à 0 €** est confirmé. La racine HTTP est `/home/vite-gourmandecf2026/app/Public/`, le code et Composer sont installés dans `app/`. PHP web 8.2 et MariaDB 11.4, fuseau Europe/Paris, redirection HTTP vers HTTPS. Les cookies de session portent Secure, HttpOnly et SameSite=Lax.
 
-Paramètres vérifiés dans l'administration :
+Paramètres vérifiés :
 
-- adresse prévue : `https://vite-gourmandecf2026.alwaysdata.net` ;
-- SSH/SFTP : `ssh-vite-gourmandecf2026.alwaysdata.net`, utilisateur `vite-gourmandecf2026` ;
-- MySQL : `mysql-vite-gourmandecf2026.alwaysdata.net`, base `vite-gourmandecf2026_app` ;
-- racine HTTP actuelle : `/home/vite-gourmandecf2026/www/` (page d'accueil de l'hébergeur). Ne la remplacer par le dossier `Public/` de l'application qu'après installation des fichiers et de la configuration privée.
+- SSH : `ssh-vite-gourmandecf2026.alwaysdata.net`, utilisateur `vite-gourmandecf2026` ; clé de déploiement installée avec accord explicite, empreinte du serveur vérifiée depuis la session déjà authentifiée ;
+- MySQL : `mysql-vite-gourmandecf2026.alwaysdata.net`, base `vite-gourmandecf2026_app` ; import réservé à cette base préalablement vide : 12 tables, 5 menus et 3 commandes fictives ;
+- Firebase : clé mode 600 dans `/home/vite-gourmandecf2026/private/`, hors racine HTTP ; PUT et GET réussis depuis alwaysdata ;
+- réglage privé `force_ipv4=true` (ou `FIREBASE_FORCE_IPV4=1`) : la route IPv6 de cet hébergement échoue en TLS vers Firebase, IPv4 fonctionne. La validation TLS reste activée ;
+- SMTP : `smtp-vite-gourmandecf2026.alwaysdata.net:587`, STARTTLS, `SMTP_AUTH=false` depuis le serveur hébergé ; expéditeur/contact `vite-gourmandecf2026@alwaysdata.net`. Aucun identifiant iCloud personnel transféré ;
+- test autorisé « Recette Vite & Gourmand » : accepté par SMTP, journal alwaysdata #499997354 à 02:48 Europe/Paris, état « Envoyé », aucun rebond signalé. Lecture/réception dans la boîte non encore confirmée ;
+- tâches alwaysdata actives : #33622, statistiques toutes les 15 minutes ; #33623, matériel chaque jour à 09:00. Les scripts réussissent en CLI; première exécution par le planificateur à observer ;
+- comptes client/employé/admin : mots de passe uniques générés avant publication. Le mot de passe du dump ne fonctionne plus en ligne. Fichier de remise privé local `var/deployment/comptes-demonstration-alwaysdata.json`, exclu de Git et de l'archive.
+
+Preuves : `recette-alwaysdata.json` (29 contrôles), `captures/accueil-alwaysdata.png`, `captures/statistiques-alwaysdata.png`. Les fichiers privés, `.git`, le dump, vendor et les scripts CLI répondent 403/404 sur le site. Le compte SQL existant reste administrateur de cette seule base; un compte SQL aux droits limités constitue un durcissement supplémentaire.
 
 
 ## Prérequis
@@ -89,7 +95,7 @@ Adapter le chemin de PHP et le chemin du dépôt; fournir les mêmes variables d
 */15 * * * * /usr/bin/php /chemin/projet/Scripts/synchroniser-statistiques.php >> /chemin/prive/statistiques.log 2>&1
 ```
 
-Ces lignes sont des exemples à installer dans le scheduler de l'hébergement; aucune tâche n'a été installée sur le Mac. Le rappel utilise un verrou MySQL et marque les notifications acceptées; un échec SMTP est réessayé. Un crash entre acceptation SMTP et commit SQL peut encore provoquer un doublon : SQL et SMTP ne partagent pas une transaction distribuée.
+Ces lignes documentent les deux tâches installées dans le planificateur alwaysdata; aucune tâche n'a été installée sur le Mac. Le rappel utilise un verrou MySQL et marque les notifications acceptées; un échec SMTP est réessayé. Un crash entre acceptation SMTP et commit SQL peut encore provoquer un doublon : SQL et SMTP ne partagent pas une transaction distribuée.
 
 ## Avant exposition publique
 

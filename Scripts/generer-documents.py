@@ -3,6 +3,7 @@ Run from any directory with a Python environment providing those two packages.
 Screenshots in docs/maquettes must already exist; no browser is automated here.
 """
 from pathlib import Path
+import sys
 from html import escape
 from PIL import Image as PILImage, ImageDraw, ImageFont
 from reportlab.pdfgen import canvas
@@ -74,8 +75,9 @@ def wireframe(name, mobile):
     dest=DOC/'wireframes';dest.mkdir(exist_ok=True)
     im.save(dest/(file+'.png')); (dest/(file+'.svg')).write_text(''.join(svg)+'</svg>')
 
-for name in ['accueil','detail-menu','contact']:
-    for mobile in [False,True]:wireframe(name,mobile)
+if '--manual-only' not in sys.argv:
+    for name in ['accueil','detail-menu','contact']:
+        for mobile in [False,True]:wireframe(name,mobile)
 
 styles={
     'p':ParagraphStyle('p',fontName=BODY,fontSize=10.5,leading=16,textColor=colors.HexColor(INK),spaceAfter=11),
@@ -89,12 +91,15 @@ def footer(c,doc):
     c.drawRightString(A4[0]-44,28,str(doc.page))
 story=[Spacer(1,40),Paragraph('Vite & Gourmand',styles['title']),Paragraph('Manuel utilisateur',styles['h']),Paragraph('Les parcours client, employé et administrateur',styles['p']),Spacer(1,15)]
 im=PILImage.open(DOC/'maquettes/accueil-desktop.png');story.append(Image(str(DOC/'maquettes/accueil-desktop.png'),width=500,height=500*im.height/im.width))
-story += [Spacer(1,20),Paragraph('Édition de recette locale · 28 septembre 2026',styles['p']),Paragraph('Hébergement et Firebase à configurer. Ce manuel distingue les parcours testés localement des étapes qui nécessitent une recette distante.',styles['small']),PageBreak()]
+story += [Spacer(1,20),Paragraph('Édition de mise en ligne · 30 septembre 2026',styles['p']),Paragraph('Site publié sur alwaysdata, avec MySQL et Firebase réels. Les mots de passe du site public sont remis séparément dans un fichier privé.',styles['small']),PageBreak()]
 for block in (DOC/'manuel-utilisateur.md').read_text().split('\n\n'):
     if block.startswith('# '):continue
     if block.startswith('## '):story.append(Paragraph(escape(block[3:]),styles['h']))
     else:story.append(Paragraph(escape(block).replace('\n',' '),styles['p']))
 SimpleDocTemplate(str(DOC/'manuel-utilisateur.pdf'),pagesize=A4,rightMargin=44,leftMargin=44,topMargin=40,bottomMargin=50,title='Vite & Gourmand - Manuel utilisateur',author='Vite & Gourmand - Projet ECF').build(story,onFirstPage=footer,onLaterPages=footer)
+
+if '--manual-only' in sys.argv:
+    sys.exit(0)
 
 W,H=landscape(A4);c=canvas.Canvas(str(DOC/'charte-graphique.pdf'),pagesize=(W,H));c.setTitle('Vite & Gourmand - Charte, wireframes et maquettes');c.setAuthor('Vite & Gourmand - Projet ECF')
 page=0

@@ -1,6 +1,6 @@
 # Checklist finale confrontée au sujet
 
-Statuts : **OK** = périmètre précisément vérifié dans la colonne test; **BLOQUÉE** = condition externe empêchant la preuve finale. Une ligne code OK ne signifie pas que l’intégration distante voisine est validée. Firebase réel est validé depuis le serveur local de recette; la livraison ECF complète reste bloquée par la mise en ligne, le SMTP distant et les cron.
+Statuts : **OK** = périmètre précisément vérifié dans la colonne test; **BLOQUÉE** = condition externe empêchant la preuve finale. Une ligne code OK ne signifie pas que l’intégration distante voisine est validée. Le site public, MySQL et Firebase sont validés depuis alwaysdata. Les deux tâches sont installées; réception en boîte et première exécution automatique restent à observer.
 
 Sources : Prompt_Maitre_Vite_Gourmand_Transfert_IA.pdf (12 pages) relu intégralement et Sujet Studi.pdf (12 pages, annexe visuelle comprise). Recette locale du 28 septembre 2026, complétée par la recette Firebase réelle du 29 septembre 2026.
 
@@ -57,7 +57,7 @@ Sources : Prompt_Maitre_Vite_Gourmand_Transfert_IA.pdf (12 pages) relu intégral
 | Synchro Firebase réelle et lecture distante | OK | docs/nosql.md; tests/statistics-live.php | PUT réel puis test distant code0, 5 menus et 2 jours | Clé privée hors dépôt; données fictives uniquement; lecture anonyme HTTP401. |
 | Graphique, commandes/menu, CA et filtres sur données Firebase réelles | OK | Public/admin-statistiques.php; Public/assets/js/statistics.js | Navigateur : 3 commandes/19 convives/120 €; menu Vegan 1/9/0 €; journée 2/15/0 €; graphique CA | Capture statistiques-firebase-reel.png; PHP local connecté à la vraie base Firebase. |
 | Emails métier et absence de mot de passe dans email employé | OK | Config/mail.php; Services/OrderNotifications.php | Huit familles SMTP capturées | Pas de mail réel envoyé pendant la recette. |
-| Délivrabilité des emails sur hébergement final | BLOQUÉE | docs/deploiement.md | Capture locale seulement | Configurer le SMTP du serveur puis vérifier réception avec adresse de recette autorisée. |
+| Délivrabilité des emails sur hébergement final | BLOQUÉE | docs/deploiement.md | STARTTLS OK; test autorisé accepté et indiqué Envoyé sans rebond | Réception dans la boîte à confirmer; les huit modèles sont vérifiés localement. |
 | CSRF central, mutations POST et requêtes préparées | OK | Config/bootstrap.php; Config/security.php; Public | CSRF absent/falsifié, GET405, SQLi, rôles/IDs | Vérifié localement. |
 | Échappement XSS, validation serveur, erreurs privées | OK | Config/security.php; Config/database.php; Public/scripts.js | Balises échappées, valeurs invalides, revue logs | Vérifié localement. |
 | Secrets ignorés, exemples fictifs, racine HTTP Public | OK | .gitignore; Config/*.example.php; Public/.htaccess | Scan sans valeurs; fichiers privés HTTP403/404 | Faux positifs du scan : chaînes de log et paramètre SQL; aucun secret identifié dans livrable. |
@@ -76,6 +76,6 @@ Sources : Prompt_Maitre_Vite_Gourmand_Transfert_IA.pdf (12 pages) relu intégral
 | Documentation technique et déploiement | OK | docs/documentation-technique.md; docs/deploiement.md | Configuration,extensions,permissions,cron,rollback | Vérifié localement. |
 | Plan et preuves des tests | OK | docs/plan-tests.md; tests | 196 contrôles automatisés, captures et recette | Vérifié localement. |
 | Lint PHP,JS,diff,liens,logs | OK | docs/plan-tests.md | 68 PHP OK;2 JS OK;diff check;22 ressources sans erreur | Ancienne erreur GD corrigée;503 Firebase attendu. |
-| Application publique déployée et fonctionnelle | BLOQUÉE | docs/deploiement.md | Local200; HTTPS hébergeur200, page par défaut | Forfait Free 0 €, base MySQL et HTTPS configurés; accès SSH requis pour le transfert. |
-| Cron installé et recette finale en ligne | BLOQUÉE | Scripts/verifier-retards-materiel.php; Scripts/synchroniser-statistiques.php | Scripts testés; commandes cron documentées | Installation et observation nécessaires sur futur hébergement. |
+| Application publique déployée et fonctionnelle | OK | docs/deploiement.md; docs/recette-alwaysdata.json | 29 contrôles HTTPS, trois rôles, Firebase et fichiers privés | alwaysdata Free 0 €, app/Public, données fictives, mots de passe publics remplacés. |
+| Cron installé et recette finale en ligne | BLOQUÉE | Scripts/verifier-retards-materiel.php; Scripts/synchroniser-statistiques.php | Deux tâches actives (#33622 et #33623), deux scripts exécutés avec succès en CLI | Première exécution automatique et ses logs à observer. |
 | Commits thématiques sans fusion aveugle | OK | docs/rapport-final.md | Commits sur branche de fonctionnalité | main et develop non fusionnés pendant cette intervention. |

@@ -679,13 +679,4 @@ $commandes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 </section>
 
-<footer>
-
-    <p>
-        © 2026 Vite & Gourmand
-        - Tous droits réservés
-    </p>
-
-</footer>
-
 <?php renderFooter($pdo); ?>

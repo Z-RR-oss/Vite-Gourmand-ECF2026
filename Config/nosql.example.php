@@ -7,4 +7,5 @@ return [
     'database_secret' => '',
     'path' => 'vite_gourmand/statistics_v1',
     'timeout' => 10,
+    'force_ipv4' => false, // Activer seulement si la route IPv6 de l'hébergeur échoue.
 ];

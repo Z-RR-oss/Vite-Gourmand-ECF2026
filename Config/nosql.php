@@ -13,6 +13,7 @@ $defaults = [
     'database_secret' => '',
     'path' => 'vite_gourmand/statistics_v1',
     'timeout' => 10,
+    'force_ipv4' => false,
 ];
 $environment = [
     'database_url' => 'FIREBASE_DATABASE_URL',
@@ -20,6 +21,7 @@ $environment = [
     'database_secret' => 'FIREBASE_DATABASE_SECRET',
     'path' => 'FIREBASE_STATISTICS_PATH',
     'timeout' => 'FIREBASE_TIMEOUT',
+    'force_ipv4' => 'FIREBASE_FORCE_IPV4',
 ];
 $config = array_replace($defaults, $local);
 foreach ($environment as $key => $variable) {

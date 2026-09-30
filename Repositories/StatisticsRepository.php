@@ -29,7 +29,9 @@ final class StatisticsRepository
         ]);
         $this->transport = $transport !== null
             ? Closure::fromCallable($transport)
-            : Closure::fromCallable([self::class, 'httpsRequest']);
+            : fn(string $method, string $url, array $headers, ?string $body, int $timeout): array =>
+                self::httpsRequest($method, $url, $headers, $body, $timeout,
+                    filter_var($this->config['force_ipv4'] ?? false, FILTER_VALIDATE_BOOLEAN));
     }
 
     public function read(): array
@@ -158,7 +160,7 @@ final class StatisticsRepository
         return rtrim(strtr(base64_encode($value), '+/', '-_'), '=');
     }
 
-    private static function httpsRequest(string $method, string $url, array $headers, ?string $body, int $timeout): array
+    private static function httpsRequest(string $method, string $url, array $headers, ?string $body, int $timeout, bool $forceIpv4 = false): array
     {
         if (!function_exists('curl_init')) {
             throw new RuntimeException('L’extension PHP cURL est requise.');
@@ -175,6 +177,10 @@ final class StatisticsRepository
             CURLOPT_SSL_VERIFYHOST => 2,
             CURLOPT_PROTOCOLS => CURLPROTO_HTTPS,
         ]);
+        // Optional hosting workaround for an unavailable IPv6 route; TLS remains verified.
+        if ($forceIpv4) {
+            curl_setopt($handle, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
+        }
         if ($body !== null) {
             curl_setopt($handle, CURLOPT_POSTFIELDS, $body);
         }
