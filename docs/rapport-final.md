@@ -247,3 +247,5 @@ Commits applicatifs sur feature/statistiques-admin : 6310334 (métier/sécurité
 Ajout de deux visuels culinaires générés pour les menus Vegan et Noël, optimisés en JPEG et associés aux menus par une migration ciblée relançable. Le dump neuf contient également les nouveaux chemins. Les originaux restent conservés hors Git.
 
 Le PHP applicatif est harmonisé, les blocs d’affichage historiques sont simplifiés et les contrôles d’authentification redondants sont retirés lorsque la garde de rôle les réalise déjà. Des commentaires expliquent les règles de prix, verrous de stock, sessions et requêtes asynchrones. Le CSS est réparti en 12 modules puis assemblé en une ressource ; les règles de formatage et les commandes d’entretien sont documentées dans `conventions-code.md`. Les 196 contrôles automatisés sont repassés avec succès ; les nouveaux visuels sont vérifiés sur ordinateur et mobile.
+
+Ces améliorations sont publiées sur alwaysdata et sur la branche `feature/statistiques-admin` (commit applicatif `2e80ccb`). Les 34 contrôles en ligne supplémentaires sont tous réussis ; les deux JPEG et le CSS servis correspondent aux fichiers testés.

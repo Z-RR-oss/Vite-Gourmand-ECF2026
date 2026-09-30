@@ -1,0 +1,170 @@
+{
+  "date_utc": "2026-09-30T20:18:12.172640+00:00",
+  "url": "https://vite-gourmandecf2026.alwaysdata.net/",
+  "checks": [
+    {
+      "controle": "Page accueil",
+      "ok": true
+    },
+    {
+      "controle": "Page menus.php",
+      "ok": true
+    },
+    {
+      "controle": "Page menu.php?id=1",
+      "ok": true
+    },
+    {
+      "controle": "Page contact.php",
+      "ok": true
+    },
+    {
+      "controle": "Page mentions-legales.php",
+      "ok": true
+    },
+    {
+      "controle": "Page cgv.php",
+      "ok": true
+    },
+    {
+      "controle": "Page login.php",
+      "ok": true
+    },
+    {
+      "controle": "Page register.php",
+      "ok": true
+    },
+    {
+      "controle": "Cookie Secure HttpOnly SameSite",
+      "ok": true
+    },
+    {
+      "controle": "Protection .git/HEAD",
+      "ok": true
+    },
+    {
+      "controle": "Protection Config/database.local.php",
+      "ok": true
+    },
+    {
+      "controle": "Protection Config/nosql.local.php",
+      "ok": true
+    },
+    {
+      "controle": "Protection private/firebase-service-account.json",
+      "ok": true
+    },
+    {
+      "controle": "Protection vite_gourmand.sql.sql",
+      "ok": true
+    },
+    {
+      "controle": "Protection vendor/",
+      "ok": true
+    },
+    {
+      "controle": "Protection Scripts/synchroniser-statistiques.php",
+      "ok": true
+    },
+    {
+      "controle": "Protection assets/uploads/",
+      "ok": true
+    },
+    {
+      "controle": "Connexion utilisateur",
+      "ok": true
+    },
+    {
+      "controle": "Espace utilisateur",
+      "ok": true
+    },
+    {
+      "controle": "Statistiques refusees utilisateur",
+      "ok": true
+    },
+    {
+      "controle": "Ancien mot de passe refuse utilisateur",
+      "ok": true
+    },
+    {
+      "controle": "Connexion employe",
+      "ok": true
+    },
+    {
+      "controle": "Espace employe",
+      "ok": true
+    },
+    {
+      "controle": "Statistiques refusees employe",
+      "ok": true
+    },
+    {
+      "controle": "Ancien mot de passe refuse employe",
+      "ok": true
+    },
+    {
+      "controle": "Connexion admin",
+      "ok": true
+    },
+    {
+      "controle": "Espace admin",
+      "ok": true
+    },
+    {
+      "controle": "Dashboard Firebase",
+      "ok": true
+    },
+    {
+      "controle": "Ancien mot de passe refuse admin",
+      "ok": true
+    },
+    {
+      "controle": "Image catalogue vegan",
+      "ok": true
+    },
+    {
+      "controle": "Photo publiee vegan",
+      "ok": true
+    },
+    {
+      "controle": "Image catalogue noel",
+      "ok": true
+    },
+    {
+      "controle": "Photo publiee noel",
+      "ok": true
+    },
+    {
+      "controle": "CSS assemble publie",
+      "ok": true
+    }
+  ],
+  "total": 34,
+  "application_commit": "2e80ccbc5229",
+  "local_assertions": 196,
+  "php_syntax_files": 68,
+  "css_modules": 12,
+  "responsive": [
+    {
+      "page": "catalogue local",
+      "viewport": 1440,
+      "document_width": 1440
+    },
+    {
+      "page": "menu Vegan local",
+      "viewport": 390,
+      "document_width": 390
+    },
+    {
+      "page": "menu Noël local",
+      "viewport": 390,
+      "document_width": 390
+    },
+    {
+      "page": "catalogue public",
+      "viewport": 1280,
+      "document_width": 1280
+    }
+  ],
+  "ajax_filter_and_reset": "Vegan : 1 carte avec photo ; réinitialisation : 4 menus actifs"
+}

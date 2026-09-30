@@ -19,3 +19,7 @@ Photographie culinaire réaliste haut de gamme, format paysage 3:2, pour la cart
 ## Prompt Noël
 
 Photographie culinaire réaliste haut de gamme, format paysage 3:2, pour la carte Menu Noël d’un traiteur français Vite & Gourmand. Belle assiette en céramique ivoire d’un repas de fête français avec volaille rôtie dorée tranchée, pommes de terre fondantes et légumes d’hiver rôtis, sauce brune délicate, romarin. Fond de table crème élégant avec une serviette bordeaux, quelques branches de sapin et lumières chaleureuses discrètes floues, ambiance Noël raffinée, lumière naturelle douce, nourriture généreuse et appétissante, angle trois quarts légèrement plongeant, composition centrale adaptée au recadrage de cartes web. Sans personne, sans texte, sans logo, sans filigrane.
+
+## Publication vérifiée
+
+Les deux images sont installées sur le site alwaysdata. La galerie précédente a été sauvegardée dans le répertoire privé de l’hébergement avant application. La migration a été relancée sans doublon. Le menu Classique et les autres galeries restent inchangés.
