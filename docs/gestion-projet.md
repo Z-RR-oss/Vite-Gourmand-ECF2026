@@ -34,7 +34,7 @@ Ces lots décrivent le travail et les points de contrôle; ils ne prétendent pa
 
 ## Git
 
-Conserver `main` stable et `develop` comme branche d'intégration. La branche de reprise est `feature/statistiques-admin`, déjà issue de develop. Les changements sont répartis en commits thématiques. Faire relire la PR vers develop, tester puis fusionner. Avant develop -> main, vérifier les ancêtres : le transfert signale un historique potentiellement divergent. Aucun merge automatique aveugle.
+Conserver `main` stable et `develop` comme branche d'intégration. La branche de reprise est `feature/statistiques-admin`, déjà issue de develop. Les changements sont répartis en commits thématiques. Après la recette, `feature/statistiques-admin` a été fusionnée dans `develop` (`3397f6e`), puis `develop` dans `main` (`3d23419`). Les ancêtres et l’identité des arbres ont été vérifiés : les historiques sont conservés, sans écrasement. Ces deux fusions ont été réalisées directement avec Git à la demande de l’utilisatrice ; aucune nouvelle PR GitHub n’a été créée pour elles.
 
 ## Difficultés et décisions
 

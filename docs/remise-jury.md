@@ -3,10 +3,10 @@
 ## Liens à reporter dans la copie officielle
 
 - Application : https://vite-gourmandecf2026.alwaysdata.net/
-- Code testé : https://github.com/Z-RR-oss/Vite-Gourmand-ECF2026/tree/feature/statistiques-admin
+- Code testé : https://github.com/Z-RR-oss/Vite-Gourmand-ECF2026/tree/main
 - Gestion de projet : https://trello.com/b/mHfEGdUL/vite-gourmand-projet-ecf
 
-La branche publiée contient le travail final. Les fusions vers develop puis main restent à finaliser ; l’accès Git SSH est opérationnel. Ne pas présenter l'ancienne branche main comme la version livrée avant cette intégration.
+La branche `main` contient la version finale testée, après fusion de la branche de fonctionnalité dans `develop`, puis de `develop` dans `main`. C’est la branche à présenter au jury.
 
 ## Documents à joindre
 
@@ -14,7 +14,7 @@ La branche publiée contient le travail final. Les fusions vers develop puis mai
 - `charte-graphique.pdf` : identité, wireframes et maquettes desktop/mobile.
 - `documentation-technique.md`, `diagrammes.md`, `deploiement.md`, `nosql.md`.
 - `gestion-projet.md`, `plan-tests.md`, `checklist-finale.md`, `rapport-final.md`.
-- `recette-alwaysdata.json` et `recette-finale-hebergement.json` : contrôles distants.
+- `recette-alwaysdata.json`, `recette-finale-hebergement.json` et `recette-nettoyage-visuels.json` : contrôles distants.
 - `vite_gourmand.sql.sql` : schéma complet et données fictives; import uniquement sur une base vide.
 
 Les identifiants du site public sont dans le fichier privé local `var/deployment/acces-site-alwaysdata.md`. Le transmettre séparément au jury par un canal privé. Il est volontairement exclu du dépôt public et de l'archive publique. Les clés Firebase/SSH et les configurations privées ne doivent jamais accompagner un dépôt public.

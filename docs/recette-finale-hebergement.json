@@ -27,5 +27,13 @@
     "apache_errors": 0,
     "new_php_errors_after_opening": 0
   },
-  "git_pending": "Intégration feature/statistiques-admin -> develop -> main à finaliser ; accès SSH opérationnel"
+  "git": {
+    "status": "Fusions publiées",
+    "feature": "feature/statistiques-admin",
+    "feature_head": "6f49c18",
+    "develop_merge": "3397f6e",
+    "main_merge": "3d23419",
+    "tested_tree": "4e1b1058ac971f7a475c8cdce43d7cd67030ad0c",
+    "force_push": false
+  }
 }

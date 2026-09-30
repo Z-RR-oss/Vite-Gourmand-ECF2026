@@ -6,6 +6,7 @@ Le site de démonstration est publié depuis le 30 septembre 2026 : https://vite
 
 Paramètres vérifiés :
 
+- branche livrée : `main`, suivie par le clone de l’hébergement ; intégration finale `feature/statistiques-admin` → `develop` (`3397f6e`) → `main` (`3d23419`), arbres identiques à la version testée ;
 - SSH : `ssh-vite-gourmandecf2026.alwaysdata.net`, utilisateur `vite-gourmandecf2026` ; clé de déploiement installée avec accord explicite, empreinte du serveur vérifiée depuis la session déjà authentifiée ;
 - MySQL : `mysql-vite-gourmandecf2026.alwaysdata.net`, base `vite-gourmandecf2026_app` ; import réservé à cette base préalablement vide : 12 tables, 5 menus et 3 commandes fictives ;
 - Firebase : clé mode 600 dans `/home/vite-gourmandecf2026/private/`, hors racine HTTP ; PUT et GET réussis depuis alwaysdata ;

@@ -1,6 +1,6 @@
 # Checklist finale confrontée au sujet
 
-Statuts : **OK** = périmètre précisément vérifié dans la colonne test; **BLOQUÉE** = condition externe empêchant la preuve finale; **À FAIRE** = action restante. Une ligne code OK ne signifie pas que l’intégration distante voisine est validée. Le site public, MySQL et Firebase sont validés depuis alwaysdata. Les deux tâches sont exécutées avec succès et la réception du mail est confirmée. L’intégration feature → develop → main reste à finaliser.
+Statuts : **OK** = périmètre précisément vérifié dans la colonne test; **BLOQUÉE** = condition externe empêchant la preuve finale; **À FAIRE** = action restante. Une ligne code OK ne signifie pas que l’intégration distante voisine est validée. Le site public, MySQL et Firebase sont validés depuis alwaysdata. Les deux tâches sont exécutées avec succès et la réception du mail est confirmée. L’intégration feature → develop → main est réalisée et publiée.
 
 Sources : Prompt_Maitre_Vite_Gourmand_Transfert_IA.pdf (12 pages) relu intégralement et Sujet Studi.pdf (12 pages, annexe visuelle comprise). Recette locale du 28 septembre 2026, complétée par la recette Firebase réelle du 29 septembre 2026.
 
@@ -78,4 +78,4 @@ Sources : Prompt_Maitre_Vite_Gourmand_Transfert_IA.pdf (12 pages) relu intégral
 | Lint PHP,JS,diff,liens,logs | OK | docs/plan-tests.md | 68 PHP OK;2 JS OK;diff check;22 ressources sans erreur | Ancienne erreur GD corrigée;503 Firebase attendu. |
 | Application publique déployée et fonctionnelle | OK | docs/deploiement.md; docs/recette-alwaysdata.json | 29 contrôles HTTPS, trois rôles, Firebase et fichiers privés | alwaysdata Free 0 €, app/Public, données fictives, mots de passe publics remplacés. |
 | Cron installé et recette finale en ligne | OK | Scripts/verifier-retards-materiel.php; Scripts/synchroniser-statistiques.php | Jobs #33622/#33623 actifs, exécutions automatiques code 0; tâche matériel à 09:00:23 | Statistiques toutes les 15 minutes; matériel chaque jour à 09:00. |
-| Workflow feature vers develop puis main | À FAIRE | docs/rapport-final.md | Commits thématiques poussés; anciens historiques raccordés sans modifier les fichiers | Fusions finales à effectuer après les améliorations demandées; aucun écrasement de main. |
+| Workflow feature vers develop puis main | OK | docs/rapport-final.md | Fusion develop 3397f6e puis main 3d23419; ascendance et arbres vérifiés | Historique conservé; aucune modification du code testé ni poussée forcée. |

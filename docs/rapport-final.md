@@ -1,6 +1,6 @@
 # Rapport final de réalisation et de recette locale
 
-Édition du 30 septembre 2026. **Le site est publié : https://vite-gourmandecf2026.alwaysdata.net.** MySQL et Firebase réels sont vérifiés sur alwaysdata, avec 29 contrôles en ligne. Les tâches sont installées et l’email de test est indiqué « Envoyé ». La réception est confirmée et les deux scripts réussissent dans le planificateur. L’intégration finale feature → develop → main reste à finaliser ; l’accès Git SSH est opérationnel.
+Édition du 30 septembre 2026. **Le site est publié : https://vite-gourmandecf2026.alwaysdata.net.** MySQL et Firebase réels sont vérifiés sur alwaysdata, avec 29 contrôles en ligne. Les tâches sont installées et l’email de test est indiqué « Envoyé ». La réception est confirmée et les deux scripts réussissent dans le planificateur. L’intégration finale feature → develop → main est réalisée et publiée.
 
 ## 1. Résumé
 
@@ -238,9 +238,9 @@ Démarrer Apache/MySQL XAMPP puis ouvrir http://vite-gourmand.local. Pour une in
 
 ## 18. Checklist finale et Git
 
-La [checklist complète](checklist-finale.md) contient 73 lignes avec exigence, statut OK/BLOQUÉE, fichiers, test et commentaire. Une ligne attend la finalisation du workflow Git; aucune donnée Firebase simulée n'est présentée comme une réussite d'intégration.
+La [checklist complète](checklist-finale.md) contient 73 lignes avec exigence, statut OK/BLOQUÉE, fichiers, test et commentaire. Les 73 exigences sont validées dans le périmètre de leurs contrôles; aucune donnée Firebase simulée n'est présentée comme une réussite d'intégration.
 
-Commits applicatifs sur feature/statistiques-admin : 6310334 (métier/sécurité/gestion), 42ccd6e (interface/pages publiques), d8d9015 (Firebase/statistiques), suivis du commit de documentation et preuves. Le commit 3db42ed raccorde l’historique main, initialement séparé, à la branche de fonctionnalité. L’arbre de fichiers est strictement identique avant/après ce raccordement; les deux historiques sont préservés. Les fusions vers develop puis main restent à finaliser. Le sujet Studi demande ces fusions, sans exiger explicitement de pull request ; les PR figurent dans le prompt de travail initial.
+Commits applicatifs sur feature/statistiques-admin : 6310334 (métier/sécurité/gestion), 42ccd6e (interface/pages publiques), d8d9015 (Firebase/statistiques), suivis du commit de documentation et preuves. Le commit 3db42ed raccorde l’historique main, initialement séparé, à la branche de fonctionnalité. L’arbre de fichiers est strictement identique avant/après ce raccordement; les deux historiques sont préservés. La fusion de `feature/statistiques-admin` dans `develop` est publiée sous `3397f6e`, puis celle de `develop` dans `main` sous `3d23419`. Les arbres de fichiers de ces deux fusions sont identiques à celui de `6f49c18`, version ayant passé les 196 tests locaux et les 34 contrôles publics. Le sujet Studi demande ces fusions, sans exiger explicitement de pull request ; les PR figurent dans le prompt de travail initial.
 
 ## Amélioration du code et des visuels — 30 septembre 2026
 
@@ -248,4 +248,4 @@ Ajout de deux visuels culinaires générés pour les menus Vegan et Noël, optim
 
 Le PHP applicatif est harmonisé, les blocs d’affichage historiques sont simplifiés et les contrôles d’authentification redondants sont retirés lorsque la garde de rôle les réalise déjà. Des commentaires expliquent les règles de prix, verrous de stock, sessions et requêtes asynchrones. Le CSS est réparti en 12 modules puis assemblé en une ressource ; les règles de formatage et les commandes d’entretien sont documentées dans `conventions-code.md`. Les 196 contrôles automatisés sont repassés avec succès ; les nouveaux visuels sont vérifiés sur ordinateur et mobile.
 
-Ces améliorations sont publiées sur alwaysdata et sur la branche `feature/statistiques-admin` (commit applicatif `2e80ccb`). Les 34 contrôles en ligne supplémentaires sont tous réussis ; les deux JPEG et le CSS servis correspondent aux fichiers testés.
+Ces améliorations sont publiées sur alwaysdata et dans `main` après intégration de `feature/statistiques-admin` (commit applicatif `2e80ccb`). Les 34 contrôles en ligne supplémentaires sont tous réussis ; les deux JPEG et le CSS servis correspondent aux fichiers testés.
