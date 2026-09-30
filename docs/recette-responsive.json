@@ -1,0 +1,530 @@
+[
+  {
+    "h1": 1,
+    "missingLabels": [],
+    "page": "/index.php",
+    "scroll": 1440,
+    "width": 1440
+  },
+  {
+    "h1": 1,
+    "missingLabels": [],
+    "page": "/menu.php",
+    "scroll": 1440,
+    "width": 1440
+  },
+  {
+    "h1": 1,
+    "missingLabels": [],
+    "page": "/contact.php",
+    "scroll": 1440,
+    "width": 1440
+  },
+  {
+    "h1": 1,
+    "page": "/index.php",
+    "scroll": 390,
+    "width": 390
+  },
+  {
+    "h1": 1,
+    "page": "/menu.php",
+    "scroll": 390,
+    "width": 390
+  },
+  {
+    "h1": 1,
+    "page": "/contact.php",
+    "scroll": 390,
+    "width": 390
+  },
+  {
+    "h1": 1,
+    "missingAlt": 0,
+    "missingLabels": [],
+    "page": "/index.php",
+    "scroll": 390,
+    "width": 390
+  },
+  {
+    "h1": 1,
+    "missingAlt": 0,
+    "missingLabels": [],
+    "page": "/menus.php",
+    "scroll": 390,
+    "width": 390
+  },
+  {
+    "h1": 1,
+    "missingAlt": 0,
+    "missingLabels": [],
+    "page": "/menu.php",
+    "scroll": 390,
+    "width": 390
+  },
+  {
+    "h1": 1,
+    "missingAlt": 0,
+    "missingLabels": [],
+    "page": "/login.php",
+    "scroll": 390,
+    "width": 390
+  },
+  {
+    "h1": 1,
+    "missingAlt": 0,
+    "missingLabels": [],
+    "page": "/register.php",
+    "scroll": 390,
+    "width": 390
+  },
+  {
+    "h1": 1,
+    "missingAlt": 0,
+    "missingLabels": [],
+    "page": "/mot-de-passe-oublie.php",
+    "scroll": 390,
+    "width": 390
+  },
+  {
+    "h1": 1,
+    "missingAlt": 0,
+    "missingLabels": [],
+    "page": "/contact.php",
+    "scroll": 390,
+    "width": 390
+  },
+  {
+    "h1": 1,
+    "missingAlt": 0,
+    "missingLabels": [],
+    "page": "/cgv.php",
+    "scroll": 390,
+    "width": 390
+  },
+  {
+    "h1": 1,
+    "missingAlt": 0,
+    "missingLabels": [],
+    "page": "/mentions-legales.php",
+    "scroll": 390,
+    "width": 390
+  },
+  {
+    "h1": 1,
+    "missingAlt": 0,
+    "missingLabels": [],
+    "page": "/index.php",
+    "scroll": 768,
+    "width": 768
+  },
+  {
+    "h1": 1,
+    "missingAlt": 0,
+    "missingLabels": [],
+    "page": "/menus.php",
+    "scroll": 768,
+    "width": 768
+  },
+  {
+    "h1": 1,
+    "missingAlt": 0,
+    "missingLabels": [],
+    "page": "/menu.php",
+    "scroll": 768,
+    "width": 768
+  },
+  {
+    "h1": 1,
+    "missingAlt": 0,
+    "missingLabels": [],
+    "page": "/login.php",
+    "scroll": 768,
+    "width": 768
+  },
+  {
+    "h1": 1,
+    "missingAlt": 0,
+    "missingLabels": [],
+    "page": "/register.php",
+    "scroll": 768,
+    "width": 768
+  },
+  {
+    "h1": 1,
+    "missingAlt": 0,
+    "missingLabels": [],
+    "page": "/mot-de-passe-oublie.php",
+    "scroll": 768,
+    "width": 768
+  },
+  {
+    "h1": 1,
+    "missingAlt": 0,
+    "missingLabels": [],
+    "page": "/contact.php",
+    "scroll": 768,
+    "width": 768
+  },
+  {
+    "h1": 1,
+    "missingAlt": 0,
+    "missingLabels": [],
+    "page": "/cgv.php",
+    "scroll": 768,
+    "width": 768
+  },
+  {
+    "h1": 1,
+    "missingAlt": 0,
+    "missingLabels": [],
+    "page": "/mentions-legales.php",
+    "scroll": 768,
+    "width": 768
+  },
+  {
+    "h1": 1,
+    "missingAlt": 0,
+    "missingLabels": [],
+    "page": "/index.php",
+    "scroll": 1440,
+    "width": 1440
+  },
+  {
+    "h1": 1,
+    "missingAlt": 0,
+    "missingLabels": [],
+    "page": "/menus.php",
+    "scroll": 1440,
+    "width": 1440
+  },
+  {
+    "h1": 1,
+    "missingAlt": 0,
+    "missingLabels": [],
+    "page": "/menu.php",
+    "scroll": 1440,
+    "width": 1440
+  },
+  {
+    "h1": 1,
+    "missingAlt": 0,
+    "missingLabels": [],
+    "page": "/login.php",
+    "scroll": 1440,
+    "width": 1440
+  },
+  {
+    "h1": 1,
+    "missingAlt": 0,
+    "missingLabels": [],
+    "page": "/register.php",
+    "scroll": 1440,
+    "width": 1440
+  },
+  {
+    "h1": 1,
+    "missingAlt": 0,
+    "missingLabels": [],
+    "page": "/mot-de-passe-oublie.php",
+    "scroll": 1440,
+    "width": 1440
+  },
+  {
+    "h1": 1,
+    "missingAlt": 0,
+    "missingLabels": [],
+    "page": "/contact.php",
+    "scroll": 1440,
+    "width": 1440
+  },
+  {
+    "h1": 1,
+    "missingAlt": 0,
+    "missingLabels": [],
+    "page": "/cgv.php",
+    "scroll": 1440,
+    "width": 1440
+  },
+  {
+    "h1": 1,
+    "missingAlt": 0,
+    "missingLabels": [],
+    "page": "/mentions-legales.php",
+    "scroll": 1440,
+    "width": 1440
+  },
+  {
+    "h1": 1,
+    "missingLabels": [],
+    "page": "/commander.php",
+    "scroll": 390,
+    "width": 390
+  },
+  {
+    "h1": 1,
+    "missingLabels": [],
+    "page": "/mes-commandes.php",
+    "scroll": 390,
+    "width": 390
+  },
+  {
+    "h1": 1,
+    "missingLabels": [],
+    "page": "/mon-profil.php",
+    "scroll": 390,
+    "width": 390
+  },
+  {
+    "h1": 1,
+    "missingLabels": [],
+    "page": "/laisser-avis.php",
+    "scroll": 390,
+    "width": 390
+  },
+  {
+    "h1": 1,
+    "missingLabels": [],
+    "page": "/modifier-commande.php",
+    "scroll": 390,
+    "width": 390
+  },
+  {
+    "h1": 1,
+    "missingLabels": [],
+    "page": "/commander.php",
+    "scroll": 768,
+    "width": 768
+  },
+  {
+    "h1": 1,
+    "missingLabels": [],
+    "page": "/mes-commandes.php",
+    "scroll": 768,
+    "width": 768
+  },
+  {
+    "h1": 1,
+    "missingLabels": [],
+    "page": "/mon-profil.php",
+    "scroll": 768,
+    "width": 768
+  },
+  {
+    "h1": 1,
+    "missingLabels": [],
+    "page": "/laisser-avis.php",
+    "scroll": 768,
+    "width": 768
+  },
+  {
+    "h1": 1,
+    "missingLabels": [],
+    "page": "/modifier-commande.php",
+    "scroll": 768,
+    "width": 768
+  },
+  {
+    "h1": 1,
+    "missingLabels": [],
+    "page": "/commander.php",
+    "scroll": 1440,
+    "width": 1440
+  },
+  {
+    "h1": 1,
+    "missingLabels": [],
+    "page": "/mes-commandes.php",
+    "scroll": 1440,
+    "width": 1440
+  },
+  {
+    "h1": 1,
+    "missingLabels": [],
+    "page": "/mon-profil.php",
+    "scroll": 1440,
+    "width": 1440
+  },
+  {
+    "h1": 1,
+    "missingLabels": [],
+    "page": "/laisser-avis.php",
+    "scroll": 1440,
+    "width": 1440
+  },
+  {
+    "h1": 1,
+    "missingLabels": [],
+    "page": "/modifier-commande.php",
+    "scroll": 1440,
+    "width": 1440
+  },
+  {
+    "h1": 1,
+    "missingLabels": [],
+    "page": "/admin-commandes.php",
+    "scroll": 390,
+    "width": 390
+  },
+  {
+    "h1": 1,
+    "missingLabels": [],
+    "page": "/admin-menus.php",
+    "scroll": 390,
+    "width": 390
+  },
+  {
+    "h1": 1,
+    "missingLabels": [],
+    "page": "/admin-plats.php",
+    "scroll": 390,
+    "width": 390
+  },
+  {
+    "h1": 1,
+    "missingLabels": [],
+    "page": "/admin-horaires.php",
+    "scroll": 390,
+    "width": 390
+  },
+  {
+    "h1": 1,
+    "missingLabels": [],
+    "page": "/admin-avis.php",
+    "scroll": 390,
+    "width": 390
+  },
+  {
+    "h1": 1,
+    "missingLabels": [],
+    "page": "/admin-employes.php",
+    "scroll": 390,
+    "width": 390
+  },
+  {
+    "h1": 1,
+    "missingLabels": [],
+    "page": "/admin-statistiques.php",
+    "scroll": 390,
+    "width": 390
+  },
+  {
+    "h1": 1,
+    "missingLabels": [],
+    "page": "/gerer-menu-images.php",
+    "scroll": 390,
+    "width": 390
+  },
+  {
+    "h1": 1,
+    "missingLabels": [],
+    "page": "/admin-commandes.php",
+    "scroll": 768,
+    "width": 768
+  },
+  {
+    "h1": 1,
+    "missingLabels": [],
+    "page": "/admin-menus.php",
+    "scroll": 768,
+    "width": 768
+  },
+  {
+    "h1": 1,
+    "missingLabels": [],
+    "page": "/admin-plats.php",
+    "scroll": 768,
+    "width": 768
+  },
+  {
+    "h1": 1,
+    "missingLabels": [],
+    "page": "/admin-horaires.php",
+    "scroll": 768,
+    "width": 768
+  },
+  {
+    "h1": 1,
+    "missingLabels": [],
+    "page": "/admin-avis.php",
+    "scroll": 768,
+    "width": 768
+  },
+  {
+    "h1": 1,
+    "missingLabels": [],
+    "page": "/admin-employes.php",
+    "scroll": 768,
+    "width": 768
+  },
+  {
+    "h1": 1,
+    "missingLabels": [],
+    "page": "/admin-statistiques.php",
+    "scroll": 768,
+    "width": 768
+  },
+  {
+    "h1": 1,
+    "missingLabels": [],
+    "page": "/gerer-menu-images.php",
+    "scroll": 768,
+    "width": 768
+  },
+  {
+    "h1": 1,
+    "missingLabels": [],
+    "page": "/admin-commandes.php",
+    "scroll": 1440,
+    "width": 1440
+  },
+  {
+    "h1": 1,
+    "missingLabels": [],
+    "page": "/admin-menus.php",
+    "scroll": 1440,
+    "width": 1440
+  },
+  {
+    "h1": 1,
+    "missingLabels": [],
+    "page": "/admin-plats.php",
+    "scroll": 1440,
+    "width": 1440
+  },
+  {
+    "h1": 1,
+    "missingLabels": [],
+    "page": "/admin-horaires.php",
+    "scroll": 1440,
+    "width": 1440
+  },
+  {
+    "h1": 1,
+    "missingLabels": [],
+    "page": "/admin-avis.php",
+    "scroll": 1440,
+    "width": 1440
+  },
+  {
+    "h1": 1,
+    "missingLabels": [],
+    "page": "/admin-employes.php",
+    "scroll": 1440,
+    "width": 1440
+  },
+  {
+    "h1": 1,
+    "missingLabels": [],
+    "page": "/admin-statistiques.php",
+    "scroll": 1440,
+    "width": 1440
+  },
+  {
+    "h1": 1,
+    "missingLabels": [],
+    "page": "/gerer-menu-images.php",
+    "scroll": 1440,
+    "width": 1440
+  }
+]

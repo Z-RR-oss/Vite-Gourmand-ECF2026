@@ -1,74 +1,16 @@
 <?php
-require_once '../Config/database.php';
-
-$sql = "SELECT * FROM menus";
-$stmt = $pdo->query($sql);
-$menus = $stmt->fetchAll(PDO::FETCH_ASSOC);
+require_once __DIR__ . '/../Config/database.php';
+require_once __DIR__ . '/../Templates/layout.php';
+$avisValides = $pdo->query("SELECT avis.note, avis.commentaire, users.prenom FROM avis JOIN users ON avis.user_id = users.id WHERE avis.statut_validation = 'validé' ORDER BY avis.created_at DESC LIMIT 3")->fetchAll(PDO::FETCH_ASSOC);
+renderHeader('Traiteur à Bordeaux, le plaisir de recevoir');
 ?>
-
-<!DOCTYPE html>
-<html lang="fr">
-   <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vite & Gourmand</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-   <nav class="navbar">
-
-    <div class="navbar-logo">
-        <a href="index.php">
-            <img src="LogoVG.png" alt="Logo Vite & Gourmand" width="150">
-        </a>
-
-        <h1>
-            <a href="index.php">Vite & Gourmand</a>
-        </h1>
-    </div>
-
-    <div class="navbar-links">
-        <a href="index.php#menus">Menus</a>
-        <a href="mes-commandes.php">Mes commandes</a>
-    </div>
-
-    <div class="navbar-user">
-        <a href="login.php">Connexion</a>
-    </div>
-
-</nav>
 <section class="hero">
-    <div class="texte">
- <h1>Des plats gourmands,prêts sans attendre</h1>
- <p>   Commandez simplement vos menus
-    et profitez d'un moment convivial.</p>
-    </div>
-  
-<a href="index.php#menus">Découvrir nos menus</a>
-</div>
-  <div class="image">
-
-<img src="" alt="">
-</div>
-
+    <div class="hero-copy"><p class="eyebrow"><span class="little-line"></span> JULIE & JOSÉ · BORDEAUX</p><h1>Les bonnes tables<br>font les <em>beaux<br> souvenirs.</em></h1><p class="hero-description">Depuis 25 ans, nous cuisinons pour vos retrouvailles, vos fêtes et tous ces moments qui méritent d’être partagés.</p><div class="hero-actions"><a href="menus.php" class="button">À table, découvrez nos menus <span aria-hidden="true">↗</span></a><a href="#notre-maison" class="text-link">Notre histoire</a></div><div class="hero-signature"><span>25</span><p>années de cuisine<br>& de convivialité</p><span class="signature-line"></span><p>Fait avec attention.<br>Partagé avec plaisir.</p></div></div>
+    <div class="hero-art"><img src="assets/images/table-partage.svg" width="800" height="650" alt="Illustration d’une assiette gourmande sur une table dressée"><div class="round-stamp">CUISINÉ AVEC<br><strong>cœur</strong><span>À BORDEAUX</span></div><span class="image-caption">L’art de recevoir, signé Vite & Gourmand.</span></div>
 </section>
-
-
-
-</section>
-<section id="menus">
-<?php foreach ($menus as $menu): ?>
-
-     <div>
-    <h1><?php echo $menu['titre']; ?></h1>
-    <h2><?php echo $menu['prix']; ?> €</h2>
-    <p><?php echo $menu['description']; ?></p>
-    <p>Minimum : <?php echo $menu['nb_personnes_min']; ?> personnes</p>
-    <a href="menu.php?id=<?php echo $menu['id']; ?>">Afficher le menu</a>
-       </div>
-
-<?php endforeach; ?>
-</section>
-
-</body>
-</html>
+<div class="values-strip"><span>25 ans de savoir-faire</span><span aria-hidden="true">✳</span><span>Des menus pour vos occasions</span><span aria-hidden="true">✳</span><span>Bordeaux & ses alentours</span></div>
+<?php require __DIR__ . '/../Templates/menu-list.php'; ?>
+<section id="notre-maison" class="story-section"><div><p class="eyebrow">DEUX PASSIONNÉS, UNE MÊME TABLE</p><h2>Recevoir est un plaisir.<br><em>Nous en prenons soin.</em></h2></div><div><p>Vite & Gourmand, c’est l’histoire de Julie et José. Depuis 25 ans à Bordeaux, nous accompagnons vos repas de famille et vos événements avec la même attention.</p><p>Du choix du menu au suivi de votre commande, retrouvez des informations claires sur les plats, leurs allergènes et les conditions de chaque prestation. Vous profitez de vos invités, nous nous occupons du menu.</p><a class="text-link" href="contact.php">Faisons connaissance <span aria-hidden="true">↗</span></a></div></section>
+<section class="reviews-section" aria-labelledby="reviews-heading"><div class="section-heading"><div><p class="eyebrow">AUTOUR DE NOTRE TABLE</p><h2 id="reviews-heading">Vos moments, vos mots.</h2></div><span class="small-note">Avis publiés après validation par notre équipe</span></div><div class="reviews-grid"><?php if (!$avisValides): ?><p class="empty-state">Les prochains souvenirs de table s’écriront ici. Après votre prestation, partagez votre expérience depuis votre espace.</p><?php endif; ?><?php foreach ($avisValides as $avis): ?><figure class="review"><div class="review-stars" aria-label="<?= (int) $avis['note'] ?> sur 5"><?= str_repeat('★', (int) $avis['note']) ?><span aria-hidden="true"><?= str_repeat('☆', 5 - (int) $avis['note']) ?></span></div><blockquote><?= nl2br(e($avis['commentaire'])) ?></blockquote><figcaption>— <?= e($avis['prenom']) ?></figcaption></figure><?php endforeach; ?></div></section>
+<section class="contact-band"><div><p class="eyebrow">UNE ENVIE, UNE OCCASION ?</p><h2>Parlons de votre prochaine table.</h2></div><a class="button button-light" href="contact.php">Écrivez-nous <span aria-hidden="true">↗</span></a></section>
+<?php renderFooter($pdo); ?>

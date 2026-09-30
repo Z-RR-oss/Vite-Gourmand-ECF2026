@@ -1,24 +1,35 @@
 <?php
-session_start();
-require_once '../Config/database.php';
 
-// Sécurité : vérifier si connecté
-if (!isset($_SESSION['user_id'])) {
-    echo "Accès refusé";
-    exit;
-}
+require_once __DIR__ . '/../Config/database.php';
+
+requireLogin();
 
 $user_id = $_SESSION['user_id'];
 
-// Récupérer les commandes du user
-$sql =  "SELECT menus.titre, commandes.nb_personnes, commandes.prix_total, commandes.id , commandes.statut
-        FROM menus
-        INNER JOIN commandes
+$sql = '
+    SELECT
+        menus.titre,
+        commandes.id,
+        commandes.nb_personnes,
+        commandes.prix_total,
+        commandes.statut,
+        commandes.date_prestation,
+        commandes.heure_prestation,
+        commandes.lieu_prestation,
+        commandes.adresse_prestation,
+        commandes.frais_livraison,
+        commandes.remise_pourcentage,
+        commandes.created_at,
+        (SELECT COUNT(*) FROM avis WHERE avis.commande_id = commandes.id) AS avis_depose
+    FROM commandes
+
+    INNER JOIN menus
         ON commandes.menu_id = menus.id
-        WHERE commandes.user_id = :user_id";
-          
-          
-        
+
+    WHERE commandes.user_id = :user_id
+
+    ORDER BY commandes.created_at DESC
+';
 
 $stmt = $pdo->prepare($sql);
 
@@ -27,179 +38,177 @@ $stmt->execute([
 ]);
 
 $commandes = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+$sqlHistorique = '
+    SELECT
+        historique_statuts.commande_id,
+        historique_statuts.statut,
+        historique_statuts.date_modification
+    FROM historique_statuts
+
+    INNER JOIN commandes
+        ON historique_statuts.commande_id = commandes.id
+
+    WHERE commandes.user_id = :user_id
+
+    ORDER BY historique_statuts.date_modification ASC
+';
+
+$stmtHistorique = $pdo->prepare($sqlHistorique);
+
+$stmtHistorique->execute([
+    ':user_id' => $user_id
+]);
+
+$historiques = $stmtHistorique->fetchAll(PDO::FETCH_ASSOC);
+
+$historiquesParCommande = [];
+
+foreach ($historiques as $historique) {
+    $commandeId = $historique['commande_id'];
+
+    $historiquesParCommande[$commandeId][] = $historique;
+}
+
 ?>
+<?php require_once __DIR__ . '/../Templates/layout.php';
+renderHeader('Mes commandes'); ?>
+    <section class="content-panel">
+        <h1>Mes commandes</h1>
+        <?php if (empty($commandes)): ?>
+            <p>
+                Aucune commande pour le moment.
+            </p>
+        <?php else: ?>
+            <?php foreach ($commandes as $commande): ?>
+                <div class="commande">
+                    <h2>
+                        <?= htmlspecialchars($commande['titre']) ?>
+                    </h2>
+                    <p>
+                        Numéro de commande :
+                        <?= (int) $commande['id'] ?>
+                    </p>
+                    <p>
+                        Nombre de personnes :
+                        <?= (int) $commande['nb_personnes'] ?>
+                    </p>
+                    <p>
+                        Prix total :
+                        <?= number_format($commande['prix_total'], 2, ',', ' ') ?>
+                        €
+                    </p>
+                    <p>
+                        Date de prestation :
+                        <?= !empty($commande['date_prestation']) ? htmlspecialchars($commande['date_prestation']) : 'Non renseignée' ?>
+                    </p>
+                    <p>
+                        Heure :
+                        <?= !empty($commande['heure_prestation']) ? htmlspecialchars($commande['heure_prestation']) : 'Non renseignée' ?>
+                    </p>
+                    <p>
+                        Lieu :
+                        <?= !empty($commande['lieu_prestation']) ? htmlspecialchars($commande['lieu_prestation']) : 'Non renseigné' ?>
+                    </p>
+                    <p>
+                        Adresse :
+                        <?= !empty($commande['adresse_prestation']) ? htmlspecialchars($commande['adresse_prestation']) : 'Non renseignée' ?>
+                    </p>
+                    <p>
+                        Frais de livraison :
+                        <?= number_format($commande['frais_livraison'], 2, ',', ' ') ?>
+                        €
+                    </p>
+                    <p>
+                        Remise :
+                        <?= number_format($commande['remise_pourcentage'], 0) ?>
+                        %
+                    </p>
+                    <p>
+                        Créée le :
+                        <?= htmlspecialchars($commande['created_at']) ?>
+                    </p>
+                    <p class="statut">
 
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <style>
+                        Statut actuel :
 
-body{
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
-    padding: 20px;
-}
+                        <?= htmlspecialchars($commande['statut']) ?>
+                    </p>
+                    <!-- Historique des statuts -->
+                    <div class="historique">
+                        <h3>Suivi de la commande</h3>
+                        <?php
+                $commandeId = $commande['id'];
+                ?>
+                        <?php
+                if (
+                    !empty(
+                        $historiquesParCommande[$commandeId]
+                    )
+                ):
+                    ?>
+                            <ul>
+                                <?php
+                            foreach (
+                                $historiquesParCommande[$commandeId] as $historique
+                            ):
+                                ?>
+                                    <li>
+                                        <strong>
+                                            <?= htmlspecialchars($historique['statut']) ?>
+                                        </strong>
 
-h1{
-    color: #333;
-}
+                                        —
 
-.commande{
-    background: white;
-    padding: 15px;
-    margin-bottom: 20px;
-    border-radius: 10px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-}
-
-.statut{
-    font-weight: bold;
-    padding: 5px 10px;
-    border-radius: 5px;
-    display: inline-block;
-}
-
-.en-attente{
-    background-color: orange;
-    color: white;
-}
-
-.validee{
-    background-color: green;
-    color: white;
-}
-
-.preparation{
-    background-color: blue;
-    color: white;
-}
-
-.livree{
-    background-color: purple;
-    color: white;
-}
-
-.terminee{
-    background-color: gray;
-    color: white;
-}
-
-a{
-    display: inline-block;
-    margin-top: 10px;
-    margin-right: 10px;
-    text-decoration: none;
-    background: black;
-    color: white;
-    padding: 8px 12px;
-    border-radius: 5px;
-}
-.navbar{
-    background-color: #111;
-    color: white;
-    padding: 15px 20px;
-    border-radius: 10px;
-    margin-bottom: 30px;
-
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.navbar a{
-    background: transparent;
-    margin-left: 10px;
-}
-
-.navbar a:hover{
-    color: orange;
-}
-.commande{
-    transition: 0.2s;
-}
-
-.commande:hover{
-    transform: translateY(-3px);
-}
-
-button{
-    background: green;
-    color: white;
-    border: none;
-    padding: 10px 15px;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-footer{
-    text-align: center;
-    margin-top: 50px;
-    color: gray;
-}
-@media (max-width: 768px){
-
-    .navbar{
-        flex-direction: column;
-        gap: 10px;
-        text-align: center;
-    }
-
-    .commande{
-        padding: 10px;
-    }
-
-    a{
-        display: block;
-        margin-top: 10px;
-    }
-
-}
-
-.statut{
-    margin-top: 10px;
-}
-</style>
-    <meta charset="UTF-8">
-    <title>Mes commandes</title>
-</head>
-<body>
-    <h1>Vite Gourmand</h1>
-    <div class="navbar">
-        <h1>Bienvenue <?php echo $_SESSION['email']; ?> 👋</h1>
-    <h2>🍽️ Vite Gourmand</h2>
-
-    <div>
-        <a href="index.php">Accueil</a>
-        <a href="mes-commandes.php">Mes commandes</a>
-        <a href="admin-commandes.php">Admin</a>
-    </div>
-</div>
-
-<h1>Mes commandes</h1>
-<?php if (empty($commandes)): ?>
-
-    <p>Aucune commande pour le moment.</p>
-
-<?php endif; ?>
-
-<?php foreach ($commandes as $une_commande): ?> 
-    <div class="commande">
-        <h2>Menu  : <?php echo $une_commande['titre']; ?></h2>
-        <p>Nombre de personnes : <?php echo $une_commande['nb_personnes']; ?></p>
-        <p>Prix total : <?php echo $une_commande['prix_total']; ?> €</p>
-        <p class="statut">Status : <?php echo $une_commande['statut'];?></p>
-        <a href="supprimer-commande.php?id=<?php echo$une_commande['id'];?> ">Annuler</a>
-        <a href="modifier-commande.php?id=<?php echo$une_commande['id'];?>">Modifier la commande</a>
-        <hr>
-    </div>
-
-
-<?php endforeach; ?>
-
-
-
-</body>
-<footer>
-    <p>© 2026 Vite Gourmand - Tous droits réservés</p>
-</footer>
-</html>
+                                        <?= htmlspecialchars($historique['date_modification']) ?>
+                                    </li>
+                                <?php endforeach; ?>
+                            </ul>
+                        <?php else: ?>
+                            <p>
+                                Aucun changement de statut
+                                pour le moment.
+                            </p>
+                        <?php endif; ?>
+                    </div>
+                    <!--
+                    Modifier / annuler uniquement
+                    tant que la commande est en attente
+                    -->
+                    <?php if ($commande['statut'] === 'en attente'): ?>
+                        <div class="actions">
+                            <a
+                                href="modifier-commande.php?id=<?= (int) $commande['id'] ?>"
+                            >
+                                Modifier la commande
+                            </a>
+                            <form method="post" action="supprimer-commande.php" class="inline-form">
+                                <?= csrfInput() ?>
+                                <input type="hidden" name="id" value="<?= (int) $commande['id'] ?>">
+                                <button type="submit" class="danger">Annuler la commande</button>
+                            </form>
+                        </div>
+                    <?php else: ?>
+                        <p>
+                            Cette commande ne peut plus
+                            être modifiée ou annulée en ligne.
+                        </p>
+                    <?php endif; ?>
+                    <!--
+                    Avis possible uniquement
+                    lorsque la commande est terminée
+                    -->
+                    <?php if ($commande['statut'] === 'terminée' && !(int) $commande['avis_depose']): ?>
+                        <div class="actions">
+                            <a
+                                href="laisser-avis.php?id=<?= (int) $commande['id'] ?>"
+                            >
+                                Laisser un avis
+                            </a>
+                        </div>
+                    <?php endif; ?>
+                </div>
+            <?php endforeach; ?>
+        <?php endif; ?>
+    </section>
+<?php renderFooter($pdo); ?>

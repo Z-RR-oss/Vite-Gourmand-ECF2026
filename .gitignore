@@ -1,0 +1,22 @@
+.DS_Store
+Config/mail.local.php
+
+# Composer
+/vendor/
+composer.phar
+Config/*.local.php
+.env
+.env.*
+!.env.example
+*service-account*.json
+credentials*.json
+*.pem
+/var/
+/tmp/
+/tests/results/
+/Public/assets/uploads/*
+!/Public/assets/uploads/.gitkeep
+!/Public/assets/uploads/.htaccess
+
+__pycache__/
+*.pyc

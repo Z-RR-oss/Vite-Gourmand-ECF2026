@@ -1,0 +1,31 @@
+{
+  "date": "2026-09-30",
+  "url": "https://vite-gourmandecf2026.alwaysdata.net",
+  "hebergement": "alwaysdata Free 0 EUR",
+  "php_lint_tracked_files": 67,
+  "javascript_syntax_files": 2,
+  "online_checks": 29,
+  "smtp": {
+    "log_id": 499997354,
+    "status": "Envoyé sans rebond",
+    "receipt": "Confirmee par la proprietaire"
+  },
+  "cron": {
+    "33622": {
+      "schedule": "*/15 * * * *",
+      "scheduler_test_exit_code": 0
+    },
+    "33623": {
+      "schedule": "09:00 Europe/Paris",
+      "observed": "2026-09-30T09:00:23+02:00",
+      "exit_code": 0
+    }
+  },
+  "logs": {
+    "http_responses": 55,
+    "http_5xx": 0,
+    "apache_errors": 0,
+    "new_php_errors_after_opening": 0
+  },
+  "git_pending": "Intégration feature/statistiques-admin -> develop -> main à finaliser ; accès SSH opérationnel"
+}

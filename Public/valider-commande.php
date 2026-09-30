@@ -1,29 +1,8 @@
 <?php
-session_start();
-require_once '../Config/database.php';
-$id = $_GET['id'];
-echo $id;
 
-    if ($_SESSION['role'] == "admin") {
-       
-        echo "Bienvenue Admin !";
-    } else {
-        echo "Accès refusé";
-        exit;
-    }
-
-$sql = "UPDATE commandes
-       SET statut = 'validée'
-       WHERE id= :id";
-
-$stmt = $pdo->prepare($sql);
-
-$stmt->execute([
-    ':id' => $id,
-    
-]);
-
-    header("Location: admin-commandes.php");
-exit;
-;
-
+// Compatibility endpoint: same POST, CSRF, permissions and workflow as every transition.
+require_once __DIR__ . '/../Config/database.php';
+requireAdminOrEmployee();
+requirePost();
+$_POST['statut'] = 'accepté';
+require __DIR__ . '/changer-statut.php';

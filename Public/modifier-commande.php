@@ -1,68 +1,119 @@
 <?php
-session_start();
-require_once '../Config/database.php';
-
-if (!isset($_SESSION['user_id'])) {
-    echo "Accès refusé";
-    exit;
-}
-
-$user_id = $_SESSION['user_id'];
-
-$id = $_GET['id'];
-if (!is_numeric($id)) {
-
-    echo "ID invalide";
-    exit;
-}
-echo $id;
-
-
-if ($_SERVER ['REQUEST_METHOD'] === 'POST') {
- $nb_personnes = $_POST['nb_personnes'];
- echo $nb_personnes;
-$sql = "UPDATE commandes
-SET nb_personnes = :nb_personnes
-WHERE id = :id
-AND user_id = :user_id";
-
-
-$stmt = $pdo->prepare($sql);
-
-$stmt->execute([
-    ':id' => $id,
-    ':nb_personnes' => $nb_personnes,
-    ':user_id' => $user_id
-]);
-
-
-
-}
-
-$sql = "SELECT * FROM commandes WHERE id = :id";
-$stmt = $pdo->prepare($sql);
-
-$stmt->execute([
-    ':id' => $id
-]);
-
+require_once __DIR__ . '/../Config/database.php';
+require_once __DIR__ . '/../Services/OrderService.php';
+requireLogin();
+$id = positiveId($_GET['id'] ?? null);
+$userId = (int) $_SESSION['user_id'];
+$stmt = $pdo->prepare('SELECT c.*, m.titre, m.nb_personnes_min FROM commandes c JOIN menus m ON m.id = c.menu_id WHERE c.id = ? AND c.user_id = ?');
+$stmt->execute([$id, $userId]);
 $commande = $stmt->fetch(PDO::FETCH_ASSOC);
-
-echo $commande['nb_personnes'];?>
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-</head>
-    <body>
-    <form   action="modifier-commande.php?id=<?php echo $id; ?>"  method="POST">
-    <input type="number" name="nb_personnes"value="<?php echo$commande['nb_personnes']?>">
-    <button type="submit">Envoyer</button>
-
+if (!$commande) {
+    abortRequest(404, 'Commande introuvable.');
+}
+if ($commande['statut'] !== 'en attente') {
+    abortRequest(409, 'Cette commande a été prise en charge et ne peut plus être modifiée.');
+}
+$message = '';
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    try {
+        (new OrderService($pdo))->update($id, $userId, $_POST);
+        header('Location: mes-commandes.php', true, 303);
+        exit;
+    } catch (DomainException $error) {
+        $message = $error->getMessage();
+        foreach (['nb_personnes', 'date_prestation', 'heure_prestation', 'lieu_prestation', 'adresse_prestation', 'distance_km'] as $field) {
+            $commande[$field] = $_POST[$field] ?? '';
+        }
+    }
+}
+$commande['heure_prestation'] = substr($commande['heure_prestation'], 0, 5);
+?>
+<?php require_once __DIR__ . '/../Templates/layout.php';
+renderHeader('Modifier ma commande'); ?>
+<section class="content-panel">
+    <h1>
+        Modifier ma commande
+    </h1>
+    <h2>
+        <?= htmlspecialchars($commande['titre']) ?>
+    </h2>
+    <p>
+        Le menu ne peut pas être modifié.
+    </p>
+    <?php if ($message): ?><p class="erreur" role="alert"><?= e($message) ?></p><?php endif; ?>
+    <form method="POST">
+        <?= csrfInput() ?>
+        <label for="nb_personnes">
+            Nombre de personnes
+        </label>
+        <input
+            type="number"
+            id="nb_personnes"
+            name="nb_personnes"
+            min="<?= (int) $commande['nb_personnes_min'] ?>"
+            value="<?= (int) $commande['nb_personnes'] ?>"
+            required
+        >
+        <label for="date_prestation">
+            Date de prestation
+        </label>
+        <input
+            type="date"
+            id="date_prestation"
+            name="date_prestation"
+            value="<?= htmlspecialchars($commande['date_prestation'] ?? '') ?>"
+            required
+        >
+        <label for="heure_prestation">
+            Heure de prestation
+        </label>
+        <input
+            type="time"
+            id="heure_prestation"
+            name="heure_prestation"
+            value="<?= htmlspecialchars($commande['heure_prestation'] ?? '') ?>"
+            required
+        >
+        <label for="lieu_prestation">
+            Lieu
+        </label>
+        <input
+            type="text"
+            id="lieu_prestation"
+            name="lieu_prestation"
+            value="<?= htmlspecialchars($commande['lieu_prestation'] ?? '') ?>"
+            required
+        >
+        <label for="adresse_prestation">
+            Adresse
+        </label>
+        <input
+            type="text"
+            id="adresse_prestation"
+            name="adresse_prestation"
+            value="<?= htmlspecialchars($commande['adresse_prestation'] ?? '') ?>"
+            required
+        >
+        <label for="distance_km">
+            Distance hors Bordeaux en kilomètres
+        </label>
+        <input
+            type="number"
+            id="distance_km"
+            name="distance_km"
+            min="0"
+            step="0.1"
+            value="<?= htmlspecialchars($commande['distance_km'] ?? 0) ?>"
+        >
+        <button type="submit">
+            Enregistrer les modifications
+        </button>
     </form>
-        
-</body>
-</html>     
+    <a
+        class="retour"
+        href="mes-commandes.php"
+    >
+        Retour à mes commandes
+    </a>
+</section>
+<?php renderFooter($pdo); ?>

@@ -1,57 +1,17 @@
 <?php
-session_start();
-require_once '../Config/database.php';
 
-
-    if ($_SESSION['role'] == "admin") {
-       
-        echo "Bienvenue Admin !";
-    } else {
-        echo "Accès refusé";
-        exit;
-    }
-
-    $id = $_GET['id'];
-    $statut = $_GET['statut'];
-    if (!is_numeric($id)) {
-
-    echo "ID invalide";
-    exit;
+require_once __DIR__ . '/../Config/database.php';
+require_once __DIR__ . '/../Services/OrderService.php';
+require_once __DIR__ . '/../Services/OrderNotifications.php';
+requireAdminOrEmployee();
+requirePost();
+$id = positiveId($_POST['id'] ?? null);
+try {
+    $status = trim($_POST['statut'] ?? '');
+    (new OrderService($pdo))->transition($id, (int) $_SESSION['user_id'], $status);
+    notifyOrderStatus($pdo, $id, $status);
+} catch (DomainException $error) {
+    abortRequest(409, $error->getMessage());
 }
-
-
-    $statutsAutorises = ["validé", "en préparation" ,"livrée" , "terminée"];
-     $statut = strtolower($statut);
-
-    if (in_array ($statut, $statutsAutorises)){
-        echo "accès autorisé";
-    } else {
-        echo "Statut invalide";
-        exit;
-        
-    }
-
-
-
-
-$sql = "UPDATE commandes
-       SET statut = :statut
-       WHERE id= :id
-       ";
-
-$stmt = $pdo->prepare($sql);
-
-$stmt->execute([
-    ':id' => $id,
-    ':statut' => $statut
-    
-
-    
-]);
-
-   header("Location: admin-commandes.php");
-exit;;
-
-
-
-    
+header('Location: admin-commandes.php', true, 303);
+exit;
