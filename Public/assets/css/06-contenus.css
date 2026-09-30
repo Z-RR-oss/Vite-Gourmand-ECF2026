@@ -1,0 +1,60 @@
+.story-section {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 85px;
+    padding: 60px 0;
+    border-top: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--color-border);
+}
+.story-section p:not(.eyebrow) {
+    font-size: 0.93rem;
+    color: var(--color-muted);
+}
+.story-section h2 {
+    font-size: 2.7rem;
+}
+.reviews-section {
+    padding: 65px 0;
+}
+.reviews-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 38px;
+}
+.review {
+    padding: 0;
+    margin: 0;
+}
+.review-stars {
+    color: var(--color-primary);
+    letter-spacing: 0.15em;
+    font-size: 1.1rem;
+}
+.review blockquote {
+    margin: 18px 0;
+    font-family: var(--font-heading);
+    font-size: 1.2rem;
+    line-height: 1.6;
+}
+.review figcaption {
+    font-size: 0.73rem;
+    color: var(--color-muted);
+}
+.contact-band {
+    background: var(--color-primary);
+    padding: 40px 45px;
+    color: var(--color-background);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 30px;
+    border-radius: 6px;
+}
+.contact-band .eyebrow {
+    color: #e1c3b5;
+    margin-bottom: 10px;
+}
+.contact-band h2 {
+    font-size: 2.2rem;
+    margin: 0;
+}

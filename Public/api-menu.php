@@ -1,56 +1,16 @@
 <?php
 
-require_once '../Config/database.php';
-
-$search = $_GET['search'] ?? '';
-$prixMin = $_GET['prix_min'] ?? '';
-$prixMax = $_GET['prix_max'] ?? '';
-$theme = $_GET['theme'] ?? '';
-$regime = $_GET['regime'] ?? '';
-$personnes = $_GET['personnes'] ?? '';
-
-$conditions = [];
-$params = [];
-
-if ($search !== '') {
-    $conditions[] = "titre LIKE :search";
-    $params[':search'] = "%$search%";
+require_once __DIR__ . '/../Config/database.php';
+require_once __DIR__ . '/../Templates/catalogue.php';
+header('Content-Type: application/json; charset=utf-8');
+header('Cache-Control: no-store');
+try {
+    echo json_encode(catalogueMenus($pdo, catalogueFilters($_GET)), JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE);
+} catch (InvalidArgumentException $exception) {
+    http_response_code(422);
+    echo json_encode(['error' => $exception->getMessage()], JSON_UNESCAPED_UNICODE);
+} catch (Throwable $exception) {
+    error_log('Catalogue indisponible : ' . $exception->getMessage());
+    http_response_code(503);
+    echo json_encode(['error' => 'Les menus sont momentanément indisponibles. Veuillez réessayer.'], JSON_UNESCAPED_UNICODE);
 }
-
-if ($theme !== '') {
-    $conditions[] = "theme = :theme";
-    $params[':theme'] = $theme;
-}
-
-if ($regime !== '') {
-    $conditions[] = "regime = :regime";
-    $params[':regime'] = $regime;
-}
-
-if ($prixMin !== '') {
-    $conditions[] = "prix >= :prix_min";
-    $params[':prix_min'] = $prixMin;
-}
-
-if ($prixMax !== '') {
-    $conditions[] = "prix <= :prix_max";
-    $params[':prix_max'] = $prixMax;
-}
-
-if ($personnes !== '') {
-    $conditions[] = "nb_personnes_min <= :personnes";
-    $params[':personnes'] = $personnes;
-}
-
-$sql = "SELECT * FROM menus";
-
-if (!empty($conditions)) {
-    $sql .= " WHERE " . implode(" AND ", $conditions);
-}
-
-$stmt = $pdo->prepare($sql);
-$stmt->execute($params);
-
-$menus = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-echo json_encode($menus);

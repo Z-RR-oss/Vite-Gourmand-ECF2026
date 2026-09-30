@@ -1,5 +1,18 @@
 {
+    "name": "vite-gourmand/ecf",
+    "description": "Application de traiteur Vite & Gourmand - projet ECF DWWM",
+    "type": "project",
     "require": {
+        "php": ">=8.2",
+        "ext-pdo": "*",
+        "ext-pdo_mysql": "*",
+        "ext-mbstring": "*",
+        "ext-curl": "*",
+        "ext-openssl": "*",
+        "ext-gd": "*",
         "phpmailer/phpmailer": "^7.1"
+    },
+    "scripts": {
+        "test:statistics": "php tests/statistics.php"
     }
 }

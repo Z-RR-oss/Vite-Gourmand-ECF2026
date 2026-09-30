@@ -1,0 +1,92 @@
+/* Vite & Gourmand · Une maison bordelaise, une table à partager. */
+:root {
+    --color-primary: #672f3e;
+    --color-primary-dark: #49202d;
+    --color-secondary: #526b57;
+    --color-accent: #d9b788;
+    --color-text: #292c25;
+    --color-muted: #62665b;
+    --color-background: #f7f3eb;
+    --color-surface: #fffdf8;
+    --color-border: #d8d6c9;
+    --color-error: #922b36;
+    --radius: 6px;
+    --shadow: 0 12px 38px rgb(41 44 37 / 7%);
+    --font-body: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --font-heading: 'Iowan Old Style', 'Palatino Linotype', 'Book Antiqua', Georgia, serif;
+    --page-width: 1240px;
+}
+* {
+    box-sizing: border-box;
+}
+html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 32px;
+}
+body {
+    margin: 0;
+    background: var(--color-background);
+    color: var(--color-text);
+    font-family: var(--font-body);
+    line-height: 1.65;
+}
+a {
+    color: var(--color-primary);
+    text-underline-offset: 4px;
+}
+a:hover {
+    text-decoration-thickness: 2px;
+}
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+button,
+input,
+select,
+textarea {
+    font: inherit;
+}
+button,
+a,
+input,
+select,
+textarea {
+    -webkit-tap-highlight-color: transparent;
+}
+:focus-visible {
+    outline: 3px solid #91692d;
+    outline-offset: 4px;
+}
+::selection {
+    background: #dfc7cf;
+    color: #49202d;
+}
+h1,
+h2,
+h3 {
+    font-family: var(--font-heading);
+    font-weight: 500;
+    line-height: 1.13;
+    letter-spacing: -0.035em;
+}
+h1 {
+    font-size: clamp(2.6rem, 4.5vw, 4.8rem);
+    margin: 0 0 24px;
+}
+h2 {
+    font-size: clamp(2rem, 3vw, 3rem);
+    margin: 0 0 20px;
+}
+h3 {
+    font-size: 1.6rem;
+    margin: 0 0 12px;
+}
+p {
+    margin: 0 0 20px;
+}
+em {
+    color: var(--color-primary);
+    font-weight: 400;
+}

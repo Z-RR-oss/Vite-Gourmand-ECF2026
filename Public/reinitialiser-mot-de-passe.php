@@ -1,6 +1,6 @@
 <?php
 
-require_once '../Config/database.php';
+require_once __DIR__ . '/../Config/database.php';
 
 $token =
     $_GET['token']
@@ -15,21 +15,18 @@ $tokenValide = false;
 
 $reset = null;
 
-
 // --------------------------------------------------
 // VÉRIFIER LE TOKEN
 // --------------------------------------------------
 
 if ($token !== '') {
-
     $tokenHash =
         hash(
             'sha256',
             $token
         );
 
-
-    $sqlToken = "
+    $sqlToken = '
         SELECT
             password_reset_tokens.id,
             password_reset_tokens.user_id,
@@ -55,33 +52,27 @@ if ($token !== '') {
         AND users.actif = 1
 
         LIMIT 1
-    ";
-
+    ';
 
     $stmtToken =
         $pdo->prepare(
             $sqlToken
         );
 
-
     $stmtToken->execute([
         ':token_hash' =>
             $tokenHash
     ]);
-
 
     $reset =
         $stmtToken->fetch(
             PDO::FETCH_ASSOC
         );
 
-
     if ($reset) {
-
         $tokenValide = true;
     }
 }
-
 
 // --------------------------------------------------
 // TRAITER LE NOUVEAU MOT DE PASSE
@@ -91,7 +82,6 @@ if (
     $_SERVER['REQUEST_METHOD'] === 'POST'
     && $tokenValide
 ) {
-
     $password =
         $_POST['password']
         ?? '';
@@ -100,83 +90,20 @@ if (
         $_POST['confirmation']
         ?? '';
 
-
-    // Minimum 10 caractères
-    if (strlen($password) < 10) {
-
-        $erreur =
-            "Le mot de passe doit contenir "
-            . "au moins 10 caractères.";
-
-    } elseif (
-        !preg_match(
-            '/[A-Z]/',
-            $password
-        )
-    ) {
-
-        $erreur =
-            "Le mot de passe doit contenir "
-            . "au moins une majuscule.";
-
-    } elseif (
-        !preg_match(
-            '/[a-z]/',
-            $password
-        )
-    ) {
-
-        $erreur =
-            "Le mot de passe doit contenir "
-            . "au moins une minuscule.";
-
-    } elseif (
-        !preg_match(
-            '/[0-9]/',
-            $password
-        )
-    ) {
-
-        $erreur =
-            "Le mot de passe doit contenir "
-            . "au moins un chiffre.";
-
-    } elseif (
-        !preg_match(
-            '/[^a-zA-Z0-9]/',
-            $password
-        )
-    ) {
-
-        $erreur =
-            "Le mot de passe doit contenir "
-            . "au moins un caractère spécial.";
-
-    } elseif (
-        $password !==
-        $confirmation
-    ) {
-
-        $erreur =
-            "Les deux mots de passe "
-            . "ne correspondent pas.";
+    $erreur = passwordValidationError($password) ?? '';
+    if ($password !== $confirmation) {
+        $erreur = 'Les deux mots de passe ne correspondent pas.';
     }
-
-
     if ($erreur === '') {
-
-
         try {
-
             $pdo->beginTransaction();
-
 
             /*
              * Relire et verrouiller le token
              * afin qu'il ne puisse pas être
              * utilisé deux fois en parallèle.
              */
-            $sqlVerification = "
+            $sqlVerification = '
                 SELECT
                     id,
                     user_id
@@ -192,34 +119,28 @@ if (
                 LIMIT 1
 
                 FOR UPDATE
-            ";
-
+            ';
 
             $stmtVerification =
                 $pdo->prepare(
                     $sqlVerification
                 );
 
-
             $stmtVerification->execute([
                 ':token_hash' =>
                     $tokenHash
             ]);
-
 
             $tokenBDD =
                 $stmtVerification->fetch(
                     PDO::FETCH_ASSOC
                 );
 
-
             if (!$tokenBDD) {
-
                 throw new Exception(
                     "Ce lien n'est plus valide."
                 );
             }
-
 
             $nouveauHash =
                 password_hash(
@@ -227,25 +148,21 @@ if (
                     PASSWORD_DEFAULT
                 );
 
-
             // Modifier le mot de passe
-            $sqlPassword = "
+            $sqlPassword = '
                 UPDATE users
 
                 SET password = :password
 
-                WHERE id = :user_id
-            ";
-
+                WHERE id = :user_id AND actif = 1
+            ';
 
             $stmtPassword =
                 $pdo->prepare(
                     $sqlPassword
                 );
 
-
             $stmtPassword->execute([
-
                 ':password' =>
                     $nouveauHash,
 
@@ -253,255 +170,103 @@ if (
                     $tokenBDD['user_id']
             ]);
 
-
             /*
              * Désactiver tous les liens
              * de réinitialisation de ce compte.
              */
-            $sqlUsed = "
+            $sqlUsed = '
                 UPDATE password_reset_tokens
 
                 SET used = 1
 
                 WHERE user_id = :user_id
                 AND used = 0
-            ";
-
+            ';
 
             $stmtUsed =
                 $pdo->prepare(
                     $sqlUsed
                 );
 
-
             $stmtUsed->execute([
                 ':user_id' =>
                     $tokenBDD['user_id']
             ]);
 
-
             $pdo->commit();
-
 
             $succes = true;
 
             $tokenValide = false;
-
-
         } catch (Throwable $e) {
-
-
             if ($pdo->inTransaction()) {
-
                 $pdo->rollBack();
             }
 
-
             error_log(
-                "Erreur changement mot de passe : "
+                'Erreur changement mot de passe : '
                 . $e->getMessage()
             );
 
-
             $erreur =
-                "Une erreur est survenue. "
-                . "Veuillez recommencer.";
+                'Une erreur est survenue. '
+                . 'Veuillez recommencer.';
         }
     }
 }
 
 ?>
-
-<!DOCTYPE html>
-
-<html lang="fr">
-
-<head>
-
-    <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
-
-    <title>
-        Nouveau mot de passe - Vite & Gourmand
-    </title>
-
-
-    <style>
-
-        body {
-            font-family: Arial, sans-serif;
-            background: #f4f4f4;
-            margin: 0;
-            padding: 20px;
-        }
-
-        main {
-            min-height: 90vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .container {
-            width: 100%;
-            max-width: 450px;
-            background: white;
-            padding: 30px;
-            border-radius: 12px;
-
-            box-shadow:
-                0 2px 10px
-                rgba(0, 0, 0, 0.1);
-        }
-
-        label {
-            display: block;
-            margin-top: 15px;
-            margin-bottom: 6px;
-            font-weight: bold;
-        }
-
-        input {
-            width: 100%;
-            padding: 12px;
-            box-sizing: border-box;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-        }
-
-        button {
-            width: 100%;
-            margin-top: 20px;
-            padding: 13px;
-            border: none;
-            border-radius: 6px;
-            background: black;
-            color: white;
-            cursor: pointer;
-        }
-
-        .erreur {
-            background: #ffdede;
-            color: #8b0000;
-            padding: 12px;
-            border-radius: 6px;
-        }
-
-        .succes {
-            background: #ddffdd;
-            padding: 12px;
-            border-radius: 6px;
-        }
-
-        .retour {
-            display: block;
-            margin-top: 20px;
-            text-align: center;
-        }
-
-    </style>
-
-</head>
-
-
-<body>
-
-
-<main>
-
+<?php require_once __DIR__ . '/../Templates/layout.php';
+renderHeader('Nouveau mot de passe'); ?>
+<section class="content-panel">
 <div class="container">
-
-
 <?php if ($succes): ?>
-
-
     <h1>
         Mot de passe modifié
     </h1>
-
-
     <p class="succes">
         Votre mot de passe a été
         modifié avec succès.
     </p>
-
-
     <a
         class="retour"
         href="login.php"
     >
         Se connecter
     </a>
-
-
 <?php elseif (!$tokenValide): ?>
-
-
     <h1>
         Lien invalide
     </h1>
-
-
     <p class="erreur">
         Ce lien de réinitialisation
         est invalide ou a expiré.
     </p>
-
-
     <a
         class="retour"
         href="mot-de-passe-oublie.php"
     >
         Demander un nouveau lien
     </a>
-
-
 <?php else: ?>
-
-
     <h1>
         Nouveau mot de passe
     </h1>
-
-
     <?php if ($erreur !== ''): ?>
-
         <p class="erreur">
-
-            <?php
-            echo htmlspecialchars(
-                $erreur
-            );
-            ?>
-
+            <?= htmlspecialchars($erreur) ?>
         </p>
-
     <?php endif; ?>
-
-
     <form method="POST">
-
-
+        <?= csrfInput() ?>
         <input
             type="hidden"
             name="token"
-            value="<?php
-            echo htmlspecialchars(
-                $token
-            );
-            ?>"
+            value="<?= htmlspecialchars($token) ?>"
         >
-
-
         <label for="password">
             Nouveau mot de passe
         </label>
-
-
         <input
             type="password"
             id="password"
@@ -509,13 +274,9 @@ if (
             autocomplete="new-password"
             required
         >
-
-
         <label for="confirmation">
             Confirmer le mot de passe
         </label>
-
-
         <input
             type="password"
             id="confirmation"
@@ -523,24 +284,11 @@ if (
             autocomplete="new-password"
             required
         >
-
-
         <button type="submit">
             Modifier mon mot de passe
         </button>
-
-
     </form>
-
-
 <?php endif; ?>
-
-
 </div>
-
-</main>
-
-
-</body>
-
-</html>
+</section>
+<?php renderFooter($pdo); ?>

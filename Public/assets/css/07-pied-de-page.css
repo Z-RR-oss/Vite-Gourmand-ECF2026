@@ -1,0 +1,77 @@
+.site-footer {
+    background: #e9eadd;
+    padding: 52px max(24px, calc((100vw - var(--page-width)) / 2)) 0;
+    color: #354534;
+}
+.footer-grid {
+    display: grid;
+    grid-template-columns: 1.3fr 1fr 1fr;
+    gap: 60px;
+}
+.footer-brand {
+    font-family: var(--font-heading);
+    font-size: 2rem;
+    text-decoration: none;
+    letter-spacing: -0.045em;
+}
+.footer-intro > p {
+    font-size: 0.87rem;
+    line-height: 1.9;
+    margin: 15px 0;
+}
+.footer-intro .footer-location {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin: 22px 0 10px;
+}
+.footer-intro .text-link {
+    font-size: 0.75rem;
+}
+.site-footer h2 {
+    font-family: var(--font-body);
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    margin: 8px 0 20px;
+}
+.footer-links {
+    padding: 0;
+    list-style: none;
+    margin: 0;
+}
+.footer-links li {
+    padding: 5px 0;
+    font-size: 0.8rem;
+}
+.footer-links a {
+    color: inherit;
+    text-decoration: none;
+}
+.opening-hours {
+    margin: 0;
+    font-size: 0.73rem;
+}
+.opening-hours > div {
+    display: flex;
+    justify-content: space-between;
+    gap: 22px;
+    padding: 3px 0;
+}
+.opening-hours dd {
+    margin: 0;
+    white-space: nowrap;
+}
+.footer-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    margin-top: 45px;
+    padding: 21px 0;
+    border-top: 1px solid #c4c9b7;
+    font-size: 0.62rem;
+}
+.footer-bottom a {
+    color: inherit;
+}

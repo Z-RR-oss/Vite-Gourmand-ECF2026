@@ -1,0 +1,54 @@
+.contact-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 100px;
+    padding: 40px 50px 30px;
+}
+.contact-intro h1 {
+    font-size: 4rem;
+}
+.contact-intro > p:not(.eyebrow) {
+    font-size: 0.95rem;
+    color: var(--color-muted);
+    max-width: 350px;
+}
+.contact-detail {
+    margin: 40px 0;
+    border-top: 1px solid var(--color-border);
+    padding-top: 25px;
+}
+.contact-detail span {
+    font-size: 0.67rem;
+    letter-spacing: 0.1em;
+    color: var(--color-primary);
+}
+.contact-detail p {
+    font-size: 0.8rem;
+    max-width: 340px;
+    margin-top: 12px;
+    color: var(--color-muted);
+}
+.contact-form-panel {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    padding: 35px;
+    box-shadow: var(--shadow);
+}
+.contact-form-panel h2 {
+    font-size: 2rem;
+}
+.legal-page {
+    max-width: 800px;
+    margin: 30px auto;
+}
+.legal-page h1 {
+    font-size: 3.5rem;
+}
+.legal-page h2 {
+    font-size: 1.7rem;
+    margin-top: 35px;
+}
+.legal-page p {
+    font-size: 0.95rem;
+}

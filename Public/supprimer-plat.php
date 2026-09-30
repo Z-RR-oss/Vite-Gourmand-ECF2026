@@ -1,41 +1,27 @@
 <?php
 
-session_start();
-require_once '../Config/database.php';
-
+require_once __DIR__ . '/../Config/database.php';
 
 // Vérifier la connexion
-if (!isset($_SESSION['user_id'], $_SESSION['role'])) {
-    header("Location: login.php");
-    exit;
-}
-
 
 // Autoriser admin / employé
-if (
-    $_SESSION['role'] !== 'admin'
-    && $_SESSION['role'] !== 'employe'
-) {
-    exit("Accès refusé.");
-}
-
+requireAdminOrEmployee();
 
 // Vérifier l'identifiant
 $id = $_GET['id'] ?? null;
 
 if (!$id || !is_numeric($id)) {
-    exit("ID de plat invalide.");
+    exit('ID de plat invalide.');
 }
 
 $id = (int) $id;
 
-
 // Récupérer le plat
-$sql = "
+$sql = '
     SELECT *
     FROM plats
     WHERE id = :id
-";
+';
 
 $stmt = $pdo->prepare($sql);
 
@@ -45,18 +31,16 @@ $stmt->execute([
 
 $plat = $stmt->fetch(PDO::FETCH_ASSOC);
 
-
 if (!$plat) {
-    exit("Plat introuvable.");
+    exit('Plat introuvable.');
 }
 
-
 // Vérifier combien de menus utilisent ce plat
-$sqlMenus = "
+$sqlMenus = '
     SELECT COUNT(*)
     FROM menu_plat
     WHERE plat_id = :plat_id
-";
+';
 
 $stmtMenus = $pdo->prepare(
     $sqlMenus
@@ -69,20 +53,16 @@ $stmtMenus->execute([
 $nombreMenus = (int)
     $stmtMenus->fetchColumn();
 
-
 // Suppression après confirmation
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
     try {
-
         $pdo->beginTransaction();
 
-
         // Supprimer les liens avec les menus
-        $sqlMenuPlat = "
+        $sqlMenuPlat = '
             DELETE FROM menu_plat
             WHERE plat_id = :plat_id
-        ";
+        ';
 
         $stmtMenuPlat = $pdo->prepare(
             $sqlMenuPlat
@@ -92,12 +72,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             ':plat_id' => $id
         ]);
 
-
         // Supprimer les liens avec les allergènes
-        $sqlAllergenes = "
+        $sqlAllergenes = '
             DELETE FROM plat_allergene
             WHERE plat_id = :plat_id
-        ";
+        ';
 
         $stmtAllergenes = $pdo->prepare(
             $sqlAllergenes
@@ -107,12 +86,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             ':plat_id' => $id
         ]);
 
-
         // Supprimer le plat
-        $sqlDelete = "
+        $sqlDelete = '
             DELETE FROM plats
             WHERE id = :id
-        ";
+        ';
 
         $stmtDelete = $pdo->prepare(
             $sqlDelete
@@ -122,183 +100,72 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             ':id' => $id
         ]);
 
-
         $pdo->commit();
 
-
         header(
-            "Location: admin-plats.php"
+            'Location: admin-plats.php'
         );
 
         exit;
-
-
     } catch (Throwable $e) {
-
         if ($pdo->inTransaction()) {
             $pdo->rollBack();
         }
 
-
         error_log(
-            "Erreur suppression plat : "
+            'Erreur suppression plat : '
             . $e->getMessage()
         );
 
-
         exit(
-            "Une erreur est survenue lors de la suppression du plat."
+            'Une erreur est survenue lors de la suppression du plat.'
         );
     }
 }
 
 ?>
-
-<!DOCTYPE html>
-
-<html lang="fr">
-
-<head>
-
-    <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
-
-    <title>
-        Supprimer un plat - Vite & Gourmand
-    </title>
-
-    <style>
-
-        body {
-            font-family: Arial, sans-serif;
-
-            background-color: #f4f4f4;
-
-            padding: 20px;
-        }
-
-        main {
-            max-width: 600px;
-
-            margin: auto;
-
-            background: white;
-
-            padding: 25px;
-
-            border-radius: 10px;
-
-            box-shadow:
-                0 2px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        .alerte {
-            background: #fff0f0;
-
-            padding: 15px;
-
-            margin: 20px 0;
-
-            border-radius: 8px;
-        }
-
-        button {
-            padding: 10px 16px;
-
-            border: none;
-
-            border-radius: 5px;
-
-            background: #b00020;
-            color: white;
-
-            cursor: pointer;
-        }
-
-        .retour {
-            display: inline-block;
-            margin-left: 15px;
-        }
-
-    </style>
-
-</head>
-
-
-<body>
-
-<main>
-
+<?php require_once __DIR__ . '/../Templates/layout.php';
+renderHeader('Supprimer un plat'); ?>
+<section class="content-panel">
     <h1>
         Supprimer le plat
     </h1>
-
-
     <h2>
-
-        <?php
-        echo htmlspecialchars(
-            $plat['nom']
-        );
-        ?>
-
+        <?= htmlspecialchars($plat['nom']) ?>
     </h2>
-
-
     <div class="alerte">
-
         <?php if ($nombreMenus > 0): ?>
-
             <p>
 
                 Ce plat appartient actuellement à
 
                 <strong>
-                    <?php echo $nombreMenus; ?>
+                    <?= $nombreMenus ?>
                     menu(s).
                 </strong>
-
             </p>
-
             <p>
                 Sa suppression le retirera également
                 de ces menus.
             </p>
-
         <?php else: ?>
-
             <p>
                 Ce plat n'est actuellement associé
                 à aucun menu.
             </p>
-
         <?php endif; ?>
-
     </div>
-
-
     <form method="POST">
-
+        <?= csrfInput() ?>
         <button type="submit">
             Confirmer la suppression
         </button>
-
-
         <a
             class="retour"
             href="admin-plats.php"
         >
             Annuler
         </a>
-
     </form>
-
-</main>
-
-</body>
-
-</html>
+</section>
+<?php renderFooter($pdo); ?>

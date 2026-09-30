@@ -1,0 +1,67 @@
+/* Formulaires métier et panneaux de gestion partagent les mêmes espacements. */
+.content-panel {
+    max-width: 900px;
+    margin: 20px auto;
+}
+.content-panel:not(:has(> .container)) {
+    padding: 32px;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+}
+.content-panel h1 {
+    font-size: clamp(2rem, 4vw, 3.25rem);
+    overflow-wrap: anywhere;
+}
+.content-panel form > label {
+    margin-top: 20px;
+}
+.content-panel form > button {
+    margin-top: 24px;
+}
+.content-panel form > input,
+.content-panel form > select,
+.content-panel form > textarea {
+    margin-bottom: 12px;
+}
+.content-panel .container {
+    margin: 0 auto;
+}
+.auth-panel {
+    max-width: 680px;
+}
+.gallery-preview {
+    width: 100%;
+    aspect-ratio: 1.5;
+    object-fit: cover;
+}
+.staff-page .page-shell {
+    overflow-wrap: anywhere;
+}
+.table-container,
+.table-responsive {
+    max-width: 100%;
+    overflow-x: auto;
+}
+.stats-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+@media (max-width: 860px) {
+    .stats-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+@media (max-width: 620px) {
+    .content-panel:not(:has(> .container)) {
+        padding: 22px 18px;
+    }
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+    .content-panel form > button {
+        width: 100%;
+    }
+    .content-panel .container {
+        margin: 0;
+    }
+}
