@@ -4,7 +4,6 @@ require_once __DIR__ . '/../Config/database.php';
 require_once __DIR__ . '/../Services/CatalogueValidation.php';
 
 // Vérifier la connexion
-requireLogin();
 
 // Autoriser admin / employé
 requireAdminOrEmployee();
@@ -13,17 +12,17 @@ requireAdminOrEmployee();
 $id = $_GET['id'] ?? null;
 
 if (!$id || !is_numeric($id)) {
-    exit("ID de menu invalide.");
+    exit('ID de menu invalide.');
 }
 
 $id = (int) $id;
 
 // Récupérer le menu
-$sql = "
+$sql = '
     SELECT *
     FROM menus
     WHERE id = :id
-";
+';
 
 $stmt = $pdo->prepare($sql);
 
@@ -34,14 +33,13 @@ $stmt->execute([
 $menu = $stmt->fetch(PDO::FETCH_ASSOC);
 
 if (!$menu) {
-    exit("Menu introuvable.");
+    exit('Menu introuvable.');
 }
 
 $erreur = '';
 
 // Traitement du formulaire
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
     $titre = trim($_POST['titre'] ?? '');
     $description = trim($_POST['description'] ?? '');
 
@@ -77,37 +75,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         || $theme === ''
         || $regime === ''
     ) {
-
         $erreur =
-            "Tous les champs obligatoires doivent être renseignés.";
-
+            'Tous les champs obligatoires doivent être renseignés.';
     } elseif ($prix <= 0) {
-
         $erreur =
-            "Le prix doit être supérieur à 0.";
-
+            'Le prix doit être supérieur à 0.';
     } elseif ($nbPersonnesMin < 1) {
-
         $erreur =
-            "Le nombre minimum de personnes doit être au moins égal à 1.";
-
+            'Le nombre minimum de personnes doit être au moins égal à 1.';
     } elseif ($stockDisponible < 0) {
-
         $erreur =
-            "Le stock ne peut pas être négatif.";
-
+            'Le stock ne peut pas être négatif.';
     } elseif ($delaiCommandeHeures < 0) {
-
         $erreur =
-            "Le délai de commande ne peut pas être négatif.";
+            'Le délai de commande ne peut pas être négatif.';
     }
 
     // Mise à jour
     $erreur = menuValidationError($_POST) ?? $erreur;
 
     if ($erreur === '') {
-
-        $sqlUpdate = "
+        $sqlUpdate = '
             UPDATE menus
 
             SET
@@ -123,7 +111,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 actif = :actif
 
             WHERE id = :id
-        ";
+        ';
 
         $stmtUpdate = $pdo->prepare(
             $sqlUpdate
@@ -145,7 +133,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         ]);
 
         header(
-            "Location: admin-menus.php"
+            'Location: admin-menus.php'
         );
 
         exit;
@@ -165,206 +153,134 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 ?>
-
-<?php require_once __DIR__ . '/../Templates/layout.php'; renderHeader('Modifier un menu'); ?>
-
+<?php require_once __DIR__ . '/../Templates/layout.php';
+renderHeader('Modifier un menu'); ?>
 <section class="content-panel">
 <p><a class="button button-secondary" href="gerer-menu-images.php?id=<?= (int) $id ?>">Gérer les images de ce menu</a></p>
-
     <h1>
         Modifier le menu
     </h1>
-
     <?php if ($erreur !== ''): ?>
-
         <p class="erreur">
-
-            <?php
-            echo htmlspecialchars(
-                $erreur
-            );
-            ?>
-
+            <?= htmlspecialchars($erreur) ?>
         </p>
-
     <?php endif; ?>
-
     <form method="POST">
         <?= csrfInput() ?>
-
         <label for="titre">
             Titre *
         </label>
-
         <input
             type="text"
             id="titre"
             name="titre"
-            value="<?php
-            echo htmlspecialchars(
-                $menu['titre']
-            );
-            ?>"
+            value="<?= htmlspecialchars($menu['titre']) ?>"
             required
         >
-
         <label for="description">
             Description *
         </label>
-
         <textarea
             id="description"
             name="description"
             required
-        ><?php
-        echo htmlspecialchars(
-            $menu['description']
-        );
-        ?></textarea>
-
+        ><?= htmlspecialchars($menu['description']) ?></textarea>
         <label for="prix">
             Prix (€) *
         </label>
-
         <input
             type="number"
             id="prix"
             name="prix"
             step="0.01"
             min="0.01"
-            value="<?php
-            echo htmlspecialchars(
-                $menu['prix']
-            );
-            ?>"
+            value="<?= htmlspecialchars($menu['prix']) ?>"
             required
         >
-
         <label for="nb_personnes_min">
             Nombre minimum de personnes *
         </label>
-
         <input
             type="number"
             id="nb_personnes_min"
             name="nb_personnes_min"
             min="1"
-            value="<?php
-            echo (int)
-                $menu['nb_personnes_min'];
-            ?>"
+            value="<?= (int) $menu['nb_personnes_min'] ?>"
             required
         >
-
         <label for="theme">
             Thème *
         </label>
-
         <input
             type="text"
             id="theme"
             name="theme"
-            value="<?php
-            echo htmlspecialchars(
-                $menu['theme']
-            );
-            ?>"
+            value="<?= htmlspecialchars($menu['theme']) ?>"
             required
         >
-
         <label for="regime">
             Régime alimentaire *
         </label>
-
         <input
             type="text"
             id="regime"
             name="regime"
-            value="<?php
-            echo htmlspecialchars(
-                $menu['regime']
-            );
-            ?>"
+            value="<?= htmlspecialchars($menu['regime']) ?>"
             required
         >
-
         <label for="stock_disponible">
             Stock disponible
         </label>
-
         <input
             type="number"
             id="stock_disponible"
             name="stock_disponible"
             min="0"
-            value="<?php
-            echo (int)
-                $menu['stock_disponible'];
-            ?>"
+            value="<?= (int) $menu['stock_disponible'] ?>"
             required
         >
-
         <label for="conditions_menu">
             Conditions particulières
         </label>
-
         <textarea
             id="conditions_menu"
             name="conditions_menu"
-        ><?php
-        echo htmlspecialchars(
-            $menu['conditions_menu'] ?? ''
-        );
-        ?></textarea>
-
+        ><?= htmlspecialchars($menu['conditions_menu'] ?? '') ?></textarea>
         <label for="delai_commande_heures">
             Délai minimum de commande en heures
         </label>
-
         <input
             type="number"
             id="delai_commande_heures"
             name="delai_commande_heures"
             min="0"
-            value="<?php
-            echo (int)
-                $menu['delai_commande_heures'];
-            ?>"
+            value="<?= (int) $menu['delai_commande_heures'] ?>"
             required
         >
-
         <div class="checkbox">
-
             <input
                 type="checkbox"
                 id="actif"
                 name="actif"
                 <?php
-                if ((int) $menu['actif'] === 1) {
-                    echo 'checked';
-                }
-                ?>
+    if ((int) $menu['actif'] === 1) {
+        echo 'checked';
+    }
+?>
             >
-
             <label for="actif">
                 Menu actif
             </label>
-
         </div>
-
         <button type="submit">
             Enregistrer les modifications
         </button>
-
     </form>
-
     <a
         class="retour"
         href="admin-menus.php"
     >
         Retour aux menus
     </a>
-
 </section>
-
 <?php renderFooter($pdo); ?>

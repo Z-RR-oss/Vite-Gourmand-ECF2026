@@ -1,6 +1,6 @@
 # Rapport final de réalisation et de recette locale
 
-Édition du 30 septembre 2026. **Le site est publié : https://vite-gourmandecf2026.alwaysdata.net.** MySQL et Firebase réels sont vérifiés sur alwaysdata, avec 29 contrôles en ligne. Les tâches sont installées et l’email de test est indiqué « Envoyé ». La réception en boîte et la première exécution automatique restent à observer.
+Édition du 30 septembre 2026. **Le site est publié : https://vite-gourmandecf2026.alwaysdata.net.** MySQL et Firebase réels sont vérifiés sur alwaysdata, avec 29 contrôles en ligne. Les tâches sont installées et l’email de test est indiqué « Envoyé ». La réception est confirmée et les deux scripts réussissent dans le planificateur. L’intégration finale feature → develop → main reste à finaliser ; l’accès Git SSH est opérationnel.
 
 ## 1. Résumé
 
@@ -40,7 +40,7 @@ Huit familles vérifiées par capture SMTP : bienvenue, reset, confirmation, att
 
 ## 10. Déploiement
 
-Site publié sur alwaysdata Free (0 €), PHP web 8.2, MySQL, racine app/Public et HTTPS obligatoire. Import fictif sur base vide : 12 tables, 5 menus et 3 commandes. Clé Firebase privée transférée après accord; PUT/GET réels réussis avec le réglage IPv4 propre à l’hébergement. Les trois mots de passe de démonstration ont été remplacés et remis dans un fichier privé. SMTP STARTTLS opérationnel; test autorisé indiqué Envoyé sans rebond dans le journal #499997354. Deux tâches actives #33622/#33623; leurs scripts réussissent en CLI. Réception en boîte et première exécution automatique à confirmer.
+Site publié sur alwaysdata Free (0 €), PHP web 8.2, MySQL, racine app/Public et HTTPS obligatoire. Import fictif sur base vide : 12 tables, 5 menus et 3 commandes. Clé Firebase privée transférée après accord; PUT/GET réels réussis avec le réglage IPv4 propre à l’hébergement. Les trois mots de passe de démonstration ont été remplacés et remis dans un fichier privé. SMTP STARTTLS opérationnel; test autorisé indiqué Envoyé sans rebond dans le journal #499997354. Deux tâches actives #33622/#33623; leurs scripts réussissent en CLI. Réception confirmée par la propriétaire; sorties du planificateur vérifiées avec code 0.
 
 ## 11. Livrables créés
 
@@ -66,9 +66,7 @@ README complet; SQL complet et données fictives; manuel PDF de 4 pages; charte 
 | PDF | Toutes les pages rendues et inspectées; sources et exports présents |
 | Firebase distant | PUT réussi, test de lecture code0, dashboard/filtres/graphique vérifiés, accès anonyme HTTP401 |
 
-## 14. Liste exacte des fichiers ajoutés
-
-Différence par rapport au commit de départ e7f6cee, configurations privées et fichiers temporaires exclus.
+## 14. Fichiers ajoutés depuis la reprise
 
 - `.gitattributes`
 - `Config/auth.php`
@@ -108,6 +106,7 @@ Différence par rapport au commit de départ e7f6cee, configurations privées et
 - `Templates/layout.php`
 - `Templates/menu-list.php`
 - `docs/audit-initial.md`
+- `docs/captures/accueil-alwaysdata.png`
 - `docs/captures/accueil-desktop.png`
 - `docs/captures/admin-avis.png`
 - `docs/captures/admin-commandes.png`
@@ -131,8 +130,9 @@ Différence par rapport au commit de départ e7f6cee, configurations privées et
 - `docs/captures/mon-profil.png`
 - `docs/captures/mot-de-passe-oublie.png`
 - `docs/captures/register.png`
-- `docs/captures/statistiques-firebase-reel.png`
+- `docs/captures/statistiques-alwaysdata.png`
 - `docs/captures/statistiques-firebase-mobile.png`
+- `docs/captures/statistiques-firebase-reel.png`
 - `docs/charte-graphique.md`
 - `docs/charte-graphique.pdf`
 - `docs/checklist-finale.md`
@@ -151,7 +151,10 @@ Différence par rapport au commit de départ e7f6cee, configurations privées et
 - `docs/nosql.md`
 - `docs/plan-tests.md`
 - `docs/rapport-final.md`
+- `docs/recette-alwaysdata.json`
+- `docs/recette-finale-hebergement.json`
 - `docs/recette-responsive.json`
+- `docs/remise-jury.md`
 - `docs/wireframes/accueil-desktop.png`
 - `docs/wireframes/accueil-desktop.svg`
 - `docs/wireframes/accueil-mobile.png`
@@ -171,7 +174,7 @@ Différence par rapport au commit de départ e7f6cee, configurations privées et
 - `tests/statistics-live.php`
 - `tests/statistics.php`
 
-## 15. Liste exacte des fichiers modifiés
+## 15. Fichiers modifiés depuis la reprise
 
 - `.gitignore`
 - `Config/database.php`
@@ -222,8 +225,8 @@ Différence par rapport au commit de départ e7f6cee, configurations privées et
 
 ## 16. Vérifications et remise restantes
 
-- SMTP : confirmer la réception en boîte du message de test autorisé. L'acceptation SMTP et l'état Envoyé sont constatés; ils ne prouvent pas le placement en boîte principale chez tous les fournisseurs.
-- Cron : observer les journaux des premières exécutions automatiques. Les deux tâches sont installées et les scripts testés sur le serveur.
+- SMTP : réception du message autorisé confirmée par la propriétaire. Le test ne garantit pas le classement chez tous les fournisseurs.
+- Cron : les deux scripts ont réussi depuis le planificateur. La tâche quotidienne #33623 a réussi à 09:00:23 le 30 septembre; la fréquence normale des statistiques est rétablie à 15 minutes.
 - Remise : reporter l'URL publique et fournir les identifiants privés au jury; actualiser le Trello existant. La copie d'examen et son dépôt restent à l'étudiante.
 - Avant une exploitation commerciale : remplacer les mentions pédagogiques par les données juridiques validées de l'exploitant, et limiter davantage les droits du compte SQL. Le site livré est une démonstration ECF.
 
@@ -235,6 +238,12 @@ Démarrer Apache/MySQL XAMPP puis ouvrir http://vite-gourmand.local. Pour une in
 
 ## 18. Checklist finale et Git
 
-La [checklist complète](checklist-finale.md) contient 73 lignes avec exigence, statut OK/BLOQUÉE, fichiers, test et commentaire. Deux lignes attendent la confirmation de réception en boîte et la première exécution automatique; aucune donnée Firebase simulée n'est présentée comme une réussite d'intégration.
+La [checklist complète](checklist-finale.md) contient 73 lignes avec exigence, statut OK/BLOQUÉE, fichiers, test et commentaire. Une ligne attend la finalisation du workflow Git; aucune donnée Firebase simulée n'est présentée comme une réussite d'intégration.
 
-Commits applicatifs sur feature/statistiques-admin : 6310334 (métier/sécurité/gestion), 42ccd6e (interface/pages publiques), d8d9015 (Firebase/statistiques), suivis du commit de documentation et preuves. Aucun merge de main ou develop. Leur état distant a été contrôlé avant livraison; la branche de fonctionnalité porte le travail à relire avant intégration.
+Commits applicatifs sur feature/statistiques-admin : 6310334 (métier/sécurité/gestion), 42ccd6e (interface/pages publiques), d8d9015 (Firebase/statistiques), suivis du commit de documentation et preuves. Le commit 3db42ed raccorde l’historique main, initialement séparé, à la branche de fonctionnalité. L’arbre de fichiers est strictement identique avant/après ce raccordement; les deux historiques sont préservés. Les fusions vers develop puis main restent à finaliser. Le sujet Studi demande ces fusions, sans exiger explicitement de pull request ; les PR figurent dans le prompt de travail initial.
+
+## Amélioration du code et des visuels — 30 septembre 2026
+
+Ajout de deux visuels culinaires générés pour les menus Vegan et Noël, optimisés en JPEG et associés aux menus par une migration ciblée relançable. Le dump neuf contient également les nouveaux chemins. Les originaux restent conservés hors Git.
+
+Le PHP applicatif est harmonisé, les blocs d’affichage historiques sont simplifiés et les contrôles d’authentification redondants sont retirés lorsque la garde de rôle les réalise déjà. Des commentaires expliquent les règles de prix, verrous de stock, sessions et requêtes asynchrones. Le CSS est réparti en 12 modules puis assemblé en une ressource ; les règles de formatage et les commandes d’entretien sont documentées dans `conventions-code.md`. Les 196 contrôles automatisés sont repassés avec succès ; les nouveaux visuels sont vérifiés sur ordinateur et mobile.

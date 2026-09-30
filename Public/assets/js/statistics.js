@@ -24,10 +24,13 @@
     const rows = Array.from(document.querySelectorAll('.chart-row'));
     const number = new Intl.NumberFormat('fr-FR');
     const currency = new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' });
+    // Sans JavaScript, le tableau et les barres initiaux restent consultables.
     controls.hidden = false;
     metric.addEventListener('change', () => {
         const revenue = metric.value === 'ca_centimes';
-        const values = rows.map(row => Number(row.dataset[revenue ? 'ca_centimes' : 'commandes']));
+        const values = rows.map((row) =>
+            Number(row.dataset[revenue ? 'ca_centimes' : 'commandes']),
+        );
         const maximum = Math.max(1, ...values);
         rows.forEach((row, index) => {
             const bar = row.querySelector('meter');

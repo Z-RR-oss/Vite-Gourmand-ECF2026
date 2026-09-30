@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 require_once __DIR__ . '/../Repositories/StatisticsRepository.php';
@@ -125,7 +126,7 @@ final class StatisticsService
                 }
             }
         }
-        uasort($rows, static fn(array $a, array $b): int => $b['commandes'] <=> $a['commandes'] ?: strcasecmp($a['titre'], $b['titre']));
+        uasort($rows, static fn (array $a, array $b): int => $b['commandes'] <=> $a['commandes'] ?: strcasecmp($a['titre'], $b['titre']));
         $totals = self::emptyTotals();
         foreach ($rows as $row) {
             foreach ($totals as $metric => $value) {

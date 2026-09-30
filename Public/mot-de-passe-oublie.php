@@ -28,19 +28,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_SESSION['reset_requested_at'] ??
             FILTER_VALIDATE_EMAIL
         )
     ) {
-
         $erreur =
-            "Veuillez saisir une adresse email valide.";
-
+            'Veuillez saisir une adresse email valide.';
     } else {
-
         /*
          * On cherche l'utilisateur.
          *
          * On ne dira jamais à l'écran
          * si l'adresse existe ou non.
          */
-        $sqlUser = "
+        $sqlUser = '
             SELECT
                 id,
                 nom,
@@ -52,7 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_SESSION['reset_requested_at'] ??
             WHERE email = :email
 
             LIMIT 1
-        ";
+        ';
 
         $stmtUser =
             $pdo->prepare(
@@ -72,23 +69,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_SESSION['reset_requested_at'] ??
             $user
             && (int) $user['actif'] === 1
         ) {
-
             try {
-
                 $pdo->beginTransaction();
 
                 /*
                  * Désactiver les anciens liens
                  * encore inutilisés.
                  */
-                $sqlAncienToken = "
+                $sqlAncienToken = '
                     UPDATE password_reset_tokens
 
                     SET used = 1
 
                     WHERE user_id = :user_id
                     AND used = 0
-                ";
+                ';
 
                 $stmtAncienToken =
                     $pdo->prepare(
@@ -126,7 +121,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_SESSION['reset_requested_at'] ??
                         time() + 3600
                     );
 
-                $sqlToken = "
+                $sqlToken = '
                     INSERT INTO
                     password_reset_tokens (
                         user_id,
@@ -141,7 +136,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_SESSION['reset_requested_at'] ??
                         :expires_at,
                         0
                     )
-                ";
+                ';
 
                 $stmtToken =
                     $pdo->prepare(
@@ -149,7 +144,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_SESSION['reset_requested_at'] ??
                     );
 
                 $stmtToken->execute([
-
                     ':user_id' =>
                         $user['id'],
 
@@ -180,20 +174,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_SESSION['reset_requested_at'] ??
 
                 $contenuEmail = "
                     <h2>Réinitialisation de votre mot de passe</h2>
-
                     <p>
                         Bonjour {$prenom},
                     </p>
-
                     <p>
                         Vous avez demandé à réinitialiser
                         votre mot de passe Vite & Gourmand.
                     </p>
-
                     <p>
                         Cliquez sur le lien suivant :
                     </p>
-
                     <p>
                         <a href=\""
                         . htmlspecialchars(
@@ -204,11 +194,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_SESSION['reset_requested_at'] ??
                             Réinitialiser mon mot de passe
                         </a>
                     </p>
-
                     <p>
                         Ce lien est valable pendant 1 heure.
                     </p>
-
                     <p>
                         Si vous n'êtes pas à l'origine
                         de cette demande,
@@ -224,18 +212,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_SESSION['reset_requested_at'] ??
                     'Réinitialisation de votre mot de passe',
                     $contenuEmail
                 );
-
             } catch (Throwable $e) {
-
                 if (
                     $pdo->inTransaction()
                 ) {
-
                     $pdo->rollBack();
                 }
 
                 error_log(
-                    "Erreur reset password : "
+                    'Erreur reset password : '
                     . $e->getMessage()
                 );
             }
@@ -246,63 +231,38 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_SESSION['reset_requested_at'] ??
          * que l'adresse existe ou non.
          */
         $message =
-            "Si un compte correspond à cette adresse, "
-            . "un email de réinitialisation a été envoyé.";
+            'Si un compte correspond à cette adresse, '
+            . 'un email de réinitialisation a été envoyé.';
     }
 }
 
 ?>
-
-<?php require_once __DIR__ . '/../Templates/layout.php'; renderHeader('Mot de passe oublié'); ?>
-
+<?php require_once __DIR__ . '/../Templates/layout.php';
+renderHeader('Mot de passe oublié'); ?>
 <section class="content-panel">
-
 <div class="container">
-
     <h1>
         Mot de passe oublié
     </h1>
-
     <p>
         Saisissez l'adresse email associée
         à votre compte.
     </p>
-
     <?php if ($message !== ''): ?>
-
         <p class="message">
-
-            <?php
-            echo htmlspecialchars(
-                $message
-            );
-            ?>
-
+            <?= htmlspecialchars($message) ?>
         </p>
-
     <?php endif; ?>
-
     <?php if ($erreur !== ''): ?>
-
         <p class="erreur">
-
-            <?php
-            echo htmlspecialchars(
-                $erreur
-            );
-            ?>
-
+            <?= htmlspecialchars($erreur) ?>
         </p>
-
     <?php endif; ?>
-
     <form method="POST">
         <?= csrfInput() ?>
-
         <label for="email">
             Adresse email
         </label>
-
         <input
             type="email"
             id="email"
@@ -310,22 +270,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_SESSION['reset_requested_at'] ??
             required
             autocomplete="email"
         >
-
         <button type="submit">
             Envoyer le lien
         </button>
-
     </form>
-
     <a
         class="retour"
         href="login.php"
     >
         ← Retour à la connexion
     </a>
-
 </div>
-
 </section>
-
 <?php renderFooter($pdo); ?>

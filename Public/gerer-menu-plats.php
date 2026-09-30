@@ -2,23 +2,21 @@
 
 require_once __DIR__ . '/../Config/database.php';
 
-requireLogin();
-
 requireAdminOrEmployee();
 
 $id = $_GET['id'] ?? null;
 
 if (!$id || !is_numeric($id)) {
-    exit("ID de menu invalide.");
+    exit('ID de menu invalide.');
 }
 
 $id = (int) $id;
 
-$sqlMenu = "
+$sqlMenu = '
     SELECT *
     FROM menus
     WHERE id = :id
-";
+';
 
 $stmtMenu = $pdo->prepare($sqlMenu);
 
@@ -29,7 +27,7 @@ $stmtMenu->execute([
 $menu = $stmtMenu->fetch(PDO::FETCH_ASSOC);
 
 if (!$menu) {
-    exit("Menu introuvable.");
+    exit('Menu introuvable.');
 }
 
 $sqlPlats = "
@@ -55,13 +53,13 @@ $stmtPlats->execute();
 
 $plats = $stmtPlats->fetchAll(PDO::FETCH_ASSOC);
 
-$sqlPlatsMenu = "
+$sqlPlatsMenu = '
     SELECT
         plat_id,
         ordre_affichage
     FROM menu_plat
     WHERE menu_id = :menu_id
-";
+';
 
 $stmtPlatsMenu = $pdo->prepare(
     $sqlPlatsMenu
@@ -80,7 +78,6 @@ $platsMenu = $stmtPlatsMenu->fetchAll(
 $platsSelectionnes = [];
 
 foreach ($platsMenu as $platMenu) {
-
     $platsSelectionnes[
         $platMenu['plat_id']
     ] = $platMenu['ordre_affichage'];
@@ -89,7 +86,6 @@ foreach ($platsMenu as $platMenu) {
 $erreur = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
     $platsChoisis =
         $_POST['plats'] ?? [];
 
@@ -97,7 +93,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_POST['ordre'] ?? [];
 
     try {
-
         if (!is_array($platsChoisis) || !is_array($ordres) || array_diff($platsChoisis, array_column($plats, 'id'))) {
             throw new DomainException('Sélection de plats invalide.');
         }
@@ -109,10 +104,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         $pdo->beginTransaction();
 
-        $sqlDelete = "
+        $sqlDelete = '
             DELETE FROM menu_plat
             WHERE menu_id = :menu_id
-        ";
+        ';
 
         $stmtDelete = $pdo->prepare(
             $sqlDelete
@@ -123,7 +118,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         ]);
 
         foreach ($platsChoisis as $platId) {
-
             if (!is_numeric($platId)) {
                 continue;
             }
@@ -138,7 +132,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $ordre = 0;
             }
 
-            $sqlInsert = "
+            $sqlInsert = '
                 INSERT INTO menu_plat (
                     menu_id,
                     plat_id,
@@ -150,7 +144,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     :plat_id,
                     :ordre_affichage
                 )
-            ";
+            ';
 
             $stmtInsert = $pdo->prepare(
                 $sqlInsert
@@ -166,19 +160,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $pdo->commit();
 
         header(
-            "Location: admin-menus.php"
+            'Location: admin-menus.php'
         );
 
         exit;
-
     } catch (Throwable $e) {
-
         if ($pdo->inTransaction()) {
             $pdo->rollBack();
         }
 
         error_log(
-            "Erreur association menu/plats : "
+            'Erreur association menu/plats : '
             . $e->getMessage()
         );
 
@@ -188,61 +180,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 ?>
-
-<?php require_once __DIR__ . '/../Templates/layout.php'; renderHeader('Composition du menu'); ?>
-
+<?php require_once __DIR__ . '/../Templates/layout.php';
+renderHeader('Composition du menu'); ?>
 <section class="content-panel">
-
     <h1>
         Composition du menu
     </h1>
-
     <h2>
-
-        <?php
-        echo htmlspecialchars(
-            $menu['titre']
-        );
-        ?>
-
+        <?= htmlspecialchars($menu['titre']) ?>
     </h2>
-
     <p>
         Sélectionne les plats qui composent ce menu.
         Le numéro d'ordre détermine leur ordre d'affichage.
     </p>
-
     <?php if ($erreur !== ''): ?>
-
         <p class="erreur">
-
-            <?php
-            echo htmlspecialchars(
-                $erreur
-            );
-            ?>
-
+            <?= htmlspecialchars($erreur) ?>
         </p>
-
     <?php endif; ?>
-
     <form method="POST">
         <?= csrfInput() ?>
-
         <?php if (empty($plats)): ?>
-
             <p>
                 Aucun plat disponible.
                 Crée d'abord des plats dans la gestion des plats.
             </p>
-
         <?php else: ?>
-
             <?php foreach ($plats as $plat): ?>
-
                 <?php
 
-                $platId = (int) $plat['id'];
+            $platId = (int) $plat['id'];
 
                 $estSelectionne =
                     array_key_exists(
@@ -255,76 +222,48 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     ?? 0;
 
                 ?>
-
                 <div class="plat">
-
                     <div class="plat-infos">
-
                         <strong>
-
-                            <?php
-                            echo htmlspecialchars(
-                                $plat['nom']
-                            );
-                            ?>
-
+                            <?= htmlspecialchars($plat['nom']) ?>
                         </strong>
-
                         <p class="type">
-
                             <?php
 
-                            if ($plat['type_plat'] === 'entree') {
-                                echo 'Entrée';
-                            } elseif ($plat['type_plat'] === 'dessert') {
-                                echo 'Dessert';
-                            } else {
-                                echo 'Plat';
-                            }
+                if ($plat['type_plat'] === 'entree') {
+                    echo 'Entrée';
+                } elseif ($plat['type_plat'] === 'dessert') {
+                    echo 'Dessert';
+                } else {
+                    echo 'Plat';
+                }
 
-                            ?>
-
+                ?>
                         </p>
-
                         <?php
                         if (!empty($plat['description'])):
-                        ?>
-
+                            ?>
                             <p>
-
-                                <?php
-                                echo htmlspecialchars(
-                                    $plat['description']
-                                );
-                                ?>
-
+                                <?= htmlspecialchars($plat['description']) ?>
                             </p>
-
                         <?php endif; ?>
-
                     </div>
-
                     <div class="selection">
-
                         <label>
-
                             <input
                                 type="checkbox"
                                 name="plats[]"
-                                value="<?php
-                                echo $platId;
-                                ?>"
+                                value="<?= $platId ?>"
                                 <?php
-                                if ($estSelectionne) {
-                                    echo 'checked';
-                                }
-                                ?>
+                if ($estSelectionne) {
+                    echo 'checked';
+                }
+                ?>
                             >
 
                             Sélectionner
 
                         </label>
-
                         <label>
 
                             Ordre :
@@ -332,42 +271,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <input
                                 class="ordre"
                                 type="number"
-                                name="ordre[<?php
-                                echo $platId;
-                                ?>]"
+                                name="ordre[<?= $platId ?>]"
                                 min="0"
-                                value="<?php
-                                echo (int) $ordreActuel;
-                                ?>"
+                                value="<?= (int) $ordreActuel ?>"
                             >
-
                         </label>
-
                     </div>
-
                 </div>
-
             <?php endforeach; ?>
-
         <?php endif; ?>
-
         <?php if (!empty($plats)): ?>
-
             <button type="submit">
                 Enregistrer la composition
             </button>
-
         <?php endif; ?>
-
     </form>
-
     <a
         class="retour"
         href="admin-menus.php"
     >
         Retour aux menus
     </a>
-
 </section>
-
 <?php renderFooter($pdo); ?>

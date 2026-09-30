@@ -38,6 +38,7 @@ function catalogueFilters(array $input): array
 
 function catalogueMenus(PDO $pdo, array $filters): array
 {
+    // Les colonnes viennent de listes fixes ; les valeurs des filtres sont liées au SQL.
     $conditions = ['m.actif = 1'];
     $params = [];
     foreach (['theme', 'regime'] as $key) {
@@ -71,13 +72,27 @@ function renderMenuCard(array $menu): void
 {
     ?>
 <article class="menu-card">
-    <a class="menu-image-link" href="menu.php?id=<?= (int) $menu['id'] ?>" tabindex="-1" aria-hidden="true"><img src="<?= e($menu['image']) ?>" alt="" width="600" height="420" loading="lazy"><span class="menu-theme"><?= e($menu['theme']) ?></span></a>
+    <a class="menu-image-link" href="menu.php?id=<?= (int) $menu['id'] ?>" tabindex="-1" aria-hidden="true">
+        <img src="<?= e($menu['image']) ?>" alt="" width="600" height="420" loading="lazy">
+        <span class="menu-theme"><?= e($menu['theme']) ?></span>
+    </a>
     <div class="menu-card-body">
-        <div class="menu-card-meta"><span><?= e($menu['regime']) ?></span><span><?= (int) $menu['nb_personnes_min'] ?> pers. minimum</span></div>
+        <div class="menu-card-meta">
+            <span><?= e($menu['regime']) ?></span>
+            <span><?= (int) $menu['nb_personnes_min'] ?> pers. minimum</span>
+        </div>
         <h3><a href="menu.php?id=<?= (int) $menu['id'] ?>"><?= e($menu['titre']) ?></a></h3>
         <p><?= e($menu['description']) ?></p>
-        <div class="menu-card-bottom"><div><strong><?= number_format((float) $menu['prix'], 2, ',', ' ') ?> €</strong><small>pour <?= (int) $menu['nb_personnes_min'] ?> personnes</small></div><a class="round-link" href="menu.php?id=<?= (int) $menu['id'] ?>" aria-label="Découvrir <?= e($menu['titre']) ?>">↗</a></div>
-        <?php if ((int) $menu['stock_disponible'] <= 0): ?><span class="badge badge-muted">Momentanément indisponible</span><?php endif; ?>
+        <div class="menu-card-bottom">
+            <div>
+                <strong><?= number_format((float) $menu['prix'], 2, ',', ' ') ?> €</strong>
+                <small>pour <?= (int) $menu['nb_personnes_min'] ?> personnes</small>
+            </div>
+            <a class="round-link" href="menu.php?id=<?= (int) $menu['id'] ?>" aria-label="Découvrir <?= e($menu['titre']) ?>">↗</a>
+        </div>
+        <?php if ((int) $menu['stock_disponible'] <= 0): ?>
+            <span class="badge badge-muted">Momentanément indisponible</span>
+        <?php endif; ?>
     </div>
 </article>
 <?php

@@ -341,8 +341,8 @@ INSERT INTO allergenes (id, nom) VALUES (1,'Gluten'),(2,'Lait'),(3,'Œufs'),(4,'
 INSERT INTO plat_allergene (plat_id, allergene_id) VALUES (1,1),(1,4),(3,2),(3,3),(7,2);
 INSERT INTO menu_images (menu_id, chemin_image, texte_alternatif) VALUES
 (1,'assets/images/menu-classique.svg','Illustration du menu Classique'),
-(3,'assets/images/menu-vegan.svg','Illustration du menu Vegan'),
-(5,'assets/images/menu-fete.svg','Illustration du menu de fête');
+(3,'assets/images/menu-vegan-genere.jpg','Présentation végétale : lentilles et légumes rôtis aux herbes'),
+(5,'assets/images/menu-noel-genere.jpg','Présentation de fête : volaille dorée, pommes de terre et légumes d’hiver');
 
 INSERT INTO horaires (jour, heure_ouverture, heure_fermeture, ferme) VALUES
 ('Lundi','09:00','18:00',0),('Mardi','09:00','18:00',0),('Mercredi','09:00','18:00',0),

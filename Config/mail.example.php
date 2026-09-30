@@ -1,4 +1,5 @@
 <?php
+
 // Copier vers mail.local.php. Identifiants fictifs; variables d'environnement prioritaires.
 define('SMTP_HOST', 'smtp.example.com');
 define('SMTP_PORT', 587);

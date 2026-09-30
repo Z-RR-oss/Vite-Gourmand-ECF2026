@@ -1,0 +1,527 @@
+@media (max-width: 1340px) {
+    .page-shell {
+        margin: 0 40px;
+    }
+    .hero {
+        gap: 40px;
+    }
+    .hero h1 {
+        font-size: 4.15rem;
+    }
+    .contact-layout {
+        gap: 65px;
+        padding-inline: 20px;
+    }
+}
+@media (max-width: 1120px) {
+    .staff-page .site-header {
+        flex-wrap: wrap;
+    }
+    .staff-page .navbar-links {
+        flex-wrap: wrap;
+        gap: 16px;
+    }
+    .hero h1 {
+        font-size: 3.6rem;
+    }
+    .hero-actions {
+        gap: 12px;
+    }
+    .catalogue-filters {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+    .filter-help {
+        grid-column: 1 / -1;
+    }
+    .menu-grid {
+        gap: 18px;
+    }
+    .story-section {
+        gap: 40px;
+    }
+    .contact-layout {
+        gap: 40px;
+        padding-inline: 0;
+    }
+    .contact-intro h1 {
+        font-size: 3.4rem;
+    }
+}
+@media (max-width: 860px) {
+    .site-header {
+        min-height: 84px;
+        padding: 17px 25px;
+        flex-wrap: wrap;
+        gap: 16px;
+    }
+    .brand {
+        font-size: 1.45rem;
+    }
+    .brand img {
+        width: 39px;
+    }
+    .burger-menu {
+        display: inline-flex;
+        padding: 8px 12px;
+        min-height: 42px;
+        font-size: 0.78rem;
+        background: transparent;
+        color: var(--color-primary);
+        border-color: var(--color-border);
+    }
+    .navbar-links,
+    .staff-page .navbar-links {
+        width: 100%;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0;
+        padding: 8px 0 15px;
+        border-top: 1px solid var(--color-border);
+    }
+    .navbar-links a {
+        min-height: 44px;
+    }
+    .js-enabled .navbar-links:not(.menu-open) {
+        display: none;
+    }
+    .logout-form {
+        margin-top: 10px;
+    }
+    .page-shell {
+        margin: 0 25px;
+        padding-top: 20px;
+    }
+    .hero {
+        gap: 28px;
+    }
+    .hero h1 {
+        font-size: 2.95rem;
+    }
+    .hero-description {
+        font-size: 0.88rem;
+    }
+    .hero-signature {
+        gap: 10px;
+    }
+    .hero-signature p {
+        font-size: 0.6rem;
+    }
+    .hero-signature p:last-child,
+    .signature-line {
+        display: none;
+    }
+    .round-stamp {
+        width: 95px;
+        height: 95px;
+        right: -10px;
+        font-size: 0.42rem;
+    }
+    .round-stamp strong {
+        font-size: 1.6rem;
+    }
+    .menu-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .story-section h2 {
+        font-size: 2.2rem;
+    }
+    .footer-grid {
+        gap: 30px;
+        grid-template-columns: 1fr 1fr;
+    }
+    .footer-intro {
+        grid-column: 1 / -1;
+    }
+    .footer-intro > p {
+        display: none;
+    }
+    .footer-intro .text-link {
+        margin-top: 16px;
+        display: flex;
+        width: fit-content;
+    }
+    .menu-detail {
+        gap: 35px;
+    }
+    .menu-detail-copy h1 {
+        font-size: 2.7rem;
+    }
+    .contact-form-panel {
+        padding: 25px;
+    }
+    .contact-intro h1 {
+        font-size: 2.9rem;
+    }
+    .contact-band {
+        padding: 30px;
+    }
+    .contact-band h2 {
+        font-size: 1.9rem;
+    }
+}
+@media (max-width: 620px) {
+    .announcement {
+        justify-content: center;
+        padding-inline: 15px;
+        font-size: 0.58rem;
+        min-height: 29px;
+    }
+    .announcement span:last-child {
+        display: none;
+    }
+    .site-header {
+        padding-inline: 20px;
+    }
+    .brand {
+        font-size: 1.3rem;
+        gap: 9px;
+    }
+    .brand small {
+        font-size: 0.45rem;
+    }
+    .brand img {
+        width: 36px;
+    }
+    .page-shell {
+        margin: 0 20px;
+        padding-bottom: 45px;
+    }
+    .page-heading {
+        padding: 25px 0 15px;
+    }
+    .page-heading h1 {
+        font-size: 2.8rem;
+    }
+    .eyebrow {
+        font-size: 0.61rem;
+        margin-bottom: 18px;
+    }
+    .hero {
+        grid-template-columns: 1fr;
+        gap: 35px;
+        padding-top: 15px;
+        padding-bottom: 30px;
+    }
+    .hero h1 {
+        font-size: clamp(2.9rem, 10.6vw, 4.2rem);
+    }
+    .hero h1 br:last-child {
+        display: none;
+    }
+    .hero-description {
+        max-width: 100%;
+        font-size: 0.9rem;
+    }
+    .hero-actions {
+        gap: 18px;
+        margin: 25px 0;
+    }
+    .hero-actions .button {
+        padding: 13px 17px;
+        font-size: 0.79rem;
+    }
+    .hero-actions .text-link {
+        font-size: 0.78rem;
+    }
+    .hero-signature > span:first-child {
+        font-size: 2rem;
+    }
+    .hero-signature p:last-child,
+    .signature-line {
+        display: block;
+    }
+    .hero-art {
+        max-width: 470px;
+        width: 100%;
+        justify-self: center;
+        padding-bottom: 0;
+    }
+    .hero-art > img {
+        aspect-ratio: 1.23;
+        border-radius: 43% 43% 5px 5px;
+    }
+    .round-stamp {
+        right: 3px;
+        top: 0;
+        width: 90px;
+        height: 90px;
+    }
+    .image-caption {
+        font-size: 0.58rem;
+    }
+    .values-strip {
+        flex-direction: column;
+        gap: 9px;
+        padding: 17px;
+        font-size: 0.68rem;
+    }
+    .values-strip span[aria-hidden] {
+        display: none;
+    }
+    .catalogue-section {
+        padding: 42px 0;
+    }
+    .section-heading {
+        flex-direction: column;
+        align-items: start;
+        gap: 14px;
+        margin-bottom: 23px;
+    }
+    .section-heading h2 {
+        font-size: 2.25rem;
+    }
+    .section-heading > p {
+        font-size: 0.8rem;
+    }
+    .catalogue-filters {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        padding: 15px;
+        gap: 12px;
+    }
+    .catalogue-filters .filter-search {
+        grid-column: 1 / -1;
+    }
+    .catalogue-filters input,
+    .catalogue-filters select {
+        font-size: 1rem;
+        min-height: 44px;
+    }
+    .catalogue-filters label {
+        font-size: 0.68rem;
+    }
+    .filter-actions {
+        grid-column: 1 / -1;
+    }
+    .filter-actions button {
+        flex: 1;
+        min-height: 44px;
+    }
+    .filter-help {
+        font-size: 0.68rem;
+    }
+    .menu-grid {
+        grid-template-columns: 1fr;
+        gap: 22px;
+    }
+    .menu-image-link > img {
+        aspect-ratio: 1.65;
+    }
+    .menu-card-body {
+        padding: 22px;
+    }
+    .menu-card-body > p {
+        min-height: 0;
+    }
+    .story-section {
+        grid-template-columns: 1fr;
+        gap: 10px;
+        padding: 40px 0;
+    }
+    .story-section h2 {
+        font-size: 2.2rem;
+    }
+    .story-section p:not(.eyebrow) {
+        font-size: 0.87rem;
+    }
+    .reviews-section {
+        padding: 40px 0;
+    }
+    .reviews-grid {
+        grid-template-columns: 1fr;
+        gap: 25px;
+    }
+    .review {
+        border-bottom: 1px solid var(--color-border);
+        padding-bottom: 22px;
+    }
+    .review blockquote {
+        font-size: 1.18rem;
+    }
+    .contact-band {
+        flex-direction: column;
+        align-items: start;
+        padding: 28px;
+        gap: 24px;
+    }
+    .contact-band h2 {
+        font-size: 2rem;
+    }
+    .site-footer {
+        padding: 35px 20px 0;
+    }
+    .footer-grid {
+        gap: 30px;
+        grid-template-columns: 1fr;
+    }
+    .footer-intro {
+        grid-column: auto;
+    }
+    .footer-grid > div:last-child {
+        max-width: 340px;
+    }
+    .footer-bottom {
+        flex-direction: column;
+        align-items: start;
+        margin-top: 28px;
+        padding: 22px 0;
+        font-size: 0.65rem;
+        gap: 10px;
+    }
+    .footer-links li,
+    .opening-hours {
+        font-size: 0.82rem;
+    }
+    .menu-detail {
+        grid-template-columns: 1fr;
+        gap: 22px;
+    }
+    .detail-cover {
+        aspect-ratio: 1.22;
+    }
+    .menu-detail-copy h1 {
+        font-size: 2.8rem;
+    }
+    .menu-detail-copy .lead {
+        font-size: 1rem;
+    }
+    .dishes-section {
+        margin-top: 40px;
+    }
+    .dish {
+        grid-template-columns: 1fr;
+        gap: 8px;
+        padding: 22px 0;
+    }
+    .dish-type {
+        padding: 0;
+    }
+    .dish h3 {
+        font-size: 1.5rem;
+    }
+    .contact-layout {
+        grid-template-columns: 1fr;
+        padding: 20px 0;
+        gap: 30px;
+    }
+    .contact-intro h1 {
+        font-size: 3.2rem;
+    }
+    .contact-intro h1 br:nth-child(2) {
+        display: none;
+    }
+    .contact-intro > img {
+        display: none;
+    }
+    .contact-detail {
+        margin: 25px 0 0;
+        padding-top: 20px;
+    }
+    .contact-form-panel {
+        padding: 22px;
+    }
+    .legal-page {
+        margin: 20px 0;
+    }
+    .legal-page h1 {
+        font-size: 2.6rem;
+    }
+    .legal-page h2 {
+        font-size: 1.6rem;
+    }
+    .container,
+    .form-container {
+        padding: 24px 20px;
+        margin: 15px 0;
+    }
+    .container h1 {
+        font-size: 2.4rem;
+    }
+    .form-grid {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+    .card,
+    .commande,
+    .menu,
+    .plat,
+    .avis,
+    .employe,
+    .horaire,
+    .recap,
+    .recapitulatif,
+    .bloc {
+        padding: 20px;
+    }
+    .stats-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+    .stat-card {
+        padding: 20px;
+    }
+    .chart-row {
+        grid-template-columns: minmax(80px, 1fr) 2fr 70px;
+        gap: 8px;
+        font-size: 0.7rem;
+    }
+    .filters,
+    .filtres {
+        padding: 18px;
+    }
+    .filters .form-group,
+    .filtres .champ {
+        flex-basis: 100%;
+    }
+    .actions {
+        align-items: stretch;
+    }
+    .actions form,
+    .actions a {
+        flex-grow: 1;
+    }
+    .actions button {
+        width: 100%;
+    }
+    th,
+    td {
+        padding: 10px;
+    }
+    .empty-state {
+        padding: 24px;
+    }
+}
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+        transition: none !important;
+        animation: none !important;
+    }
+}
+@media print {
+    .site-header,
+    .site-footer,
+    .announcement,
+    .burger-menu,
+    .skip-link,
+    .actions,
+    .catalogue-filters,
+    .hero-art {
+        display: none;
+    }
+    body {
+        background: white;
+        color: black;
+    }
+    .page-shell {
+        margin: 0;
+        width: auto;
+    }
+    .card,
+    .menu-card {
+        break-inside: avoid;
+    }
+}

@@ -8,7 +8,9 @@ $id = positiveId($_GET['id'] ?? null);
 $query = $pdo->prepare('SELECT id, titre FROM menus WHERE id = ?');
 $query->execute([$id]);
 $menu = $query->fetch();
-if (!$menu) { abortRequest(404, 'Menu introuvable.'); }
+if (!$menu) {
+    abortRequest(404, 'Menu introuvable.');
+}
 $error = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
@@ -18,7 +20,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $query->execute([positiveId($_POST['image_id'] ?? null), $id]);
         } elseif ($action === 'ajouter') {
             $alt = trim($_POST['texte_alternatif'] ?? '');
-            if ($alt === '' || mb_strlen($alt) > 255) { throw new DomainException('Décrivez l’image en 1 à 255 caractères.'); }
+            if ($alt === '' || mb_strlen($alt) > 255) {
+                throw new DomainException('Décrivez l’image en 1 à 255 caractères.');
+            }
             $path = storeMenuImage($_FILES['image'] ?? []);
             try {
                 $query = $pdo->prepare('INSERT INTO menu_images (menu_id, chemin_image, texte_alternatif) VALUES (?, ?, ?)');
@@ -29,15 +33,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         } elseif ($action === 'modifier') {
             $alt = trim($_POST['texte_alternatif'] ?? '');
-            if ($alt === '' || mb_strlen($alt) > 255) { throw new DomainException('Décrivez l’image en 1 à 255 caractères.'); }
+            if ($alt === '' || mb_strlen($alt) > 255) {
+                throw new DomainException('Décrivez l’image en 1 à 255 caractères.');
+            }
             $query = $pdo->prepare('UPDATE menu_images SET texte_alternatif = ? WHERE id = ? AND menu_id = ?');
             $query->execute([$alt, positiveId($_POST['image_id'] ?? null), $id]);
-        } else { throw new DomainException('Action invalide.'); }
-        header('Location: gerer-menu-images.php?id=' . $id, true, 303); exit;
-    } catch (DomainException $exception) { $error = $exception->getMessage(); }
+        } else {
+            throw new DomainException('Action invalide.');
+        }
+        header('Location: gerer-menu-images.php?id=' . $id, true, 303);
+        exit;
+    } catch (DomainException $exception) {
+        $error = $exception->getMessage();
+    }
 }
 $query = $pdo->prepare('SELECT * FROM menu_images WHERE menu_id = ? ORDER BY id');
-$query->execute([$id]); $images = $query->fetchAll();
+$query->execute([$id]);
+$images = $query->fetchAll();
 renderHeader('Images du menu');
 ?>
 <section class="content-panel">

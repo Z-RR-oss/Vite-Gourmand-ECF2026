@@ -3,14 +3,11 @@
 require_once __DIR__ . '/../Config/database.php';
 require_once __DIR__ . '/../Services/CatalogueValidation.php';
 
-requireLogin();
-
 requireAdminOrEmployee();
 
 $erreur = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
     $titre = trim($_POST['titre'] ?? '');
     $description = trim($_POST['description'] ?? '');
 
@@ -46,33 +43,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         || $regime === ''
     ) {
         $erreur =
-            "Tous les champs obligatoires doivent être renseignés.";
+            'Tous les champs obligatoires doivent être renseignés.';
     } elseif ($prix <= 0) {
-
         $erreur =
-            "Le prix doit être supérieur à 0.";
-
+            'Le prix doit être supérieur à 0.';
     } elseif ($nbPersonnesMin < 1) {
-
         $erreur =
-            "Le nombre minimum de personnes doit être au moins égal à 1.";
-
+            'Le nombre minimum de personnes doit être au moins égal à 1.';
     } elseif ($stockDisponible < 0) {
-
         $erreur =
-            "Le stock ne peut pas être négatif.";
-
+            'Le stock ne peut pas être négatif.';
     } elseif ($delaiCommandeHeures < 0) {
-
         $erreur =
-            "Le délai de commande ne peut pas être négatif.";
+            'Le délai de commande ne peut pas être négatif.';
     }
 
     $erreur = menuValidationError($_POST) ?? $erreur;
 
     if ($erreur === '') {
-
-        $sql = "
+        $sql = '
             INSERT INTO menus (
                 titre,
                 description,
@@ -98,7 +87,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 :delai_commande_heures,
                 :actif
             )
-        ";
+        ';
 
         $stmt = $pdo->prepare($sql);
 
@@ -117,7 +106,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         ]);
 
         header(
-            "Location: admin-menus.php"
+            'Location: admin-menus.php'
         );
 
         exit;
@@ -125,216 +114,141 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 ?>
-
-<?php require_once __DIR__ . '/../Templates/layout.php'; renderHeader('Ajouter un menu'); ?>
-
+<?php require_once __DIR__ . '/../Templates/layout.php';
+renderHeader('Ajouter un menu'); ?>
 <section class="content-panel">
-
     <h1>
         Ajouter un menu
     </h1>
-
     <?php if ($erreur !== ''): ?>
-
         <p class="erreur">
-
-            <?php
-            echo htmlspecialchars(
-                $erreur
-            );
-            ?>
-
+            <?= htmlspecialchars($erreur) ?>
         </p>
-
     <?php endif; ?>
-
     <form method="POST">
         <?= csrfInput() ?>
-
         <label for="titre">
             Titre *
         </label>
-
         <input
             type="text"
             id="titre"
             name="titre"
-            value="<?php
-            echo htmlspecialchars(
-                $_POST['titre'] ?? ''
-            );
-            ?>"
+            value="<?= htmlspecialchars($_POST['titre'] ?? '') ?>"
             required
         >
-
         <label for="description">
             Description *
         </label>
-
         <textarea
             id="description"
             name="description"
             required
-        ><?php
-        echo htmlspecialchars(
-            $_POST['description'] ?? ''
-        );
-        ?></textarea>
-
+        ><?= htmlspecialchars($_POST['description'] ?? '') ?></textarea>
         <label for="prix">
             Prix correspondant au minimum de personnes (€) *
         </label>
-
         <input
             type="number"
             id="prix"
             name="prix"
             step="0.01"
             min="0.01"
-            value="<?php
-            echo htmlspecialchars(
-                $_POST['prix'] ?? ''
-            );
-            ?>"
+            value="<?= htmlspecialchars($_POST['prix'] ?? '') ?>"
             required
         >
-
         <label for="nb_personnes_min">
             Nombre minimum de personnes *
         </label>
-
         <input
             type="number"
             id="nb_personnes_min"
             name="nb_personnes_min"
             min="1"
-            value="<?php
-            echo htmlspecialchars(
-                $_POST['nb_personnes_min'] ?? ''
-            );
-            ?>"
+            value="<?= htmlspecialchars($_POST['nb_personnes_min'] ?? '') ?>"
             required
         >
-
         <label for="theme">
             Thème *
         </label>
-
         <input
             type="text"
             id="theme"
             name="theme"
             placeholder="Exemple : Classique, Noël..."
-            value="<?php
-            echo htmlspecialchars(
-                $_POST['theme'] ?? ''
-            );
-            ?>"
+            value="<?= htmlspecialchars($_POST['theme'] ?? '') ?>"
             required
         >
-
         <label for="regime">
             Régime alimentaire *
         </label>
-
         <input
             type="text"
             id="regime"
             name="regime"
             placeholder="Exemple : Classique, Vegan..."
-            value="<?php
-            echo htmlspecialchars(
-                $_POST['regime'] ?? ''
-            );
-            ?>"
+            value="<?= htmlspecialchars($_POST['regime'] ?? '') ?>"
             required
         >
-
         <label for="stock_disponible">
             Stock disponible
         </label>
-
         <input
             type="number"
             id="stock_disponible"
             name="stock_disponible"
             min="0"
-            value="<?php
-            echo htmlspecialchars(
-                $_POST['stock_disponible'] ?? '0'
-            );
-            ?>"
+            value="<?= htmlspecialchars($_POST['stock_disponible'] ?? '0') ?>"
             required
         >
-
         <label for="conditions_menu">
             Conditions particulières
         </label>
-
         <textarea
             id="conditions_menu"
             name="conditions_menu"
             placeholder="Exemple : commander 48 h à l'avance..."
-        ><?php
-        echo htmlspecialchars(
-            $_POST['conditions_menu'] ?? ''
-        );
-        ?></textarea>
-
+        ><?= htmlspecialchars($_POST['conditions_menu'] ?? '') ?></textarea>
         <label for="delai_commande_heures">
             Délai minimum de commande en heures
         </label>
-
         <input
             type="number"
             id="delai_commande_heures"
             name="delai_commande_heures"
             min="0"
-            value="<?php
-            echo htmlspecialchars(
-                $_POST['delai_commande_heures'] ?? '0'
-            );
-            ?>"
+            value="<?= htmlspecialchars($_POST['delai_commande_heures'] ?? '0') ?>"
             required
         >
-
         <div class="checkbox">
-
             <input
                 type="checkbox"
                 id="actif"
                 name="actif"
                 <?php
-                if (
-                    !isset($_POST['actif'])
-                    && $_SERVER['REQUEST_METHOD'] !== 'POST'
-                ) {
-                    echo 'checked';
-                } elseif (isset($_POST['actif'])) {
-                    echo 'checked';
-                }
-                ?>
+    if (
+        !isset($_POST['actif'])
+        && $_SERVER['REQUEST_METHOD'] !== 'POST'
+    ) {
+        echo 'checked';
+    } elseif (isset($_POST['actif'])) {
+        echo 'checked';
+    }
+?>
             >
-
             <label for="actif">
                 Menu actif
             </label>
-
         </div>
-
         <button type="submit">
             Ajouter le menu
         </button>
-
     </form>
-
     <a
         class="retour"
         href="admin-menus.php"
     >
         Retour à la gestion des menus
     </a>
-
 </section>
-
 <?php renderFooter($pdo); ?>

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 /** Firebase REST access only: this class has no PDO or local statistics cache. */
@@ -29,9 +30,15 @@ final class StatisticsRepository
         ]);
         $this->transport = $transport !== null
             ? Closure::fromCallable($transport)
-            : fn(string $method, string $url, array $headers, ?string $body, int $timeout): array =>
-                self::httpsRequest($method, $url, $headers, $body, $timeout,
-                    filter_var($this->config['force_ipv4'] ?? false, FILTER_VALIDATE_BOOLEAN));
+            : fn (string $method, string $url, array $headers, ?string $body, int $timeout): array =>
+                self::httpsRequest(
+                    $method,
+                    $url,
+                    $headers,
+                    $body,
+                    $timeout,
+                    filter_var($this->config['force_ipv4'] ?? false, FILTER_VALIDATE_BOOLEAN)
+                );
     }
 
     public function read(): array

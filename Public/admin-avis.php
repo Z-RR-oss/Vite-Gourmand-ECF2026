@@ -2,11 +2,9 @@
 
 require_once __DIR__ . '/../Config/database.php';
 
-requireLogin();
-
 requireAdminOrEmployee();
 
-$sql = "
+$sql = '
     SELECT
         avis.id,
         avis.note,
@@ -29,7 +27,7 @@ $sql = "
         ON commandes.menu_id = menus.id
 
     ORDER BY avis.created_at DESC
-";
+';
 
 $stmt = $pdo->prepare($sql);
 $stmt->execute();
@@ -37,147 +35,85 @@ $stmt->execute();
 $avis = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 ?>
-
-<?php require_once __DIR__ . '/../Templates/layout.php'; renderHeader('Gestion des avis'); ?>
-
+<?php require_once __DIR__ . '/../Templates/layout.php';
+renderHeader('Gestion des avis'); ?>
     <section class="content-panel">
-
         <h1>
             Gestion des avis clients
         </h1>
-
         <?php if (empty($avis)): ?>
-
             <p>
                 Aucun avis pour le moment.
             </p>
-
         <?php else: ?>
-
             <?php foreach ($avis as $unAvis): ?>
-
                 <div class="avis">
-
                     <h2>
-                        <?php
-                        echo htmlspecialchars(
-                            $unAvis['titre']
-                        );
-                        ?>
+                        <?= htmlspecialchars($unAvis['titre']) ?>
                     </h2>
-
                     <p>
                         Client :
                         <strong>
-                            <?php
-                            echo htmlspecialchars(
-                                $unAvis['prenom']
-                            );
-                            ?>
-
-                            <?php
-                            echo htmlspecialchars(
-                                $unAvis['nom']
-                            );
-                            ?>
+                            <?= htmlspecialchars($unAvis['prenom']) ?>
+                            <?= htmlspecialchars($unAvis['nom']) ?>
                         </strong>
                     </p>
-
                     <p>
                         Email :
-                        <?php
-                        echo htmlspecialchars(
-                            $unAvis['email']
-                        );
-                        ?>
+                        <?= htmlspecialchars($unAvis['email']) ?>
                     </p>
-
                     <p class="note">
 
                         Note :
 
-                        <?php
-                        echo (int) $unAvis['note'];
-                        ?>
+                        <?= (int) $unAvis['note'] ?>
 
                         / 5 ⭐
 
                     </p>
-
                     <p>
                         Commentaire :
                     </p>
-
                     <p>
-                        <?php
-                        echo nl2br(
-                            htmlspecialchars(
-                                $unAvis['commentaire']
-                            )
-                        );
-                        ?>
+                        <?= nl2br(htmlspecialchars($unAvis['commentaire'])) ?>
                     </p>
-
                     <p>
                         Avis envoyé le :
-                        <?php
-                        echo htmlspecialchars(
-                            $unAvis['created_at']
-                        );
-                        ?>
+                        <?= htmlspecialchars($unAvis['created_at']) ?>
                     </p>
-
                     <p class="statut">
 
                         Statut :
 
-                        <?php
-                        echo htmlspecialchars(
-                            $unAvis['statut_validation']
-                        );
-                        ?>
-
+                        <?= htmlspecialchars($unAvis['statut_validation']) ?>
                     </p>
-
                     <?php
                     if (
                         $unAvis['statut_validation']
                         === 'en attente'
                     ):
-                    ?>
-
+                        ?>
                         <div class="actions">
-
                             <form method="post" action="changer-avis.php" class="inline-form">
                                 <?= csrfInput() ?>
                                 <input type="hidden" name="id" value="<?= (int) $unAvis['id'] ?>">
                                 <input type="hidden" name="statut" value="validé">
                                 <button type="submit">Valider</button>
                             </form>
-
                             <form method="post" action="changer-avis.php" class="inline-form">
                                 <?= csrfInput() ?>
                                 <input type="hidden" name="id" value="<?= (int) $unAvis['id'] ?>">
                                 <input type="hidden" name="statut" value="refusé">
                                 <button type="submit">Refuser</button>
                             </form>
-
                         </div>
-
                     <?php else: ?>
-
                         <p>
                             Cet avis a déjà été traité.
                         </p>
-
                     <?php endif; ?>
-
                 </div>
-
             <?php endforeach; ?>
-
         <?php endif; ?>
-
     </section>
-
 <?php renderFooter($pdo); ?>

@@ -2,7 +2,7 @@
 
 Application de traiteur bordelais : catalogue filtrable, commandes, suivi, avis modérés et gestion par rôle. PHP 8.2, PDO/MariaDB, HTML/CSS/JavaScript et PHPMailer. Les statistiques sont synchronisées vers Firebase Realtime Database puis lues depuis Firebase.
 
-**Site de démonstration publié le 30 septembre 2026 : [https://vite-gourmandecf2026.alwaysdata.net](https://vite-gourmandecf2026.alwaysdata.net).** Hébergement alwaysdata Free (0 €), PHP 8.2, MySQL et Firebase opérationnels; 29 contrôles HTTPS/authentification réussis. Les deux tâches sont installées et le test SMTP autorisé est indiqué « Envoyé » par alwaysdata. La réception en boîte et la première exécution automatique restent à observer. Les mots de passe publics ont été remplacés; ils sont remis séparément dans un fichier privé. Voir la [checklist](docs/checklist-finale.md) et le [rapport](docs/rapport-final.md).
+**Site de démonstration publié le 30 septembre 2026 : [https://vite-gourmandecf2026.alwaysdata.net](https://vite-gourmandecf2026.alwaysdata.net).** Hébergement alwaysdata Free (0 €), PHP 8.2, MySQL et Firebase opérationnels; 29 contrôles HTTPS/authentification réussis. Les deux tâches sont installées et le test SMTP autorisé est indiqué « Envoyé » par alwaysdata. La réception de l’email est confirmée par la propriétaire et les deux scripts sont validés par le planificateur. L’intégration finale de la branche de fonctionnalité vers develop puis main reste à finaliser. Les mots de passe publics ont été remplacés; ils sont remis séparément dans un fichier privé. Voir la [checklist](docs/checklist-finale.md) et le [rapport](docs/rapport-final.md).
 
 ## Installation locale
 
@@ -72,4 +72,10 @@ PDO préparé, sorties échappées, CSRF, rôles serveur, sessions renouvelées/
 - [Gestion de projet](docs/gestion-projet.md), [audit initial](docs/audit-initial.md).
 - [Dépôt GitHub](https://github.com/Z-RR-oss/Vite-Gourmand-ECF2026), [Trello communiqué](https://trello.com/b/mHfEGdUL/vite-gourmand-projet-ecf).
 
-Workflow : feature -> PR develop -> recette -> main. Vérifier l'ascendance avant fusion. La documentation locale ne vaut pas publication GitHub/Trello. **URL publique à renseigner après déploiement.**
+Workflow demandé par le sujet : feature -> develop -> recette -> main. Les pull requests figurent dans le prompt de travail, mais ne sont pas une obligation explicite du sujet Studi. L’accès Git SSH est opérationnel ; une connexion au navigateur GitHub n’est pas nécessaire pour fusionner les branches.
+
+## Lisibilité et visuels
+
+Le PHP suit les règles de `.php-cs-fixer.dist.php`, le CSS et le JavaScript celles de `.prettierrc.json`. Les 12 modules CSS de `Public/assets/css/` sont assemblés par `python3 Scripts/construire-css.py`; utiliser `--check` pour vérifier la synchronisation. Voir les [conventions de code](docs/conventions-code.md).
+
+Les menus Vegan et Noël disposent de [visuels générés et optimisés](docs/visuels-menus.md). Pour compléter une base existante sans réimporter le dump : examiner `php Scripts/installer-images-menus.php`, puis ajouter `--apply`. Les photos personnelles restent conservées.

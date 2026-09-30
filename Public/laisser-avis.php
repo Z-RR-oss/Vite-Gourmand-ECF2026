@@ -7,12 +7,12 @@ requireLogin();
 $id = $_GET['id'] ?? null;
 
 if (!$id || !is_numeric($id)) {
-    exit("Commande invalide.");
+    exit('Commande invalide.');
 }
 
 $id = (int) $id;
 
-$sql = "
+$sql = '
     SELECT
         commandes.*,
         menus.titre
@@ -23,7 +23,7 @@ $sql = "
 
     WHERE commandes.id = :id
     AND commandes.user_id = :user_id
-";
+';
 
 $stmt = $pdo->prepare($sql);
 
@@ -35,20 +35,20 @@ $stmt->execute([
 $commande = $stmt->fetch(PDO::FETCH_ASSOC);
 
 if (!$commande) {
-    exit("Commande introuvable.");
+    exit('Commande introuvable.');
 }
 
 if ($commande['statut'] !== 'terminée') {
     exit(
-        "Vous pourrez laisser un avis lorsque la commande sera terminée."
+        'Vous pourrez laisser un avis lorsque la commande sera terminée.'
     );
 }
 
-$sqlAvis = "
+$sqlAvis = '
     SELECT id
     FROM avis
     WHERE commande_id = :commande_id
-";
+';
 
 $stmtAvis = $pdo->prepare($sqlAvis);
 
@@ -60,7 +60,7 @@ $avisExistant = $stmtAvis->fetch(PDO::FETCH_ASSOC);
 
 if ($avisExistant) {
     exit(
-        "Vous avez déjà laissé un avis pour cette commande."
+        'Vous avez déjà laissé un avis pour cette commande.'
     );
 }
 
@@ -74,83 +74,64 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         try {
             $stmt = $pdo->prepare("INSERT INTO avis (commande_id, user_id, note, commentaire, statut_validation) VALUES (?, ?, ?, ?, 'en attente')");
             $stmt->execute([$id, $_SESSION['user_id'], $note, $commentaire]);
-            header('Location: mes-commandes.php', true, 303); exit;
+            header('Location: mes-commandes.php', true, 303);
+            exit;
         } catch (PDOException $exception) {
-            if ((int) ($exception->errorInfo[1] ?? 0) !== 1062) { throw $exception; }
+            if ((int) ($exception->errorInfo[1] ?? 0) !== 1062) {
+                throw $exception;
+            }
             $erreur = 'Vous avez déjà laissé un avis pour cette commande.';
         }
     }
 }
 
 ?>
-
-<?php require_once __DIR__ . '/../Templates/layout.php'; renderHeader('Laisser un avis'); ?>
-
+<?php require_once __DIR__ . '/../Templates/layout.php';
+renderHeader('Laisser un avis'); ?>
     <h1>
         Laisser un avis
     </h1>
-
     <p>
         Menu :
-        <?php
-        echo htmlspecialchars(
-            $commande['titre']
-        );
-        ?>
+        <?= htmlspecialchars($commande['titre']) ?>
     </p>
-
     <p>
         Commande n°
-        <?php
-        echo (int) $commande['id'];
-        ?>
+        <?= (int) $commande['id'] ?>
     </p>
-
     <form method="post">
         <?= csrfInput() ?>
-
         <label for="note">
             Note
         </label>
-
         <select
             id="note"
             name="note"
             required
         >
-
             <option value="">
                 Choisir une note
             </option>
-
             <option value="1">
                 1 / 5
             </option>
-
             <option value="2">
                 2 / 5
             </option>
-
             <option value="3">
                 3 / 5
             </option>
-
             <option value="4">
                 4 / 5
             </option>
-
             <option value="5">
                 5 / 5
             </option>
-
         </select>
-
         <br><br>
-
         <label for="commentaire">
             Commentaire
         </label>
-
         <textarea
             id="commentaire"
             name="commentaire"
@@ -158,13 +139,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             cols="40"
             required
         ></textarea>
-
         <br><br>
-
         <button type="submit">
             Envoyer mon avis
         </button>
-
     </form>
-
 <?php renderFooter($pdo); ?>

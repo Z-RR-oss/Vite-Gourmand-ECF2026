@@ -10,7 +10,7 @@ requireRole('admin');
 
 // Cette page ne doit être appelée qu'en POST
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    header("Location: admin-employes.php");
+    header('Location: admin-employes.php');
     exit;
 }
 
@@ -22,7 +22,7 @@ $action = trim(
 );
 
 if (!$id || !is_numeric($id)) {
-    exit("Employé invalide.");
+    exit('Employé invalide.');
 }
 
 $id = (int) $id;
@@ -31,7 +31,7 @@ if (
     $action !== 'desactiver'
     && $action !== 'activer'
 ) {
-    exit("Action invalide.");
+    exit('Action invalide.');
 }
 
 // Vérifier que le compte existe
@@ -60,7 +60,7 @@ $employe = $stmtEmploye->fetch(
 );
 
 if (!$employe) {
-    exit("Compte employé introuvable.");
+    exit('Compte employé introuvable.');
 }
 
 // Déterminer le nouvel état
@@ -89,7 +89,7 @@ $stmtUpdate->execute([
 ]);
 
 header(
-    "Location: admin-employes.php"
+    'Location: admin-employes.php'
 );
 
 exit;

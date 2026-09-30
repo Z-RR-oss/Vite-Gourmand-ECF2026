@@ -26,140 +26,77 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 ?>
-<?php require_once __DIR__ . '/../Templates/layout.php'; renderHeader('Retour du matériel'); ?>
-
+<?php require_once __DIR__ . '/../Templates/layout.php';
+renderHeader('Retour du matériel'); ?>
 <section class="content-panel">
-
     <h1>
         Retour du matériel
     </h1>
-
     <div class="infos">
-
         <h2>
             Commande n°
-            <?php
-            echo (int)
-                $commande['id'];
-            ?>
+            <?= (int) $commande['id'] ?>
         </h2>
-
         <p>
-
             <strong>
                 Menu :
             </strong>
-
-            <?php
-            echo htmlspecialchars(
-                $commande['titre']
-            );
-            ?>
-
+            <?= htmlspecialchars($commande['titre']) ?>
         </p>
-
         <p>
-
             <strong>
                 Client :
             </strong>
-
-            <?php
-            echo htmlspecialchars(
-                $commande['prenom']
-                . ' '
-                . $commande['nom']
-            );
-            ?>
-
+            <?= htmlspecialchars($commande['prenom'] . ' ' . $commande['nom']) ?>
         </p>
-
         <p>
-
             <strong>
                 Email :
             </strong>
-
-            <?php
-            echo htmlspecialchars(
-                $commande['email']
-            );
-            ?>
-
+            <?= htmlspecialchars($commande['email']) ?>
         </p>
-
         <p>
-
             <strong>
                 Début de l'attente du matériel :
             </strong>
-
-            <?php
-            echo htmlspecialchars(
-                $commande[
-                    'date_debut_attente_retour'
-                ]
-            );
-            ?>
-
+            <?= htmlspecialchars($commande[ 'date_debut_attente_retour' ]) ?>
         </p>
-
         <p>
-
             <strong>
                 Nombre de jours ouvrés écoulés :
             </strong>
-
-            <?php
-            echo $joursOuvres;
-            ?>
-
+            <?= $joursOuvres ?>
         </p>
-
     </div>
-
     <?php if ($fraisRetard > 0): ?>
-
         <div class="alerte">
-
             <strong>
                 Délai de 10 jours ouvrés dépassé.
             </strong>
-
             <p>
                 Frais de retard :
                 600 €
             </p>
-
         </div>
-
     <?php else: ?>
-
         <div class="ok">
 
             Le matériel est retourné
             dans le délai prévu.
 
         </div>
-
     <?php endif; ?>
-
     <form method="POST">
         <?= csrfInput() ?>
-
         <button type="submit">
             Confirmer le retour du matériel
         </button>
-
     </form>
-
     <a
         class="retour"
         href="admin-commandes.php"
     >
         Retour aux commandes
     </a>
-
 </section>
-
 <?php renderFooter($pdo); ?>

@@ -3,7 +3,6 @@
 require_once __DIR__ . '/../Config/database.php';
 
 // Vérifier la connexion
-requireLogin();
 
 // Autoriser admin / employé
 requireAdminOrEmployee();
@@ -12,17 +11,17 @@ requireAdminOrEmployee();
 $id = $_GET['id'] ?? null;
 
 if (!$id || !is_numeric($id)) {
-    exit("ID de plat invalide.");
+    exit('ID de plat invalide.');
 }
 
 $id = (int) $id;
 
 // Récupérer le plat
-$sql = "
+$sql = '
     SELECT *
     FROM plats
     WHERE id = :id
-";
+';
 
 $stmt = $pdo->prepare($sql);
 
@@ -33,15 +32,15 @@ $stmt->execute([
 $plat = $stmt->fetch(PDO::FETCH_ASSOC);
 
 if (!$plat) {
-    exit("Plat introuvable.");
+    exit('Plat introuvable.');
 }
 
 // Vérifier combien de menus utilisent ce plat
-$sqlMenus = "
+$sqlMenus = '
     SELECT COUNT(*)
     FROM menu_plat
     WHERE plat_id = :plat_id
-";
+';
 
 $stmtMenus = $pdo->prepare(
     $sqlMenus
@@ -56,16 +55,14 @@ $nombreMenus = (int)
 
 // Suppression après confirmation
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
     try {
-
         $pdo->beginTransaction();
 
         // Supprimer les liens avec les menus
-        $sqlMenuPlat = "
+        $sqlMenuPlat = '
             DELETE FROM menu_plat
             WHERE plat_id = :plat_id
-        ";
+        ';
 
         $stmtMenuPlat = $pdo->prepare(
             $sqlMenuPlat
@@ -76,10 +73,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         ]);
 
         // Supprimer les liens avec les allergènes
-        $sqlAllergenes = "
+        $sqlAllergenes = '
             DELETE FROM plat_allergene
             WHERE plat_id = :plat_id
-        ";
+        ';
 
         $stmtAllergenes = $pdo->prepare(
             $sqlAllergenes
@@ -90,10 +87,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         ]);
 
         // Supprimer le plat
-        $sqlDelete = "
+        $sqlDelete = '
             DELETE FROM plats
             WHERE id = :id
-        ";
+        ';
 
         $stmtDelete = $pdo->prepare(
             $sqlDelete
@@ -106,95 +103,69 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $pdo->commit();
 
         header(
-            "Location: admin-plats.php"
+            'Location: admin-plats.php'
         );
 
         exit;
-
     } catch (Throwable $e) {
-
         if ($pdo->inTransaction()) {
             $pdo->rollBack();
         }
 
         error_log(
-            "Erreur suppression plat : "
+            'Erreur suppression plat : '
             . $e->getMessage()
         );
 
         exit(
-            "Une erreur est survenue lors de la suppression du plat."
+            'Une erreur est survenue lors de la suppression du plat.'
         );
     }
 }
 
 ?>
-
-<?php require_once __DIR__ . '/../Templates/layout.php'; renderHeader('Supprimer un plat'); ?>
-
+<?php require_once __DIR__ . '/../Templates/layout.php';
+renderHeader('Supprimer un plat'); ?>
 <section class="content-panel">
-
     <h1>
         Supprimer le plat
     </h1>
-
     <h2>
-
-        <?php
-        echo htmlspecialchars(
-            $plat['nom']
-        );
-        ?>
-
+        <?= htmlspecialchars($plat['nom']) ?>
     </h2>
-
     <div class="alerte">
-
         <?php if ($nombreMenus > 0): ?>
-
             <p>
 
                 Ce plat appartient actuellement à
 
                 <strong>
-                    <?php echo $nombreMenus; ?>
+                    <?= $nombreMenus ?>
                     menu(s).
                 </strong>
-
             </p>
-
             <p>
                 Sa suppression le retirera également
                 de ces menus.
             </p>
-
         <?php else: ?>
-
             <p>
                 Ce plat n'est actuellement associé
                 à aucun menu.
             </p>
-
         <?php endif; ?>
-
     </div>
-
     <form method="POST">
         <?= csrfInput() ?>
-
         <button type="submit">
             Confirmer la suppression
         </button>
-
         <a
             class="retour"
             href="admin-plats.php"
         >
             Annuler
         </a>
-
     </form>
-
 </section>
-
 <?php renderFooter($pdo); ?>

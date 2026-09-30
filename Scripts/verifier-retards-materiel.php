@@ -1,4 +1,5 @@
 <?php
+
 /** Run daily using CLI. Never expose this file through the public document root. */
 if (PHP_SAPI !== 'cli') {
     http_response_code(404);
@@ -37,8 +38,12 @@ try {
             // Hold this row while sending: no return/cancellation can race the reminder.
             // SMTP and SQL cannot form one atomic transaction: a crash immediately after
             // SMTP acceptance may cause one retry. Failed sends remain eligible for retry.
-            $sent = envoyerEmail($user['email'], $user['prenom'] . ' ' . $user['nom'], 'Retard de retour du matériel - 600 €',
-                '<p>Bonjour ' . e($user['prenom']) . ',</p><p>Le délai de 10 jours ouvrés de votre commande n°' . (int) $id . ' est dépassé. Des frais de 600 € sont appliqués conformément aux CGV.</p><p><a href="' . e(applicationUrl() . '/contact.php') . '">Contactez Vite &amp; Gourmand</a> pour organiser le retour du matériel.</p>');
+            $sent = envoyerEmail(
+                $user['email'],
+                $user['prenom'] . ' ' . $user['nom'],
+                'Retard de retour du matériel - 600 €',
+                '<p>Bonjour ' . e($user['prenom']) . ',</p><p>Le délai de 10 jours ouvrés de votre commande n°' . (int) $id . ' est dépassé. Des frais de 600 € sont appliqués conformément aux CGV.</p><p><a href="' . e(applicationUrl() . '/contact.php') . '">Contactez Vite &amp; Gourmand</a> pour organiser le retour du matériel.</p>'
+            );
             if ($sent) {
                 $stmt = $pdo->prepare('UPDATE commandes SET notification_retard_envoyee = 1, date_notification_retard = NOW() WHERE id = ?');
                 $stmt->execute([$id]);

@@ -1,4 +1,5 @@
 <?php
+
 function clearAuthentication(): void
 {
     $_SESSION = [];
@@ -7,7 +8,7 @@ function clearAuthentication(): void
     }
 }
 
-/** Revalidate the database state on every request, including already open sessions. */
+/** Révoque aussi les sessions déjà ouvertes après désactivation ou changement de mot de passe. */
 function refreshAuthentication(PDO $pdo): void
 {
     if (PHP_SAPI === 'cli' || !isset($_SESSION['user_id'])) {

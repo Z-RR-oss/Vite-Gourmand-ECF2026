@@ -2,7 +2,6 @@
 declare(strict_types=1);
 
 require_once __DIR__ . '/../Config/database.php';
-refreshAuthentication($pdo);
 requireRole('admin');
 require_once __DIR__ . '/../Services/StatisticsService.php';
 require_once __DIR__ . '/../Templates/layout.php';

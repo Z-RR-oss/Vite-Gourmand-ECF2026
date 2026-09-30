@@ -23,172 +23,98 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 ?>
-<?php require_once __DIR__ . '/../Templates/layout.php'; renderHeader('Annuler une commande'); ?>
-
+<?php require_once __DIR__ . '/../Templates/layout.php';
+renderHeader('Annuler une commande'); ?>
 <section class="content-panel">
-
     <h1>
         Annuler une commande
     </h1>
-
     <div class="commande-info">
-
         <h2>
             Commande n°
-            <?php
-            echo (int)
-                $commande['id'];
-            ?>
+            <?= (int) $commande['id'] ?>
         </h2>
-
         <p>
-
             <strong>
                 Menu :
             </strong>
-
-            <?php
-            echo htmlspecialchars(
-                $commande['titre']
-            );
-            ?>
-
+            <?= htmlspecialchars($commande['titre']) ?>
         </p>
-
         <p>
-
             <strong>
                 Client :
             </strong>
-
-            <?php
-            echo htmlspecialchars(
-                $commande['prenom']
-                . ' '
-                . $commande['nom']
-            );
-            ?>
-
+            <?= htmlspecialchars($commande['prenom'] . ' ' . $commande['nom']) ?>
         </p>
-
         <p>
-
             <strong>
                 Email :
             </strong>
-
-            <?php
-            echo htmlspecialchars(
-                $commande['email']
-            );
-            ?>
-
+            <?= htmlspecialchars($commande['email']) ?>
         </p>
-
         <p>
-
             <strong>
                 Téléphone :
             </strong>
-
-            <?php
-            echo htmlspecialchars(
-                $commande['gsm']
-            );
-            ?>
-
+            <?= htmlspecialchars($commande['gsm']) ?>
         </p>
-
         <p>
-
             <strong>
                 Statut actuel :
             </strong>
-
-            <?php
-            echo htmlspecialchars(
-                $commande['statut']
-            );
-            ?>
-
+            <?= htmlspecialchars($commande['statut']) ?>
         </p>
-
     </div>
-
     <?php if ($erreur !== ''): ?>
-
         <p class="erreur">
-
-            <?php
-            echo htmlspecialchars(
-                $erreur
-            );
-            ?>
-
+            <?= htmlspecialchars($erreur) ?>
         </p>
-
     <?php endif; ?>
-
     <p>
         Avant d'annuler la commande,
         le client doit être contacté.
     </p>
-
     <form method="POST">
         <?= csrfInput() ?>
-
         <label for="mode_contact">
             Mode de contact utilisé
         </label>
-
         <select
             id="mode_contact"
             name="mode_contact"
             required
         >
-
             <option value="">
                 Sélectionner
             </option>
-
             <option value="Téléphone">
                 Téléphone
             </option>
-
             <option value="Email">
                 Email
             </option>
-
             <option value="SMS">
                 SMS
             </option>
-
         </select>
-
         <label for="motif">
             Motif de l'annulation
         </label>
-
         <textarea
             id="motif"
             name="motif"
             required
             placeholder="Expliquez la raison de l'annulation..."
         ></textarea>
-
         <button type="submit">
             Confirmer l'annulation
         </button>
-
     </form>
-
     <a
         class="retour"
         href="admin-commandes.php"
     >
         Retour aux commandes
     </a>
-
 </section>
-
 <?php renderFooter($pdo); ?>

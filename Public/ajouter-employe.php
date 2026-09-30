@@ -13,7 +13,6 @@ $erreur = '';
 
 // Traitement du formulaire
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
     $nom = trim(
         $_POST['nom'] ?? ''
     );
@@ -41,7 +40,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Création du compte
     if ($erreur === '') {
-
         $passwordHash =
             password_hash(
                 $password,
@@ -49,7 +47,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             );
 
         try {
-
             /*
              * Le rôle est volontairement écrit
              * directement dans la requête.
@@ -95,13 +92,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             envoyerEmail($email, $prenom . ' ' . $nom, 'Votre compte employé Vite & Gourmand', '<p>Bonjour ' . e($prenom) . ',</p><p>Votre compte employé a été créé. Contactez votre administrateur pour obtenir votre mot de passe. Aucun mot de passe n’est envoyé par email.</p>');
             header(
-                "Location: admin-employes.php"
+                'Location: admin-employes.php'
             );
 
             exit;
-
         } catch (PDOException $e) {
-
             $errorInfo =
                 $e->errorInfo;
 
@@ -109,165 +104,111 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 isset($errorInfo[1])
                 && (int) $errorInfo[1] === 1062
             ) {
-
                 $erreur =
-                    "Cette adresse email est déjà utilisée.";
-
+                    'Cette adresse email est déjà utilisée.';
             } else {
-
                 error_log(
-                    "Erreur création employé : "
+                    'Erreur création employé : '
                     . $e->getMessage()
                 );
 
                 $erreur =
-                    "Une erreur est survenue lors de la création du compte.";
+                    'Une erreur est survenue lors de la création du compte.';
             }
         }
     }
 }
 
 ?>
-
-<?php require_once __DIR__ . '/../Templates/layout.php'; renderHeader('Créer un employé'); ?>
-
+<?php require_once __DIR__ . '/../Templates/layout.php';
+renderHeader('Créer un employé'); ?>
 <section class="content-panel">
-
     <h1>
         Créer un compte employé
     </h1>
-
     <p>
         Le rôle attribué sera automatiquement
         <strong>employé</strong>.
     </p>
-
     <?php if ($erreur !== ''): ?>
-
         <p class="erreur">
-
-            <?php
-            echo htmlspecialchars(
-                $erreur
-            );
-            ?>
-
+            <?= htmlspecialchars($erreur) ?>
         </p>
-
     <?php endif; ?>
-
     <form method="POST">
         <?= csrfInput() ?>
-
         <label for="nom">
             Nom
         </label>
-
         <input
             type="text"
             id="nom"
             name="nom"
-            value="<?php
-            echo htmlspecialchars(
-                $_POST['nom'] ?? ''
-            );
-            ?>"
+            value="<?= htmlspecialchars($_POST['nom'] ?? '') ?>"
             required
         >
-
         <label for="prenom">
             Prénom
         </label>
-
         <input
             type="text"
             id="prenom"
             name="prenom"
-            value="<?php
-            echo htmlspecialchars(
-                $_POST['prenom'] ?? ''
-            );
-            ?>"
+            value="<?= htmlspecialchars($_POST['prenom'] ?? '') ?>"
             required
         >
-
         <label for="email">
             Email
         </label>
-
         <input
             type="email"
             id="email"
             name="email"
-            value="<?php
-            echo htmlspecialchars(
-                $_POST['email'] ?? ''
-            );
-            ?>"
+            value="<?= htmlspecialchars($_POST['email'] ?? '') ?>"
             required
         >
-
         <label for="gsm">
             Téléphone
         </label>
-
         <input
             type="text"
             id="gsm"
             name="gsm"
-            value="<?php
-            echo htmlspecialchars(
-                $_POST['gsm'] ?? ''
-            );
-            ?>"
+            value="<?= htmlspecialchars($_POST['gsm'] ?? '') ?>"
             required
         >
-
         <label for="adresse">
             Adresse
         </label>
-
         <input
             type="text"
             id="adresse"
             name="adresse"
-            value="<?php
-            echo htmlspecialchars(
-                $_POST['adresse'] ?? ''
-            );
-            ?>"
+            value="<?= htmlspecialchars($_POST['adresse'] ?? '') ?>"
             required
         >
-
         <label for="password">
             Mot de passe
         </label>
-
         <input
             type="password"
             id="password"
             name="password"
             required
         >
-
         <p>
             Minimum 10 caractères avec une majuscule,
             une minuscule, un chiffre et un caractère spécial.
         </p>
-
         <button type="submit">
             Créer le compte employé
         </button>
-
     </form>
-
     <a
         class="retour"
         href="admin-employes.php"
     >
         ← Retour aux employés
     </a>
-
 </section>
-
 <?php renderFooter($pdo); ?>

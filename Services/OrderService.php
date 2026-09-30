@@ -1,10 +1,14 @@
 <?php
+
 require_once __DIR__ . '/OrderRules.php';
 
 final class OrderService
 {
-    public function __construct(private PDO $pdo) {}
+    public function __construct(private PDO $pdo)
+    {
+    }
 
+    // Commande, stock et historique doivent être validés ensemble ou entièrement annulés.
     private function transaction(callable $operation): mixed
     {
         $this->pdo->beginTransaction();
@@ -40,6 +44,7 @@ final class OrderService
     public function create(int $userId, int $menuId, array $input): int
     {
         return $this->transaction(function () use ($userId, $menuId, $input): int {
+            // Le verrou sérialise les achats concurrents du dernier exemplaire disponible.
             $stmt = $this->pdo->prepare('SELECT * FROM menus WHERE id = ? FOR UPDATE');
             $stmt->execute([$menuId]);
             $menu = $stmt->fetch(PDO::FETCH_ASSOC);

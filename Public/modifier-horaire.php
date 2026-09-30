@@ -2,8 +2,6 @@
 
 require_once __DIR__ . '/../Config/database.php';
 
-requireLogin();
-
 requireAdminOrEmployee();
 
 $joursAutorises = [
@@ -27,14 +25,14 @@ if (
         true
     )
 ) {
-    exit("Jour invalide.");
+    exit('Jour invalide.');
 }
 
-$sql = "
+$sql = '
     SELECT *
     FROM horaires
     WHERE jour = :jour
-";
+';
 
 $stmt = $pdo->prepare($sql);
 
@@ -61,7 +59,6 @@ $ferme = $horaire
     : 0;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
     $action =
         $_POST['action'] ?? 'enregistrer';
 
@@ -69,13 +66,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
      * SUPPRESSION
      */
     if ($action === 'supprimer') {
-
         if ($horaire) {
-
-            $sqlDelete = "
+            $sqlDelete = '
                 DELETE FROM horaires
                 WHERE jour = :jour
-            ";
+            ';
 
             $stmtDelete = $pdo->prepare(
                 $sqlDelete
@@ -87,7 +82,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         header(
-            "Location: admin-horaires.php"
+            'Location: admin-horaires.php'
         );
 
         exit;
@@ -112,20 +107,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Si le restaurant est ouvert,
     // les heures doivent être renseignées
     if ($ferme === 0) {
-
         if (
             $heureOuverture === ''
             || $heureFermeture === ''
         ) {
-
             $erreur =
                 "Les heures d'ouverture et de fermeture sont obligatoires.";
-
         } elseif (
             $heureFermeture
             <= $heureOuverture
         ) {
-
             $erreur =
                 "L'heure de fermeture doit être après l'heure d'ouverture.";
         }
@@ -134,11 +125,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($ferme === 0 && (!preg_match('/^(?:[01][0-9]|2[0-3]):[0-5][0-9]$/D', $heureOuverture) || !preg_match('/^(?:[01][0-9]|2[0-3]):[0-5][0-9]$/D', $heureFermeture))) {
         $erreur = 'Indiquez des heures valides au format HH:MM.';
     }
-    if ($ferme === 1) { $heureOuverture = $heureFermeture = ''; }
+    if ($ferme === 1) {
+        $heureOuverture = $heureFermeture = '';
+    }
 
     if ($erreur === '') {
-
-        $sqlSave = "
+        $sqlSave = '
             INSERT INTO horaires (
                 jour,
                 heure_ouverture,
@@ -163,7 +155,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 ferme =
                     VALUES(ferme)
-        ";
+        ';
 
         $stmtSave = $pdo->prepare(
             $sqlSave
@@ -186,7 +178,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         ]);
 
         header(
-            "Location: admin-horaires.php"
+            'Location: admin-horaires.php'
         );
 
         exit;
@@ -194,23 +186,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 ?>
-
-<?php require_once __DIR__ . '/../Templates/layout.php'; renderHeader('Modifier un horaire'); ?>
-
+<?php require_once __DIR__ . '/../Templates/layout.php';
+renderHeader('Modifier un horaire'); ?>
 <section class="content-panel">
-
     <h1>
 
         Horaires du
 
-        <?php
-        echo htmlspecialchars(
-            $jour
-        );
-        ?>
-
+        <?= htmlspecialchars($jour) ?>
     </h1>
-
     <p class="info">
 
         Modifiez les horaires de ce jour
@@ -220,81 +204,46 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </strong>.
 
     </p>
-
     <?php if ($erreur !== ''): ?>
-
         <p class="erreur">
-
-            <?php
-            echo htmlspecialchars(
-                $erreur
-            );
-            ?>
-
+            <?= htmlspecialchars($erreur) ?>
         </p>
-
     <?php endif; ?>
-
     <form method="POST">
         <?= csrfInput() ?>
-
         <label for="heure_ouverture">
             Heure d'ouverture
         </label>
-
         <input
             type="time"
             id="heure_ouverture"
             name="heure_ouverture"
-            value="<?php
-            echo htmlspecialchars(
-                substr(
-                    $heureOuverture,
-                    0,
-                    5
-                )
-            );
-            ?>"
+            value="<?= htmlspecialchars(substr($heureOuverture, 0, 5)) ?>"
         >
-
         <label for="heure_fermeture">
             Heure de fermeture
         </label>
-
         <input
             type="time"
             id="heure_fermeture"
             name="heure_fermeture"
-            value="<?php
-            echo htmlspecialchars(
-                substr(
-                    $heureFermeture,
-                    0,
-                    5
-                )
-            );
-            ?>"
+            value="<?= htmlspecialchars(substr($heureFermeture, 0, 5)) ?>"
         >
-
         <div class="checkbox">
-
             <input
                 type="checkbox"
                 id="ferme"
                 name="ferme"
                 <?php
-                if ($ferme === 1) {
-                    echo 'checked';
-                }
-                ?>
+    if ($ferme === 1) {
+        echo 'checked';
+    }
+?>
             >
-
             <label for="ferme">
                 Fermé ce jour
             </label>
-
         </div>
-
         <button
             class="enregistrer"
             type="submit"
@@ -303,9 +252,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         >
             Enregistrer les horaires
         </button>
-
         <?php if ($horaire): ?>
-
             <button
                 class="supprimer"
                 type="submit"
@@ -314,18 +261,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             >
                 Supprimer cet horaire
             </button>
-
         <?php endif; ?>
-
     </form>
-
     <a
         class="retour"
         href="admin-horaires.php"
     >
         ← Retour à la gestion des horaires
     </a>
-
 </section>
-
 <?php renderFooter($pdo); ?>

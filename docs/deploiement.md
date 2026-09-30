@@ -11,8 +11,8 @@ Paramètres vérifiés :
 - Firebase : clé mode 600 dans `/home/vite-gourmandecf2026/private/`, hors racine HTTP ; PUT et GET réussis depuis alwaysdata ;
 - réglage privé `force_ipv4=true` (ou `FIREBASE_FORCE_IPV4=1`) : la route IPv6 de cet hébergement échoue en TLS vers Firebase, IPv4 fonctionne. La validation TLS reste activée ;
 - SMTP : `smtp-vite-gourmandecf2026.alwaysdata.net:587`, STARTTLS, `SMTP_AUTH=false` depuis le serveur hébergé ; expéditeur/contact `vite-gourmandecf2026@alwaysdata.net`. Aucun identifiant iCloud personnel transféré ;
-- test autorisé « Recette Vite & Gourmand » : accepté par SMTP, journal alwaysdata #499997354 à 02:48 Europe/Paris, état « Envoyé », aucun rebond signalé. Lecture/réception dans la boîte non encore confirmée ;
-- tâches alwaysdata actives : #33622, statistiques toutes les 15 minutes ; #33623, matériel chaque jour à 09:00. Les scripts réussissent en CLI; première exécution par le planificateur à observer ;
+- test autorisé « Recette Vite & Gourmand » : accepté par SMTP, journal alwaysdata #499997354 à 02:48 Europe/Paris, état « Envoyé », aucun rebond signalé. Réception dans la boîte confirmée par la propriétaire ;
+- tâches alwaysdata actives : #33622, statistiques toutes les 15 minutes ; #33623, matériel chaque jour à 09:00. Les deux scripts réussissent dans le planificateur (code 0); tâche quotidienne matériel exécutée à 09:00:23 ;
 - comptes client/employé/admin : mots de passe uniques générés avant publication. Le mot de passe du dump ne fonctionne plus en ligne. Fichier de remise privé local `var/deployment/comptes-demonstration-alwaysdata.json`, exclu de Git et de l'archive.
 
 Preuves : `recette-alwaysdata.json` (29 contrôles), `captures/accueil-alwaysdata.png`, `captures/statistiques-alwaysdata.png`. Les fichiers privés, `.git`, le dump, vendor et les scripts CLI répondent 403/404 sur le site. Le compte SQL existant reste administrateur de cette seule base; un compte SQL aux droits limités constitue un durcissement supplémentaire.

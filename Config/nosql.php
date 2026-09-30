@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 /** Server-only Firebase configuration. Environment variables override the local file. */

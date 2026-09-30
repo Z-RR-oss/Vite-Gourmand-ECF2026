@@ -1,0 +1,115 @@
+.breadcrumbs {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    font-size: 0.75rem;
+    color: var(--color-muted);
+    margin: 5px 0 30px;
+}
+.menu-detail {
+    display: grid;
+    grid-template-columns: 1.05fr 1fr;
+    gap: 60px;
+}
+.detail-cover {
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    border-radius: 44% 44% 6px 6px;
+}
+.gallery-thumbnails {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin: 16px 0;
+}
+.gallery-thumbnails img {
+    width: 100%;
+    aspect-ratio: 1.3;
+    object-fit: cover;
+    border-radius: 5px;
+}
+.menu-gallery .small-note {
+    margin-top: 15px;
+}
+.menu-detail-copy h1 {
+    font-size: 3.5rem;
+}
+.menu-detail-copy .lead {
+    color: var(--color-muted);
+}
+.detail-price {
+    margin: 20px 0;
+}
+.detail-price strong {
+    display: block;
+    font-size: 2.5rem;
+    color: var(--color-primary);
+    font-family: var(--font-heading);
+    font-weight: 500;
+}
+.detail-price span {
+    font-size: 0.8rem;
+    color: var(--color-muted);
+}
+.menu-facts {
+    margin: 22px 0;
+    font-size: 0.85rem;
+}
+.menu-facts > div {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--color-border);
+}
+.menu-facts dt {
+    color: var(--color-muted);
+}
+.menu-facts dd {
+    margin: 0;
+    font-weight: 500;
+    text-align: right;
+}
+.menu-conditions {
+    padding: 22px;
+    background: #ecebdc;
+    border-left: 3px solid var(--color-secondary);
+    margin: 25px 0;
+}
+.menu-conditions h2 {
+    font-size: 1.3rem;
+}
+.menu-conditions p {
+    font-size: 0.82rem;
+    margin: 10px 0 0;
+}
+.menu-detail-copy > .small-note {
+    margin-top: 14px;
+}
+.dishes-section {
+    margin: 65px 0 0;
+    max-width: 860px;
+}
+.dish {
+    display: grid;
+    grid-template-columns: 100px 1fr;
+    gap: 30px;
+    border-top: 1px solid var(--color-border);
+    padding: 28px 0;
+}
+.dish-type {
+    text-transform: uppercase;
+    font-size: 0.66rem;
+    letter-spacing: 0.1em;
+    color: var(--color-primary);
+    padding-top: 9px;
+}
+.dish p {
+    font-size: 0.9rem;
+    margin-bottom: 8px;
+}
+.dish .allergens {
+    color: var(--color-muted);
+    font-size: 0.76rem;
+}

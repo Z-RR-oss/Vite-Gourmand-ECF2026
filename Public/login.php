@@ -9,23 +9,20 @@ $loginAttempts = array_filter($loginAttempts, static fn ($at) => $at > time() - 
 // Si l'utilisateur est déjà connecté,
 // on peut le rediriger directement.
 if (isset($_SESSION['user_id'], $_SESSION['role'])) {
-
     if (
         $_SESSION['role'] === 'admin'
         || $_SESSION['role'] === 'employe'
     ) {
-
-        header("Location: admin-commandes.php");
+        header('Location: admin-commandes.php');
         exit;
     }
 
-    header("Location: mes-commandes.php");
+    header('Location: mes-commandes.php');
     exit;
 }
 
 // Traitement du formulaire
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
     $email = trim(
         $_POST['email'] ?? ''
     );
@@ -37,24 +34,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (count($loginAttempts) >= 8) {
         $erreur = 'Trop de tentatives. Réessayez dans 15 minutes.';
     } elseif ($email === '' || $password === '') {
-
         $erreur =
-            "Veuillez renseigner votre email et votre mot de passe.";
-
+            'Veuillez renseigner votre email et votre mot de passe.';
     } elseif (
         !filter_var(
             $email,
             FILTER_VALIDATE_EMAIL
         )
     ) {
-
         $erreur =
             "L'adresse email n'est pas valide.";
-
     } else {
-
         // Chercher l'utilisateur
-        $sql = "
+        $sql = '
             SELECT
                 id,
                 nom,
@@ -68,7 +60,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             WHERE email = :email
 
             LIMIT 1
-        ";
+        ';
 
         $stmt = $pdo->prepare($sql);
 
@@ -89,19 +81,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $user['password']
             )
         ) {
-
             $erreur =
-                "Email ou mot de passe incorrect.";
-
+                'Email ou mot de passe incorrect.';
         } elseif ((int) $user['actif'] !== 1) {
-
             // Le mot de passe est correct,
             // mais le compte a été désactivé.
             $erreur =
-                "Ce compte a été désactivé. Contactez un administrateur.";
-
+                'Ce compte a été désactivé. Contactez un administrateur.';
         } else {
-
             /*
              * La connexion est valide.
              *
@@ -131,7 +118,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $returnTo = $_SESSION['return_to'] ?? '';
             unset($_SESSION['return_to']);
             if (preg_match('/^commander\.php\?id=[1-9][0-9]*$/D', $returnTo)) {
-                header('Location: ' . $returnTo, true, 303); exit;
+                header('Location: ' . $returnTo, true, 303);
+                exit;
             }
 
             // Redirection selon le rôle
@@ -139,16 +127,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $user['role'] === 'admin'
                 || $user['role'] === 'employe'
             ) {
-
                 header(
-                    "Location: admin-commandes.php"
+                    'Location: admin-commandes.php'
                 );
 
                 exit;
             }
 
             header(
-                "Location: mes-commandes.php"
+                'Location: mes-commandes.php'
             );
 
             exit;
@@ -157,55 +144,34 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 ?>
-
-<?php require_once __DIR__ . '/../Templates/layout.php'; renderHeader('Connexion'); ?>
-
+<?php require_once __DIR__ . '/../Templates/layout.php';
+renderHeader('Connexion'); ?>
 <section class="content-panel">
-
     <div class="container">
-
         <h1>
             Connexion
         </h1>
-
         <?php if ($erreur !== ''): ?>
-
             <p class="erreur">
-
-                <?php
-                echo htmlspecialchars(
-                    $erreur
-                );
-                ?>
-
+                <?= htmlspecialchars($erreur) ?>
             </p>
-
         <?php endif; ?>
-
         <form method="POST">
         <?= csrfInput() ?>
-
             <label for="email">
                 Adresse email
             </label>
-
             <input
                 type="email"
                 id="email"
                 name="email"
-                value="<?php
-                echo htmlspecialchars(
-                    $_POST['email'] ?? ''
-                );
-                ?>"
+                value="<?= htmlspecialchars($_POST['email'] ?? '') ?>"
                 autocomplete="email"
                 required
             >
-
             <label for="password">
                 Mot de passe
             </label>
-
             <input
                 type="password"
                 id="password"
@@ -213,19 +179,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 autocomplete="current-password"
                 required
             >
-
             <p class="oubli">
     <a href="mot-de-passe-oublie.php">
         Mot de passe oublié ?
     </a>
 </p>
-
             <button type="submit">
                 Connexion
             </button>
-
         </form>
-
         <p class="retour">Première visite ? <a href="register.php">Créer mon compte</a></p>
         <a
             class="retour"
@@ -233,9 +195,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         >
             ← Retour à l'accueil
         </a>
-
     </div>
-
 </section>
-
 <?php renderFooter($pdo); ?>

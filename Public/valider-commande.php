@@ -1,4 +1,5 @@
 <?php
+
 // Compatibility endpoint: same POST, CSRF, permissions and workflow as every transition.
 require_once __DIR__ . '/../Config/database.php';
 requireAdminOrEmployee();

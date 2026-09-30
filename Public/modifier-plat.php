@@ -4,7 +4,6 @@ require_once __DIR__ . '/../Config/database.php';
 require_once __DIR__ . '/../Services/CatalogueValidation.php';
 
 // Vérifier la connexion
-requireLogin();
 
 // Autoriser admin / employé
 requireAdminOrEmployee();
@@ -13,17 +12,17 @@ requireAdminOrEmployee();
 $id = $_GET['id'] ?? null;
 
 if (!$id || !is_numeric($id)) {
-    exit("ID de plat invalide.");
+    exit('ID de plat invalide.');
 }
 
 $id = (int) $id;
 
 // Récupérer le plat
-$sqlPlat = "
+$sqlPlat = '
     SELECT *
     FROM plats
     WHERE id = :id
-";
+';
 
 $stmtPlat = $pdo->prepare($sqlPlat);
 
@@ -34,15 +33,15 @@ $stmtPlat->execute([
 $plat = $stmtPlat->fetch(PDO::FETCH_ASSOC);
 
 if (!$plat) {
-    exit("Plat introuvable.");
+    exit('Plat introuvable.');
 }
 
 // Récupérer tous les allergènes
-$sqlAllergenes = "
+$sqlAllergenes = '
     SELECT id, nom
     FROM allergenes
     ORDER BY nom ASC
-";
+';
 
 $stmtAllergenes = $pdo->prepare(
     $sqlAllergenes
@@ -55,11 +54,11 @@ $allergenes = $stmtAllergenes->fetchAll(
 );
 
 // Allergènes actuellement associés au plat
-$sqlSelection = "
+$sqlSelection = '
     SELECT allergene_id
     FROM plat_allergene
     WHERE plat_id = :plat_id
-";
+';
 
 $stmtSelection = $pdo->prepare(
     $sqlSelection
@@ -84,7 +83,6 @@ $erreur = '';
 
 // Traitement du formulaire
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
     $nom = trim(
         $_POST['nom'] ?? ''
     );
@@ -111,10 +109,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     ];
 
     if ($nom === '') {
-
         $erreur =
-            "Le nom du plat est obligatoire.";
-
+            'Le nom du plat est obligatoire.';
     } elseif (
         !in_array(
             $typePlat,
@@ -122,22 +118,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             true
         )
     ) {
-
         $erreur =
-            "Le type de plat est invalide.";
+            'Le type de plat est invalide.';
     }
 
     $erreur = dishValidationError($_POST, $allergenes) ?? $erreur;
     $allergenesSelectionnes = is_array($allergenesSelectionnes) ? array_unique($allergenesSelectionnes) : [];
 
     if ($erreur === '') {
-
         try {
-
             $pdo->beginTransaction();
 
             // Modifier les informations du plat
-            $sqlUpdate = "
+            $sqlUpdate = '
                 UPDATE plats
 
                 SET
@@ -146,7 +139,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     type_plat = :type_plat
 
                 WHERE id = :id
-            ";
+            ';
 
             $stmtUpdate = $pdo->prepare(
                 $sqlUpdate
@@ -160,10 +153,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             ]);
 
             // Supprimer les anciennes associations
-            $sqlDeleteLiens = "
+            $sqlDeleteLiens = '
                 DELETE FROM plat_allergene
                 WHERE plat_id = :plat_id
-            ";
+            ';
 
             $stmtDeleteLiens = $pdo->prepare(
                 $sqlDeleteLiens
@@ -175,15 +168,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             // Réenregistrer les allergènes cochés
             foreach (
-                $allergenesSelectionnes
-                as $allergeneId
+                $allergenesSelectionnes as $allergeneId
             ) {
-
                 if (!is_numeric($allergeneId)) {
                     continue;
                 }
 
-                $sqlLien = "
+                $sqlLien = '
                     INSERT INTO plat_allergene (
                         plat_id,
                         allergene_id
@@ -193,7 +184,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         :plat_id,
                         :allergene_id
                     )
-                ";
+                ';
 
                 $stmtLien = $pdo->prepare(
                     $sqlLien
@@ -208,14 +199,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             // Ajouter les nouveaux allergènes
             if ($nouveauxAllergenes !== '') {
-
                 $listeNouveaux = explode(
                     ',',
                     $nouveauxAllergenes
                 );
 
                 foreach ($listeNouveaux as $nomAllergene) {
-
                     $nomAllergene = trim(
                         $nomAllergene
                     );
@@ -225,7 +214,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     }
 
                     // Créer s'il n'existe pas
-                    $sqlInsertAllergene = "
+                    $sqlInsertAllergene = '
                         INSERT IGNORE INTO allergenes (
                             nom
                         )
@@ -233,7 +222,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         VALUES (
                             :nom
                         )
-                    ";
+                    ';
 
                     $stmtInsertAllergene =
                         $pdo->prepare(
@@ -245,11 +234,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     ]);
 
                     // Récupérer son ID
-                    $sqlGetAllergene = "
+                    $sqlGetAllergene = '
                         SELECT id
                         FROM allergenes
                         WHERE nom = :nom
-                    ";
+                    ';
 
                     $stmtGetAllergene =
                         $pdo->prepare(
@@ -264,8 +253,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $stmtGetAllergene->fetchColumn();
 
                     if ($allergeneId) {
-
-                        $sqlLienNouveau = "
+                        $sqlLienNouveau = '
                             INSERT IGNORE INTO plat_allergene (
                                 plat_id,
                                 allergene_id
@@ -275,7 +263,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 :plat_id,
                                 :allergene_id
                             )
-                        ";
+                        ';
 
                         $stmtLienNouveau =
                             $pdo->prepare(
@@ -294,24 +282,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $pdo->commit();
 
             header(
-                "Location: admin-plats.php"
+                'Location: admin-plats.php'
             );
 
             exit;
-
         } catch (Throwable $e) {
-
             if ($pdo->inTransaction()) {
                 $pdo->rollBack();
             }
 
             error_log(
-                "Erreur modification plat : "
+                'Erreur modification plat : '
                 . $e->getMessage()
             );
 
             $erreur =
-                "Une erreur est survenue lors de la modification.";
+                'Une erreur est survenue lors de la modification.';
         }
     }
 
@@ -322,182 +308,124 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 ?>
-
-<?php require_once __DIR__ . '/../Templates/layout.php'; renderHeader('Modifier un plat'); ?>
-
+<?php require_once __DIR__ . '/../Templates/layout.php';
+renderHeader('Modifier un plat'); ?>
 <section class="content-panel">
-
     <h1>
         Modifier le plat
     </h1>
-
     <?php if ($erreur !== ''): ?>
-
         <p class="erreur">
-
-            <?php
-            echo htmlspecialchars(
-                $erreur
-            );
-            ?>
-
+            <?= htmlspecialchars($erreur) ?>
         </p>
-
     <?php endif; ?>
-
     <form method="POST">
         <?= csrfInput() ?>
-
         <label for="nom">
             Nom du plat *
         </label>
-
         <input
             type="text"
             id="nom"
             name="nom"
-            value="<?php
-            echo htmlspecialchars(
-                $plat['nom']
-            );
-            ?>"
+            value="<?= htmlspecialchars($plat['nom']) ?>"
             required
         >
-
         <label for="description">
             Description
         </label>
-
         <textarea
             id="description"
             name="description"
-        ><?php
-        echo htmlspecialchars(
-            $plat['description'] ?? ''
-        );
-        ?></textarea>
-
+        ><?= htmlspecialchars($plat['description'] ?? '') ?></textarea>
         <label for="type_plat">
             Type de plat *
         </label>
-
         <select
             id="type_plat"
             name="type_plat"
             required
         >
-
             <option
                 value="entree"
                 <?php
-                if ($plat['type_plat'] === 'entree') {
-                    echo 'selected';
-                }
-                ?>
+        if ($plat['type_plat'] === 'entree') {
+            echo 'selected';
+        }
+?>
             >
                 Entrée
             </option>
-
             <option
                 value="plat"
                 <?php
-                if ($plat['type_plat'] === 'plat') {
-                    echo 'selected';
-                }
-                ?>
+if ($plat['type_plat'] === 'plat') {
+    echo 'selected';
+}
+?>
             >
                 Plat
             </option>
-
             <option
                 value="dessert"
                 <?php
-                if ($plat['type_plat'] === 'dessert') {
-                    echo 'selected';
-                }
-                ?>
+if ($plat['type_plat'] === 'dessert') {
+    echo 'selected';
+}
+?>
             >
                 Dessert
             </option>
-
         </select>
-
         <label>
             Allergènes
         </label>
-
         <div class="allergenes">
-
             <?php foreach ($allergenes as $allergene): ?>
-
                 <div class="allergene">
-
                     <input
                         type="checkbox"
-                        id="allergene-<?php
-                        echo (int) $allergene['id'];
-                        ?>"
+                        id="allergene-<?= (int) $allergene['id'] ?>"
                         name="allergenes[]"
-                        value="<?php
-                        echo (int) $allergene['id'];
-                        ?>"
+                        value="<?= (int) $allergene['id'] ?>"
                         <?php
-                        if (
-                            in_array(
-                                (string) $allergene['id'],
-                                $allergenesSelectionnes,
-                                true
-                            )
-                        ) {
-                            echo 'checked';
-                        }
-                        ?>
+                if (
+                    in_array(
+                        (string) $allergene['id'],
+                        $allergenesSelectionnes,
+                        true
+                    )
+                ) {
+                    echo 'checked';
+                }
+                ?>
                     >
-
                     <label
-                        for="allergene-<?php
-                        echo (int) $allergene['id'];
-                        ?>"
+                        for="allergene-<?= (int) $allergene['id'] ?>"
                     >
-
-                        <?php
-                        echo htmlspecialchars(
-                            $allergene['nom']
-                        );
-                        ?>
-
+                        <?= htmlspecialchars($allergene['nom']) ?>
                     </label>
-
                 </div>
-
             <?php endforeach; ?>
-
         </div>
-
         <label for="nouveaux_allergenes">
             Ajouter de nouveaux allergènes
         </label>
-
         <input
             type="text"
             id="nouveaux_allergenes"
             name="nouveaux_allergenes"
             placeholder="Exemple : Soja, Fruits à coque"
         >
-
         <button type="submit">
             Enregistrer les modifications
         </button>
-
     </form>
-
     <a
         class="retour"
         href="admin-plats.php"
     >
         Retour aux plats
     </a>
-
 </section>
-
 <?php renderFooter($pdo); ?>

@@ -38,7 +38,12 @@ function menuCard(menu) {
     imageLink.tabIndex = -1;
     imageLink.setAttribute('aria-hidden', 'true');
     const image = element('img');
-    image.src = /^(?:assets\/[a-zA-Z0-9_./-]+|[a-zA-Z0-9_-]+)\.(?:webp|png|jpg|jpeg|svg)$/i.test(menu.image) && !menu.image.includes('..') ? menu.image : 'assets/images/table-partage.svg';
+    image.src =
+        /^(?:assets\/[a-zA-Z0-9_./-]+|[a-zA-Z0-9_-]+)\.(?:webp|png|jpg|jpeg|svg)$/i.test(
+            menu.image,
+        ) && !menu.image.includes('..')
+            ? menu.image
+            : 'assets/images/table-partage.svg';
     image.alt = '';
     image.width = 600;
     image.height = 420;
@@ -46,20 +51,33 @@ function menuCard(menu) {
     imageLink.append(image, element('span', 'menu-theme', menu.theme));
     const body = element('div', 'menu-card-body');
     const meta = element('div', 'menu-card-meta');
-    meta.append(element('span', '', menu.regime), element('span', '', `${Number(menu.nb_personnes_min)} pers. minimum`));
+    meta.append(
+        element('span', '', menu.regime),
+        element('span', '', `${Number(menu.nb_personnes_min)} pers. minimum`),
+    );
     const heading = element('h3');
     const link = element('a', '', menu.titre);
     link.href = href;
     heading.append(link);
     const bottom = element('div', 'menu-card-bottom');
     const price = element('div');
-    price.append(element('strong', '', new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(Number(menu.prix))), element('small', '', `pour ${Number(menu.nb_personnes_min)} personnes`));
+    price.append(
+        element(
+            'strong',
+            '',
+            new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(
+                Number(menu.prix),
+            ),
+        ),
+        element('small', '', `pour ${Number(menu.nb_personnes_min)} personnes`),
+    );
     const arrow = element('a', 'round-link', '↗');
     arrow.href = href;
     arrow.setAttribute('aria-label', `Découvrir ${menu.titre}`);
     bottom.append(price, arrow);
     body.append(meta, heading, element('p', '', menu.description), bottom);
-    if (Number(menu.stock_disponible) <= 0) body.append(element('span', 'badge badge-muted', 'Momentanément indisponible'));
+    if (Number(menu.stock_disponible) <= 0)
+        body.append(element('span', 'badge badge-muted', 'Momentanément indisponible'));
     article.append(imageLink, body);
     return article;
 }
@@ -72,6 +90,8 @@ if (filtersForm && menuContainer && resultsStatus) {
     let debounceTimer;
     let requestVersion = 0;
     async function loadMenus() {
+        // Annuler le réseau et vérifier la version empêche une ancienne réponse
+        // d'écraser les résultats des derniers filtres saisis.
         activeController?.abort();
         const version = ++requestVersion;
         if (!filtersForm.reportValidity()) return;
@@ -80,7 +100,10 @@ if (filtersForm && menuContainer && resultsStatus) {
         resultsStatus.textContent = 'Recherche des menus…';
         menuContainer.setAttribute('aria-busy', 'true');
         try {
-            const response = await fetch(`api-menu.php?${params.toString()}`, { signal: activeController.signal, headers: { Accept: 'application/json' } });
+            const response = await fetch(`api-menu.php?${params.toString()}`, {
+                signal: activeController.signal,
+                headers: { Accept: 'application/json' },
+            });
             const data = await response.json();
             if (!response.ok) throw new Error(data.error || 'La recherche n’a pas pu aboutir.');
             if (!Array.isArray(data)) throw new Error('La réponse du catalogue est indisponible.');
@@ -90,13 +113,15 @@ if (filtersForm && menuContainer && resultsStatus) {
             if (!data.length) {
                 const empty = document.createElement('p');
                 empty.className = 'empty-state';
-                empty.textContent = 'Aucun menu ne correspond à votre recherche. Essayez d’autres filtres.';
+                empty.textContent =
+                    'Aucun menu ne correspond à votre recherche. Essayez d’autres filtres.';
                 fragment.append(empty);
             }
             menuContainer.replaceChildren(fragment);
             resultsStatus.textContent = `${data.length} menu(s) à découvrir`;
         } catch (error) {
-            if (error.name !== 'AbortError' && version === requestVersion) resultsStatus.textContent = `${error.message} Les derniers résultats restent affichés.`;
+            if (error.name !== 'AbortError' && version === requestVersion)
+                resultsStatus.textContent = `${error.message} Les derniers résultats restent affichés.`;
         } finally {
             if (version === requestVersion) menuContainer.removeAttribute('aria-busy');
         }
@@ -118,7 +143,9 @@ if (filtersForm && menuContainer && resultsStatus) {
         clearTimeout(debounceTimer);
         // Réinitialiser aussi les valeurs venues de l’URL, pas seulement les valeurs modifiées.
         requestAnimationFrame(() => {
-            filtersForm.querySelectorAll('input, select').forEach((input) => { input.value = ''; });
+            filtersForm.querySelectorAll('input, select').forEach((input) => {
+                input.value = '';
+            });
             loadMenus();
         });
     });

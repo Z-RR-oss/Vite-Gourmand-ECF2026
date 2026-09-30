@@ -32,162 +32,91 @@ $stmt->execute();
 $employes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 ?>
-
-<?php require_once __DIR__ . '/../Templates/layout.php'; renderHeader('Gestion des employés'); ?>
-
+<?php require_once __DIR__ . '/../Templates/layout.php';
+renderHeader('Gestion des employés'); ?>
 <section class="content-panel">
-
     <h1>
         Gestion des employés
     </h1>
-
     <a
         class="ajouter"
         href="ajouter-employe.php"
     >
         + Créer un compte employé
     </a>
-
     <?php if (empty($employes)): ?>
-
         <p>
             Aucun compte employé.
         </p>
-
     <?php else: ?>
-
         <?php foreach ($employes as $employe): ?>
-
             <article class="employe">
-
                 <h2>
-
-                    <?php
-                    echo htmlspecialchars(
-                        $employe['prenom']
-                        . ' '
-                        . $employe['nom']
-                    );
-                    ?>
-
+                    <?= htmlspecialchars($employe['prenom'] . ' ' . $employe['nom']) ?>
                 </h2>
-
                 <p>
-
                     <strong>Email :</strong>
-
-                    <?php
-                    echo htmlspecialchars(
-                        $employe['email']
-                    );
-                    ?>
-
+                    <?= htmlspecialchars($employe['email']) ?>
                 </p>
-
                 <p>
-
                     <strong>Téléphone :</strong>
-
-                    <?php
-                    echo htmlspecialchars(
-                        $employe['gsm']
-                    );
-                    ?>
-
+                    <?= htmlspecialchars($employe['gsm']) ?>
                 </p>
-
                 <p>
-
                     <strong>Adresse :</strong>
-
-                    <?php
-                    echo htmlspecialchars(
-                        $employe['adresse']
-                    );
-                    ?>
-
+                    <?= htmlspecialchars($employe['adresse']) ?>
                 </p>
-
                 <p>
-
                     <strong>Créé le :</strong>
-
-                    <?php
-                    echo htmlspecialchars(
-                        $employe['created_at']
-                    );
-                    ?>
-
+                    <?= htmlspecialchars($employe['created_at']) ?>
                 </p>
-
                 <?php if ((int) $employe['actif'] === 1): ?>
-
                     <span class="actif">
                         Compte actif
                     </span>
-
                 <?php else: ?>
-
                     <span class="inactif">
                         Compte désactivé
                     </span>
-
                 <?php endif; ?>
-
                 <form
                     method="POST"
                     action="desactiver-employe.php"
                 >
         <?= csrfInput() ?>
-
                     <input
                         type="hidden"
                         name="id"
-                        value="<?php
-                        echo (int) $employe['id'];
-                        ?>"
+                        value="<?= (int) $employe['id'] ?>"
                     >
-
                     <?php if ((int) $employe['actif'] === 1): ?>
-
                         <input
                             type="hidden"
                             name="action"
                             value="desactiver"
                         >
-
                         <button
                             class="desactiver"
                             type="submit"
                         >
                             Désactiver le compte
                         </button>
-
                     <?php else: ?>
-
                         <input
                             type="hidden"
                             name="action"
                             value="activer"
                         >
-
                         <button
                             class="activer"
                             type="submit"
                         >
                             Réactiver le compte
                         </button>
-
                     <?php endif; ?>
-
                 </form>
-
             </article>
-
         <?php endforeach; ?>
-
     <?php endif; ?>
-
 </section>
-
 <?php renderFooter($pdo); ?>

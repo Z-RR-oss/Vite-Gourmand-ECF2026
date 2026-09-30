@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 require_once __DIR__ . '/../Services/StatisticsService.php';
@@ -27,15 +28,15 @@ $configuration = ['database_url' => 'https://test-only.firebaseio.com', 'databas
 $fixedDate = new DateTimeImmutable('2026-09-28', new DateTimeZone('Europe/Paris'));
 $filters = StatisticsService::parseFilters(['periode' => '7'], $fixedDate);
 statsCheck($filters['du'] === '2026-09-22' && $filters['au'] === '2026-09-28', 'Période inclusive de sept jours');
-statsReject(fn() => StatisticsService::parseFilters(['periode' => 'invalide']), 'Période non autorisée');
-statsReject(fn() => StatisticsService::parseFilters(['menu' => ['1']]), 'Menu tableau rejeté');
-statsReject(fn() => StatisticsService::parseFilters(['menu' => '1 OR 1=1']), 'Menu injection rejeté');
-statsReject(fn() => StatisticsService::parseFilters(['periode' => 'personnalisee', 'du' => '2026-02-30', 'au' => '2026-03-01']), 'Date impossible rejetée');
-statsReject(fn() => StatisticsService::parseFilters(['periode' => 'personnalisee', 'du' => '2026-10-01', 'au' => '2026-09-01']), 'Dates inversées rejetées');
-statsReject(fn() => new StatisticsRepository([]), 'Configuration manquante rejetée');
-statsReject(fn() => new StatisticsRepository(['database_url' => 'http://test-only.firebaseio.com'] + $configuration), 'HTTPS obligatoire');
-statsReject(fn() => new StatisticsRepository(['database_url' => 'https://example.org'] + $configuration), 'Domaine non Firebase rejeté');
-statsReject(fn() => new StatisticsRepository(['path' => '../other'] + $configuration), 'Chemin invalide rejeté');
+statsReject(fn () => StatisticsService::parseFilters(['periode' => 'invalide']), 'Période non autorisée');
+statsReject(fn () => StatisticsService::parseFilters(['menu' => ['1']]), 'Menu tableau rejeté');
+statsReject(fn () => StatisticsService::parseFilters(['menu' => '1 OR 1=1']), 'Menu injection rejeté');
+statsReject(fn () => StatisticsService::parseFilters(['periode' => 'personnalisee', 'du' => '2026-02-30', 'au' => '2026-03-01']), 'Date impossible rejetée');
+statsReject(fn () => StatisticsService::parseFilters(['periode' => 'personnalisee', 'du' => '2026-10-01', 'au' => '2026-09-01']), 'Dates inversées rejetées');
+statsReject(fn () => new StatisticsRepository([]), 'Configuration manquante rejetée');
+statsReject(fn () => new StatisticsRepository(['database_url' => 'http://test-only.firebaseio.com'] + $configuration), 'HTTPS obligatoire');
+statsReject(fn () => new StatisticsRepository(['database_url' => 'https://example.org'] + $configuration), 'Domaine non Firebase rejeté');
+statsReject(fn () => new StatisticsRepository(['path' => '../other'] + $configuration), 'Chemin invalide rejeté');
 
 $snapshot = StatisticsService::buildSnapshot([
     ['id' => 1, 'titre' => 'Menu Classique'], ['id' => 2, 'titre' => 'Menu Vegan'], ['id' => 3, 'titre' => 'Menu sans commande'],
@@ -55,10 +56,10 @@ $oneMenu = StatisticsService::summarize($snapshot, $filters + []);
 $menuFilters = StatisticsService::parseFilters(['periode' => '7', 'menu' => '2'], $fixedDate);
 $oneMenu = StatisticsService::summarize($snapshot, $menuFilters);
 statsCheck(count($oneMenu['rows']) === 1 && $oneMenu['totals']['ca_centimes'] === 25000, 'Filtre menu et dates combinés');
-statsReject(fn() => StatisticsService::summarize($snapshot, array_replace($filters, ['menu' => 99])), 'Menu inconnu rejeté');
+statsReject(fn () => StatisticsService::summarize($snapshot, array_replace($filters, ['menu' => 99])), 'Menu inconnu rejeté');
 $broken = $snapshot;
 $broken['days']['2026-09-22']['menu_1']['ca_centimes'] = -100;
-statsReject(fn() => StatisticsService::summarize($broken, $filters), 'Agrégat négatif rejeté');
+statsReject(fn () => StatisticsService::summarize($broken, $filters), 'Agrégat négatif rejeté');
 
 $requests = [];
 $repository = new StatisticsRepository($configuration, static function ($method, $url, $headers, $body, $timeout) use (&$requests, $snapshot): array {
@@ -72,10 +73,12 @@ $fromFirebase = (new StatisticsService($repository))->dashboard($filters);
 statsCheck($requests[0][0] === 'PUT' && $requests[0][2] === $requests[1][2], 'Synchronisation idempotente par remplacement');
 statsCheck($requests[2][0] === 'GET' && $fromFirebase['totals']['commandes'] === 3, 'Dashboard lit le transport Firebase');
 foreach ([['status' => 401, 'body' => 'TEST_ONLY_SECRET'], ['status' => 500, 'body' => 'server'], ['status' => 200, 'body' => 'broken'], ['status' => 200, 'body' => 'null'], ['status' => 200, 'body' => '{}']] as $response) {
-    statsReject(fn() => (new StatisticsRepository($configuration, fn() => $response))->read(), 'Erreur fournisseur gérée');
+    statsReject(fn () => (new StatisticsRepository($configuration, fn () => $response))->read(), 'Erreur fournisseur gérée');
 }
 try {
-    (new StatisticsRepository($configuration, static function (): never { throw new RuntimeException('TEST_ONLY_SECRET'); }))->read();
+    (new StatisticsRepository($configuration, static function (): never {
+        throw new RuntimeException('TEST_ONLY_SECRET');
+    }))->read();
     statsCheck(false, 'Erreur réseau attendue');
 } catch (RuntimeException $exception) {
     statsCheck(!str_contains($exception->getMessage(), 'TEST_ONLY_SECRET'), 'Exception transport expurgée');

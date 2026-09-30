@@ -1,4 +1,5 @@
 <?php
+
 require_once __DIR__ . '/../Config/mail.php';
 
 /** Email is a post-commit side effect: a delivery failure never undoes an order. */

@@ -1,4 +1,5 @@
 <?php
+
 require_once __DIR__ . '/../Config/bootstrap.php';
 requirePost();
 $_SESSION = [];

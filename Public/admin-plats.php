@@ -3,7 +3,6 @@
 require_once __DIR__ . '/../Config/database.php';
 
 // Vérifier la connexion
-requireLogin();
 
 // Autoriser uniquement admin et employé
 requireAdminOrEmployee();
@@ -45,113 +44,57 @@ $stmt->execute();
 $plats = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 ?>
-
-<?php require_once __DIR__ . '/../Templates/layout.php'; renderHeader('Gestion des plats'); ?>
-
+<?php require_once __DIR__ . '/../Templates/layout.php';
+renderHeader('Gestion des plats'); ?>
 <section class="content-panel">
-
     <h1>
         Gestion des plats
     </h1>
-
     <div class="header-actions">
-
         <a
             class="bouton"
             href="ajouter-plat.php"
         >
             + Ajouter un plat
         </a>
-
     </div>
-
     <?php if (empty($plats)): ?>
-
         <p>
             Aucun plat enregistré.
         </p>
-
     <?php else: ?>
-
         <?php foreach ($plats as $plat): ?>
-
             <article class="plat">
-
                 <h2>
-
-                    <?php
-                    echo htmlspecialchars(
-                        $plat['nom']
-                    );
-                    ?>
-
+                    <?= htmlspecialchars($plat['nom']) ?>
                 </h2>
-
                 <p class="type">
-
-                    <?php
-                    echo htmlspecialchars(
-                        $plat['type_plat']
-                    );
-                    ?>
-
+                    <?= htmlspecialchars($plat['type_plat']) ?>
                 </p>
-
                 <p>
-
-                    <?php
-                    echo nl2br(
-                        htmlspecialchars(
-                            $plat['description'] ?? ''
-                        )
-                    );
-                    ?>
-
+                    <?= nl2br(htmlspecialchars($plat['description'] ?? '')) ?>
                 </p>
-
                 <p>
-
                     <strong>
                         Allergènes :
                     </strong>
-
-                    <?php
-                    echo !empty($plat['allergenes'])
-                        ? htmlspecialchars(
-                            $plat['allergenes']
-                        )
-                        : 'Aucun allergène renseigné';
-                    ?>
-
+                    <?= !empty($plat['allergenes']) ? htmlspecialchars($plat['allergenes']) : 'Aucun allergène renseigné' ?>
                 </p>
-
                 <div class="actions">
-
                     <a
-                        href="modifier-plat.php?id=<?php
-                        echo (int) $plat['id'];
-                        ?>"
+                        href="modifier-plat.php?id=<?= (int) $plat['id'] ?>"
                     >
                         Modifier
                     </a>
-
                     <a
                         class="supprimer"
-                        href="supprimer-plat.php?id=<?php
-                        echo (int) $plat['id'];
-                        ?>"
+                        href="supprimer-plat.php?id=<?= (int) $plat['id'] ?>"
                     >
                         Supprimer
                     </a>
-
                 </div>
-
             </article>
-
         <?php endforeach; ?>
-
     <?php endif; ?>
-
 </section>
-
 <?php renderFooter($pdo); ?>

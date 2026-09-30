@@ -6,7 +6,7 @@ requireLogin();
 
 $userId = (int) $_SESSION['user_id'];
 
-$sql = "
+$sql = '
     SELECT
         id,
         nom,
@@ -19,7 +19,7 @@ $sql = "
     FROM users
 
     WHERE id = :id
-";
+';
 
 $stmt = $pdo->prepare($sql);
 
@@ -30,16 +30,15 @@ $stmt->execute([
 $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
 if (!$user) {
-    exit("Utilisateur introuvable.");
+    exit('Utilisateur introuvable.');
 }
 
 // Compte désactivé
 if ((int) $user['actif'] !== 1) {
-
     session_unset();
     session_destroy();
 
-    header("Location: login.php");
+    header('Location: login.php');
     exit;
 }
 
@@ -47,7 +46,6 @@ $erreur = '';
 $succes = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
     $nom = trim(
         $_POST['nom'] ?? ''
     );
@@ -72,14 +70,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // n'est pas utilisé par un autre compte
     if ($erreur === '') {
-
-        $sqlEmail = "
+        $sqlEmail = '
             SELECT id
             FROM users
 
             WHERE email = :email
             AND id != :id
-        ";
+        ';
 
         $stmtEmail = $pdo->prepare(
             $sqlEmail
@@ -91,17 +88,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         ]);
 
         if ($stmtEmail->fetch()) {
-
             $erreur =
-                "Cette adresse email est déjà utilisée.";
+                'Cette adresse email est déjà utilisée.';
         }
     }
 
     if ($erreur === '') {
-
         try {
-
-            $sqlUpdate = "
+            $sqlUpdate = '
                 UPDATE users
 
                 SET
@@ -112,7 +106,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     adresse = :adresse
 
                 WHERE id = :id
-            ";
+            ';
 
             $stmtUpdate = $pdo->prepare(
                 $sqlUpdate
@@ -140,10 +134,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $user['adresse'] = $adresse;
 
             $succes =
-                "Vos informations ont bien été mises à jour.";
-
+                'Vos informations ont bien été mises à jour.';
         } catch (PDOException $e) {
-
             $errorInfo =
                 $e->errorInfo;
 
@@ -151,167 +143,101 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 isset($errorInfo[1])
                 && (int) $errorInfo[1] === 1062
             ) {
-
                 $erreur =
-                    "Cette adresse email est déjà utilisée.";
-
+                    'Cette adresse email est déjà utilisée.';
             } else {
-
                 error_log(
-                    "Erreur modification profil : "
+                    'Erreur modification profil : '
                     . $e->getMessage()
                 );
 
                 $erreur =
-                    "Une erreur est survenue lors de la modification du profil.";
+                    'Une erreur est survenue lors de la modification du profil.';
             }
         }
     }
 }
 
 ?>
-
-<?php require_once __DIR__ . '/../Templates/layout.php'; renderHeader('Mon profil'); ?>
-
+<?php require_once __DIR__ . '/../Templates/layout.php';
+renderHeader('Mon profil'); ?>
 <section class="content-panel">
-
     <h1>
         Mon profil
     </h1>
-
     <div class="role">
 
         Connecté en tant que :
 
         <strong>
-            <?php
-            echo htmlspecialchars(
-                $user['prenom']
-                . ' '
-                . $user['nom']
-            );
-            ?>
+            <?= htmlspecialchars($user['prenom'] . ' ' . $user['nom']) ?>
         </strong>
-
     </div>
-
     <?php if ($erreur !== ''): ?>
-
         <p class="erreur">
-
-            <?php
-            echo htmlspecialchars(
-                $erreur
-            );
-            ?>
-
+            <?= htmlspecialchars($erreur) ?>
         </p>
-
     <?php endif; ?>
-
     <?php if ($succes !== ''): ?>
-
         <p class="succes">
-
-            <?php
-            echo htmlspecialchars(
-                $succes
-            );
-            ?>
-
+            <?= htmlspecialchars($succes) ?>
         </p>
-
     <?php endif; ?>
-
     <form method="POST">
         <?= csrfInput() ?>
-
         <label for="nom">
             Nom
         </label>
-
         <input
             type="text"
             id="nom"
             name="nom"
-            value="<?php
-            echo htmlspecialchars(
-                $user['nom']
-            );
-            ?>"
+            value="<?= htmlspecialchars($user['nom']) ?>"
             required
         >
-
         <label for="prenom">
             Prénom
         </label>
-
         <input
             type="text"
             id="prenom"
             name="prenom"
-            value="<?php
-            echo htmlspecialchars(
-                $user['prenom']
-            );
-            ?>"
+            value="<?= htmlspecialchars($user['prenom']) ?>"
             required
         >
-
         <label for="email">
             Adresse email
         </label>
-
         <input
             type="email"
             id="email"
             name="email"
-            value="<?php
-            echo htmlspecialchars(
-                $user['email']
-            );
-            ?>"
+            value="<?= htmlspecialchars($user['email']) ?>"
             required
         >
-
         <label for="gsm">
             Téléphone
         </label>
-
         <input
             type="text"
             id="gsm"
             name="gsm"
-            value="<?php
-            echo htmlspecialchars(
-                $user['gsm']
-            );
-            ?>"
+            value="<?= htmlspecialchars($user['gsm']) ?>"
             required
         >
-
         <label for="adresse">
             Adresse postale
         </label>
-
         <input
             type="text"
             id="adresse"
             name="adresse"
-            value="<?php
-            echo htmlspecialchars(
-                $user['adresse']
-            );
-            ?>"
+            value="<?= htmlspecialchars($user['adresse']) ?>"
             required
         >
-
         <button type="submit">
             Enregistrer mes modifications
         </button>
-
     </form>
-
 </section>
-
 <?php renderFooter($pdo); ?>

@@ -1,4 +1,5 @@
 <?php
+
 require_once __DIR__ . '/security.php';
 require_once __DIR__ . '/auth.php';
 date_default_timezone_set('Europe/Paris');
@@ -19,7 +20,8 @@ if (PHP_SAPI !== 'cli') {
     header('Referrer-Policy: strict-origin-when-cross-origin');
     header('Permissions-Policy: camera=(), microphone=(), geolocation=()');
     header('Cache-Control: no-store');
-    // HTML scalar fields must never accept arrays. Only these checkbox/order lists are arrays.
+    // Seules les listes de cases à cocher acceptent un tableau ; les champs scalaires
+    // sont rejetés ici avant d'atteindre les contrôleurs et leurs fonctions de validation.
     foreach ([$_GET, $_POST] as $input) {
         foreach ($input as $name => $value) {
             if (is_array($value) && (!in_array($name, ['allergenes', 'plats', 'ordre'], true)

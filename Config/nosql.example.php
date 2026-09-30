@@ -1,4 +1,5 @@
 <?php
+
 // Copy as Config/nosql.local.php (ignored by Git). Never place credentials in Public/.
 return [
     'database_url' => 'https://YOUR-DATABASE-default-rtdb.europe-west1.firebasedatabase.app',

@@ -1,5 +1,6 @@
 <?php
-/** Shared HTTP input, session and form protections. */
+
+/** Échappement à la sortie HTML : les données restent intactes en base. */
 function e(mixed $value): string
 {
     return htmlspecialchars((string) $value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');

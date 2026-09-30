@@ -1,0 +1,34 @@
+# Remise du projet Vite & Gourmand
+
+## Liens à reporter dans la copie officielle
+
+- Application : https://vite-gourmandecf2026.alwaysdata.net/
+- Code testé : https://github.com/Z-RR-oss/Vite-Gourmand-ECF2026/tree/feature/statistiques-admin
+- Gestion de projet : https://trello.com/b/mHfEGdUL/vite-gourmand-projet-ecf
+
+La branche publiée contient le travail final. Les fusions vers develop puis main restent à finaliser ; l’accès Git SSH est opérationnel. Ne pas présenter l'ancienne branche main comme la version livrée avant cette intégration.
+
+## Documents à joindre
+
+- `manuel-utilisateur.pdf` : parcours et comptes du dump local.
+- `charte-graphique.pdf` : identité, wireframes et maquettes desktop/mobile.
+- `documentation-technique.md`, `diagrammes.md`, `deploiement.md`, `nosql.md`.
+- `gestion-projet.md`, `plan-tests.md`, `checklist-finale.md`, `rapport-final.md`.
+- `recette-alwaysdata.json` et `recette-finale-hebergement.json` : contrôles distants.
+- `vite_gourmand.sql.sql` : schéma complet et données fictives; import uniquement sur une base vide.
+
+Les identifiants du site public sont dans le fichier privé local `var/deployment/acces-site-alwaysdata.md`. Le transmettre séparément au jury par un canal privé. Il est volontairement exclu du dépôt public et de l'archive publique. Les clés Firebase/SSH et les configurations privées ne doivent jamais accompagner un dépôt public.
+
+## Démonstration de cinq minutes
+
+1. Accueil, menus, filtres et détail avec conditions/allergènes.
+2. Client : connexion, préparation d'une commande, prix et historique.
+3. Employé : catalogue, filtres des commandes, transitions et avis.
+4. Administrateur : équipe, puis statistiques avec source Firebase et date de synchronisation.
+5. Montrer le schéma SQL, le flux MySQL → agrégation serveur → Firebase → dashboard, et les preuves de tests.
+
+Le site est pédagogique : aucun paiement réel et aucune prestation commerciale. Les huit familles d'emails sont testées localement; un message autorisé a été réellement envoyé puis reçu dans la boîte de recette. Les deux tâches serveur ont réussi dans le planificateur.
+
+## Dernières actions de remise
+
+La copie officielle est à compléter et déposer par l'étudiante avec ses propres explications et les liens ci-dessus. Reporter les preuves dans le tableau de gestion de projet si nécessaire. Ces démarches de dépôt de l'examen ne sont pas effectuées automatiquement.

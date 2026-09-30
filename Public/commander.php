@@ -63,250 +63,147 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 ?>
-<?php require_once __DIR__ . '/../Templates/layout.php'; renderHeader('Commander'); ?>
-
+<?php require_once __DIR__ . '/../Templates/layout.php';
+renderHeader('Commander'); ?>
 <section class="content-panel">
-
     <h1>
-
-        <?php
-        echo htmlspecialchars(
-            $menu['titre']
-        );
-        ?>
-
+        <?= htmlspecialchars($menu['titre']) ?>
     </h1>
-
     <p>
-
-        <?php
-        echo htmlspecialchars(
-            $menu['description']
-        );
-        ?>
-
+        <?= htmlspecialchars($menu['description']) ?>
     </p>
-
     <div class="infos-menu">
-
         <p>
-
             <strong>
                 Prix de base :
             </strong>
-
-            <?php
-            echo number_format(
-                $menu['prix'],
-                2,
-                ',',
-                ' '
-            );
-            ?>
+            <?= number_format($menu['prix'], 2, ',', ' ') ?>
 
             €
 
         </p>
-
         <p>
-
             <strong>
                 Minimum :
             </strong>
-
-            <?php
-            echo (int)
-                $menu['nb_personnes_min'];
-            ?>
+            <?= (int) $menu['nb_personnes_min'] ?>
 
             personnes
 
         </p>
-
         <p class="stock">
 
             Commandes encore disponibles :
 
-            <?php
-            echo (int)
-                $menu['stock_disponible'];
-            ?>
-
+            <?= (int) $menu['stock_disponible'] ?>
         </p>
-
         <p>
 
             Délai minimum de commande :
 
-            <?php
-            echo (int)
-                $menu[
-                    'delai_commande_heures'
-                ];
-            ?>
+            <?= (int) $menu[ 'delai_commande_heures' ] ?>
 
             heure(s)
 
         </p>
-
     </div>
-
     <?php if ($erreur !== ''): ?>
-
         <p class="erreur">
-
-            <?php
-            echo htmlspecialchars(
-                $erreur
-            );
-            ?>
-
+            <?= htmlspecialchars($erreur) ?>
         </p>
-
     <?php endif; ?>
-
     <form method="post">
         <?= csrfInput() ?>
         <input type="hidden" name="quote_token" value="<?= e($quoteToken) ?>">
-
         <h2>
             Votre commande
         </h2>
-
         <label for="nom">
             Nom
         </label>
-
         <input
             type="text"
             id="nom"
-            value="<?php
-            echo htmlspecialchars(
-                $user['nom']
-            );
-            ?>"
+            value="<?= htmlspecialchars($user['nom']) ?>"
             disabled
         >
-
         <label for="prenom">
             Prénom
         </label>
-
         <input
             type="text"
             id="prenom"
-            value="<?php
-            echo htmlspecialchars(
-                $user['prenom']
-            );
-            ?>"
+            value="<?= htmlspecialchars($user['prenom']) ?>"
             disabled
         >
-
         <label for="client-email">Adresse email du compte</label>
         <input id="client-email" type="email" value="<?= e($user['email']) ?>" disabled>
         <label for="client-gsm">Téléphone du compte</label>
         <input id="client-gsm" type="tel" value="<?= e($user['gsm']) ?>" disabled>
         <p class="small-note">Pour les corriger, rendez-vous dans <a href="mon-profil.php">Mon profil</a>.</p>
-
         <label for="adresse_prestation">
             Adresse de prestation
         </label>
-
         <input
             type="text"
             id="adresse_prestation"
             name="adresse_prestation"
-            value="<?php
-            echo htmlspecialchars(
-                $adressePrestation
-            );
-            ?>"
+            value="<?= htmlspecialchars($adressePrestation) ?>"
             required
         >
-
         <label for="date_prestation">
             Date de prestation
         </label>
-
         <input
             type="date"
             id="date_prestation"
             name="date_prestation"
-            value="<?php
-            echo htmlspecialchars(
-                $datePrestation
-            );
-            ?>"
+            value="<?= htmlspecialchars($datePrestation) ?>"
             required
         >
-
         <label for="heure_prestation">
             Heure de prestation
         </label>
-
         <input
             type="time"
             id="heure_prestation"
             name="heure_prestation"
-            value="<?php
-            echo htmlspecialchars(
-                $heurePrestation
-            );
-            ?>"
+            value="<?= htmlspecialchars($heurePrestation) ?>"
             required
         >
-
         <label for="lieu_prestation">
             Lieu de prestation
         </label>
-
         <input
             type="text"
             id="lieu_prestation"
             name="lieu_prestation"
-            value="<?php
-            echo htmlspecialchars(
-                $lieuPrestation
-            );
-            ?>"
+            value="<?= htmlspecialchars($lieuPrestation) ?>"
             required
         >
-
         <label for="nb_personnes">
             Nombre de personnes
         </label>
-
         <input
             type="number"
             id="nb_personnes"
             name="nb_personnes"
-            min="<?php
-            echo (int)
-                $menu['nb_personnes_min'];
-            ?>"
-            value="<?php
-            echo $nbPersonnes;
-            ?>"
+            min="<?= (int) $menu['nb_personnes_min'] ?>"
+            value="<?= $nbPersonnes ?>"
             required
         >
-
         <label for="distance_km">
             Distance hors Bordeaux en km
         </label>
-
         <input
             type="number"
             id="distance_km"
             name="distance_km"
             min="0"
             step="0.1"
-            value="<?php
-            echo $distanceKm;
-            ?>"
+            value="<?= $distanceKm ?>"
             required
         >
-
         <button
             type="submit"
             name="action"
@@ -314,201 +211,114 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         >
             Voir le récapitulatif
         </button>
-
     </form>
-
     <?php if ($recap): ?>
-
         <section class="recap">
-
             <h2>
                 Récapitulatif de votre commande
             </h2>
-
             <p>
 
                 Menu :
 
                 <strong>
-                    <?php
-                    echo htmlspecialchars(
-                        $menu['titre']
-                    );
-                    ?>
+                    <?= htmlspecialchars($menu['titre']) ?>
                 </strong>
-
             </p>
-
             <p>
 
                 Date :
 
-                <?php
-                echo htmlspecialchars(
-                    $datePrestation
-                );
-                ?>
+                <?= htmlspecialchars($datePrestation) ?>
 
                 à
 
-                <?php
-                echo htmlspecialchars(
-                    $heurePrestation
-                );
-                ?>
-
+                <?= htmlspecialchars($heurePrestation) ?>
             </p>
-
             <p>
 
                 Nombre de personnes :
 
-                <?php
-                echo $nbPersonnes;
-                ?>
-
+                <?= $nbPersonnes ?>
             </p>
-
             <p>
 
                 Prix du repas :
 
-                <?php
-                echo number_format(
-                    $prixRepas,
-                    2,
-                    ',',
-                    ' '
-                );
-                ?>
+                <?= number_format($prixRepas, 2, ',', ' ') ?>
 
                 €
 
             </p>
-
             <p>
 
                 Remise :
 
-                <?php
-                echo $remisePourcentage;
-                ?>
+                <?= $remisePourcentage ?>
 
                 %
 
             </p>
-
             <p>
 
                 Montant de la remise :
 
-                <?php
-                echo number_format(
-                    $montantRemise,
-                    2,
-                    ',',
-                    ' '
-                );
-                ?>
+                <?= number_format($montantRemise, 2, ',', ' ') ?>
 
                 €
 
             </p>
-
             <p>
 
                 Frais de livraison :
 
-                <?php
-                echo number_format(
-                    $fraisLivraison,
-                    2,
-                    ',',
-                    ' '
-                );
-                ?>
+                <?= number_format($fraisLivraison, 2, ',', ' ') ?>
 
                 €
 
             </p>
-
             <h3>
 
                 Total :
 
-                <?php
-                echo number_format(
-                    $prixTotal,
-                    2,
-                    ',',
-                    ' '
-                );
-                ?>
+                <?= number_format($prixTotal, 2, ',', ' ') ?>
 
                 €
 
             </h3>
-
             <form method="post">
         <?= csrfInput() ?>
         <input type="hidden" name="quote_token" value="<?= e($quoteToken) ?>">
-
                 <input
                     type="hidden"
                     name="adresse_prestation"
-                    value="<?php
-                    echo htmlspecialchars(
-                        $adressePrestation
-                    );
-                    ?>"
+                    value="<?= htmlspecialchars($adressePrestation) ?>"
                 >
-
                 <input
                     type="hidden"
                     name="date_prestation"
-                    value="<?php
-                    echo htmlspecialchars(
-                        $datePrestation
-                    );
-                    ?>"
+                    value="<?= htmlspecialchars($datePrestation) ?>"
                 >
-
                 <input
                     type="hidden"
                     name="heure_prestation"
-                    value="<?php
-                    echo htmlspecialchars(
-                        $heurePrestation
-                    );
-                    ?>"
+                    value="<?= htmlspecialchars($heurePrestation) ?>"
                 >
-
                 <input
                     type="hidden"
                     name="lieu_prestation"
-                    value="<?php
-                    echo htmlspecialchars(
-                        $lieuPrestation
-                    );
-                    ?>"
+                    value="<?= htmlspecialchars($lieuPrestation) ?>"
                 >
-
                 <input
                     type="hidden"
                     name="nb_personnes"
-                    value="<?php
-                    echo $nbPersonnes;
-                    ?>"
+                    value="<?= $nbPersonnes ?>"
                 >
-
                 <input
                     type="hidden"
                     name="distance_km"
-                    value="<?php
-                    echo $distanceKm;
-                    ?>"
+                    value="<?= $distanceKm ?>"
                 >
-
                 <button
                     type="submit"
                     name="action"
@@ -516,13 +326,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 >
                     Confirmer la commande
                 </button>
-
             </form>
-
         </section>
-
     <?php endif; ?>
-
 </section>
-
 <?php renderFooter($pdo); ?>

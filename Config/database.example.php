@@ -1,4 +1,5 @@
 <?php
+
 // Copier vers database.local.php, exclu de Git. Variables DB_* prioritaires.
 return [
     'DB_HOST' => 'localhost',

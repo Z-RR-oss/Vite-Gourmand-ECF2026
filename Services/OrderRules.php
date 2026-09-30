@@ -1,5 +1,6 @@
 <?php
-/** The menu price covers nb_personnes_min guests; discount excludes delivery. */
+
+/** Refuse aussi les dates normalisées silencieusement par PHP, comme le 31 février. */
 function creerDatePrestation(string $date, string $heure): ?DateTimeImmutable
 {
     if (!preg_match('/^\d{4}-\d{2}-\d{2}$/D', $date) || !preg_match('/^\d{2}:\d{2}$/D', $heure)) {
@@ -22,6 +23,7 @@ function verifierDelaiCommande(string $date, string $heure, int $delaiHeures): ?
     return null;
 }
 
+/** Le prix couvre le minimum de convives ; la remise ne s'applique pas à la livraison. */
 function calculerPrixCommande(array $menu, int $nbPersonnes, float $distanceKm): array
 {
     $minimum = (int) $menu['nb_personnes_min'];
@@ -29,6 +31,7 @@ function calculerPrixCommande(array $menu, int $nbPersonnes, float $distanceKm):
         || $distanceKm < 0 || $distanceKm > 10000 || (float) $menu['prix'] <= 0) {
         throw new DomainException('Le nombre de personnes, la distance ou le prix du menu est invalide.');
     }
+    // Arrondir chaque montant en centimes avant de reconstituer le total en euros.
     $repas = round((float) $menu['prix'] * 100 * $nbPersonnes / $minimum);
     $pourcentage = $nbPersonnes >= $minimum + 5 ? 10 : 0;
     $remise = round($repas * $pourcentage / 100);
@@ -68,12 +71,12 @@ function allowedOrderTransitions(string $status): array
         'en préparation' => ['en cours de livraison'],
         'en cours de livraison' => ['livré'],
         'livré' => ['en attente du retour de matériel', 'terminée'],
-        // Finishing a loan is only possible through returnEquipment().
+        // Un prêt de matériel se termine uniquement via returnEquipment().
         default => [],
     };
 }
 
-/** Monday–Friday, excluding the start day. Public holidays are not deducted. */
+/** Du lundi au vendredi, sans compter le jour de départ ni déduire les jours fériés. */
 function calculerJoursOuvres(string $dateDebut, string $dateFin): int
 {
     $day = (new DateTimeImmutable($dateDebut))->setTime(0, 0)->modify('+1 day');
