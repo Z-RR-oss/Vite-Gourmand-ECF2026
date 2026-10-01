@@ -44,7 +44,7 @@ Site publié sur alwaysdata Free (0 €), PHP web 8.2, MySQL, racine app/Public 
 
 ## 11. Livrables créés
 
-README complet; SQL complet et données fictives; manuel PDF de 4 pages; charte PDF de 9 pages; six wireframes SVG/PNG et six mockups PNG; documentation technique, déploiement, NoSQL, gestion de projet, audit initial; MCD/classes/cas d'utilisation/séquences Mermaid; plan de tests, captures, mesures responsive et checklist de 73 exigences. Sources PDF générables via Scripts/generer-documents.py avec ReportLab/Pillow. Les wireframes documentent l'état final et ne prétendent pas avoir précédé le code.
+README complet; SQL complet et données fictives; manuel PDF de 4 pages; charte PDF de 9 pages; six wireframes SVG/PNG et six mockups PNG; documentation technique, déploiement, NoSQL, gestion de projet, audit initial; [MCD conceptuel en 3 vues PDF/SVG](mcd.md), schéma relationnel/classes/cas d'utilisation/séquences Mermaid; plan de tests, captures, mesures responsive et checklist de 73 exigences. Manuel et charte générables via Scripts/generer-documents.py avec ReportLab/Pillow ; MCD via Scripts/generer-mcd.py avec ReportLab. Les wireframes documentent l'état final et ne prétendent pas avoir précédé le code.
 
 ## 12. Tests réalisés
 

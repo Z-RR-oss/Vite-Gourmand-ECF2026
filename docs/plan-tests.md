@@ -121,3 +121,7 @@ Après déploiement du commit `2e80ccb`, 34 contrôles HTTPS/authentification/Fi
 La connexion est simplifiée avec une destination interne partagée, des redirections 303 et un message d'erreur annoncé aux technologies d'assistance. La validation du texte alternatif est commune aux deux actions de galerie. La normalisation du catalogue n'utilise plus de référence persistante de boucle. Des commentaires et contrats PHPDoc expliquent les limites et invariants des sessions, commandes, emails, uploads, agrégats Firebase et tâches planifiées.
 
 Sur `vite_gourmand_test_comments_20261001`, les 25 assertions métier, 41 statistiques, 126 HTTP/SQL/SMTP et 4 images réussissent. Les 68 fichiers PHP passent le contrôle syntaxique ; JavaScript, formatage et assemblage CSS sont vérifiés. La connexion est inspectée sur ordinateur et à 390 px (largeur du document : 390 px). Aucun email de recette n'est envoyé hors de la capture locale.
+
+## Modélisation et livrables graphiques - 1er octobre 2026
+
+Ajout d'un MCD conceptuel distinct du schéma SQL : dix entités, dix associations, trois vues PDF/SVG. Les cardinalités sont confrontées aux clés étrangères, à l'unicité de l'avis par commande et aux règles applicatives. Le PDF de trois pages est rendu en PNG et chaque page inspectée ; les liens locaux des documents modifiés sont vérifiés. Les six wireframes et six mockups existants ont les dimensions attendues (1440 × 1000 ou 390 × 844), et la charte conserve ses neuf pages. Ce changement documentaire ne modifie ni le code PHP ni la base de données.

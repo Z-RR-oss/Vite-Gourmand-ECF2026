@@ -71,7 +71,7 @@ Sources : Prompt_Maitre_Vite_Gourmand_Transfert_IA.pdf (12 pages) relu intégral
 | Manuel PDF avec comptes et parcours | OK | docs/manuel-utilisateur.pdf; docs/manuel-utilisateur.md | 4 pages rendues et inspectées | Vérifié localement. |
 | Charte PDF palette,typographies,logo,composants | OK | docs/charte-graphique.pdf; docs/charte-graphique.md | 9 pages rendues et inspectées | Vérifié localement. |
 | 3 desktop +3 mobile : wireframes ET mockups | OK | docs/wireframes; docs/maquettes | 6 SVG/PNG wireframes et6 mockups PNG intégrés au PDF | Wireframes documentaires reconstruits depuis la version finale. |
-| MCD,classes,cas utilisation,séquences | OK | docs/diagrammes.md | Sources Mermaid confrontées au SQL et classes réelles | Vérifié localement. |
+| MCD,classes,cas utilisation,séquences | OK | output/pdf/mcd-vite-gourmand.pdf; docs/mcd.md; docs/diagrammes.md | MCD conceptuel en 3 vues PDF/SVG, distinct du schéma SQL ; UML Mermaid | Cardinalités confrontées au SQL et règles applicatives ; PDF rendu et inspecté. |
 | Gestion projet,backlog,user stories,priorités | OK | docs/gestion-projet.md | Document et lien Trello fourni | Mise à jour du tableau distant non effectuée. |
 | Documentation technique et déploiement | OK | docs/documentation-technique.md; docs/deploiement.md | Configuration,extensions,permissions,cron,rollback | Vérifié localement. |
 | Plan et preuves des tests | OK | docs/plan-tests.md; tests | 196 contrôles automatisés, captures et recette | Vérifié localement. |
