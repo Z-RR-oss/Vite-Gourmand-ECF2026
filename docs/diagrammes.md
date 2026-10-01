@@ -1,6 +1,6 @@
 # Modèle des données et diagrammes
 
-Le [MCD conceptuel](mcd.md) dispose d'un [export PDF](../output/pdf/mcd-vite-gourmand.pdf) et de trois vues SVG éditables : entités, associations et cardinalités, sans clés étrangères ni types SQL. Le présent fichier rassemble le schéma relationnel et les diagrammes UML en sources Mermaid éditables.
+Le [MCD conceptuel](mcd.md) dispose d'un [export PDF](../Livrables-jury/MCD/mcd-vite-gourmand.pdf) et de trois vues SVG éditables : entités, associations et cardinalités, sans clés étrangères ni types SQL. Le présent fichier rassemble le schéma relationnel et les diagrammes UML en sources Mermaid éditables.
 
 ## Modèle relationnel / schéma SQL
 

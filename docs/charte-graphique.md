@@ -38,6 +38,6 @@ Le PDF réunit les douze vues. Les captures montrent la fenêtre initiale; le co
 
 | Écran | Wireframe ordinateur | Wireframe mobile | Mockup ordinateur | Mockup mobile |
 | --- | --- | --- | --- | --- |
-| Accueil | [SVG](wireframes/accueil-desktop.svg) | [SVG](wireframes/accueil-mobile.svg) | [PNG](maquettes/accueil-desktop.png) | [PNG](maquettes/accueil-mobile.png) |
-| Détail menu | [SVG](wireframes/detail-menu-desktop.svg) | [SVG](wireframes/detail-menu-mobile.svg) | [PNG](maquettes/detail-menu-desktop.png) | [PNG](maquettes/detail-menu-mobile.png) |
-| Contact | [SVG](wireframes/contact-desktop.svg) | [SVG](wireframes/contact-mobile.svg) | [PNG](maquettes/contact-desktop.png) | [PNG](maquettes/contact-mobile.png) |
+| Accueil | [SVG](../Livrables-jury/Wireframes/accueil-desktop.svg) | [SVG](../Livrables-jury/Wireframes/accueil-mobile.svg) | [PNG](../Livrables-jury/Mockups/accueil-desktop.png) | [PNG](../Livrables-jury/Mockups/accueil-mobile.png) |
+| Détail menu | [SVG](../Livrables-jury/Wireframes/detail-menu-desktop.svg) | [SVG](../Livrables-jury/Wireframes/detail-menu-mobile.svg) | [PNG](../Livrables-jury/Mockups/detail-menu-desktop.png) | [PNG](../Livrables-jury/Mockups/detail-menu-mobile.png) |
+| Contact | [SVG](../Livrables-jury/Wireframes/contact-desktop.svg) | [SVG](../Livrables-jury/Wireframes/contact-mobile.svg) | [PNG](../Livrables-jury/Mockups/contact-desktop.png) | [PNG](../Livrables-jury/Mockups/contact-mobile.png) |
