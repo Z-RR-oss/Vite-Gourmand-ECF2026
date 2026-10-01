@@ -225,7 +225,7 @@ renderHeader('Nouveau mot de passe'); ?>
     <h1>
         Mot de passe modifié
     </h1>
-    <p class="succes">
+    <p class="succes" role="status">
         Votre mot de passe a été
         modifié avec succès.
     </p>
@@ -239,7 +239,7 @@ renderHeader('Nouveau mot de passe'); ?>
     <h1>
         Lien invalide
     </h1>
-    <p class="erreur">
+    <p class="erreur" role="alert">
         Ce lien de réinitialisation
         est invalide ou a expiré.
     </p>
@@ -254,7 +254,7 @@ renderHeader('Nouveau mot de passe'); ?>
         Nouveau mot de passe
     </h1>
     <?php if ($erreur !== ''): ?>
-        <p class="erreur">
+        <p class="erreur" role="alert">
             <?= htmlspecialchars($erreur) ?>
         </p>
     <?php endif; ?>
@@ -265,24 +265,26 @@ renderHeader('Nouveau mot de passe'); ?>
             name="token"
             value="<?= htmlspecialchars($token) ?>"
         >
-        <label for="password">
-            Nouveau mot de passe
-        </label>
+        <label for="password">Nouveau mot de passe <span class="required-label">(obligatoire)</span></label>
         <input
             type="password"
             id="password"
             name="password"
             autocomplete="new-password"
+            minlength="10"
+            maxlength="72"
+            aria-describedby="password-help"
             required
         >
-        <label for="confirmation">
-            Confirmer le mot de passe
-        </label>
+        <p id="password-help" class="small-note">10 à 72 caractères, avec une majuscule, une minuscule, un chiffre et un caractère spécial.</p>
+        <label for="confirmation">Confirmer le mot de passe <span class="required-label">(obligatoire)</span></label>
         <input
             type="password"
             id="confirmation"
             name="confirmation"
             autocomplete="new-password"
+            minlength="10"
+            maxlength="72"
             required
         >
         <button type="submit">

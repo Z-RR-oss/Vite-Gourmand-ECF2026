@@ -194,7 +194,7 @@ renderHeader('Composition du menu'); ?>
         Le numéro d'ordre détermine leur ordre d'affichage.
     </p>
     <?php if ($erreur !== ''): ?>
-        <p class="erreur">
+        <p class="erreur" role="alert">
             <?= htmlspecialchars($erreur) ?>
         </p>
     <?php endif; ?>

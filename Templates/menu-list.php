@@ -13,7 +13,7 @@ $regimes = $pdo->query("SELECT DISTINCT regime FROM menus WHERE actif = 1 AND re
 ?>
 <section class="catalogue-section" aria-labelledby="catalogue-heading">
     <div class="section-heading"><div><p class="eyebrow">À CHAQUE OCCASION, SA TABLE</p><h2 id="catalogue-heading">Le goût du choix.</h2></div><p>Petite tablée ou grande occasion,<br>trouvez le menu qui vous ressemble.</p></div>
-    <form id="menu-filters" class="catalogue-filters" action="menus.php" method="get">
+    <form id="menu-filters" class="catalogue-filters" action="menus.php" method="get" role="search" aria-label="Recherche de menus">
         <div class="filter-search"><label for="search-menu">Rechercher un menu</label><input type="search" name="search" id="search-menu" placeholder="Une envie en particulier ?" value="<?= e($filters['search']) ?>" maxlength="160"></div>
         <div><label for="theme">L’occasion</label><select name="theme" id="theme"><option value="">Tous les thèmes</option><?php foreach ($themes as $theme): ?><option value="<?= e($theme) ?>" <?= $filters['theme'] === $theme ? 'selected' : '' ?>><?= e($theme) ?></option><?php endforeach; ?></select></div>
         <div><label for="regime">Le régime</label><select name="regime" id="regime"><option value="">Tous les régimes</option><?php foreach ($regimes as $regime): ?><option value="<?= e($regime) ?>" <?= $filters['regime'] === $regime ? 'selected' : '' ?>><?= e($regime) ?></option><?php endforeach; ?></select></div>

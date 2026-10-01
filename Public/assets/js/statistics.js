@@ -10,6 +10,10 @@
         to.disabled = !custom;
         from.required = custom;
         to.required = custom;
+        for (const id of ['du-required', 'au-required']) {
+            const notice = document.getElementById(id);
+            if (notice) notice.hidden = !custom;
+        }
     };
     if (period && from && to) {
         period.addEventListener('change', updateDates);

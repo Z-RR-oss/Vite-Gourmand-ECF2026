@@ -1,0 +1,528 @@
+{
+  "date": "2026-10-01",
+  "environment": "Navigateur Chromium intégré, cadre de recette local de largeur contrôlée ; clientWidth exclut la barre de défilement. Texte agrandi par font-size racine, distinct du zoom navigateur. Aucun appareil mobile physique testé.",
+  "measurements": [
+    {
+      "overflow": [],
+      "scroll": 305,
+      "title": "Les bonnes tablesfont les beaux souvenirs.",
+      "width": 305,
+      "path": "index.php",
+      "mode": ""
+    },
+    {
+      "overflow": [],
+      "scroll": 305,
+      "title": "Une belle occasionde se retrouver.",
+      "width": 305,
+      "path": "menus.php",
+      "mode": ""
+    },
+    {
+      "overflow": [],
+      "scroll": 305,
+      "title": "Menu Classique",
+      "width": 305,
+      "path": "menu.php?id=1",
+      "mode": ""
+    },
+    {
+      "overflow": [],
+      "scroll": 305,
+      "title": "Une belle tablecommence par un échange.",
+      "width": 305,
+      "path": "contact.php",
+      "mode": ""
+    },
+    {
+      "overflow": [],
+      "scroll": 305,
+      "title": "Créer mon compte",
+      "width": 305,
+      "path": "register.php",
+      "mode": ""
+    },
+    {
+      "overflow": [],
+      "scroll": 305,
+      "title": "Mot de passe oublié",
+      "width": 305,
+      "path": "mot-de-passe-oublie.php",
+      "mode": ""
+    },
+    {
+      "overflow": [],
+      "scroll": 305,
+      "title": "Mentions légales",
+      "width": 305,
+      "path": "mentions-legales.php",
+      "mode": ""
+    },
+    {
+      "overflow": [],
+      "scroll": 305,
+      "title": "Conditions générales de vente",
+      "width": 305,
+      "path": "cgv.php",
+      "mode": ""
+    },
+    {
+      "overflow": [],
+      "scroll": 305,
+      "title": "Gestion des commandes",
+      "width": 305,
+      "path": "admin-commandes.php",
+      "mode": ""
+    },
+    {
+      "overflow": [],
+      "scroll": 305,
+      "title": "Gestion des menus",
+      "width": 305,
+      "path": "admin-menus.php",
+      "mode": ""
+    },
+    {
+      "overflow": [],
+      "scroll": 305,
+      "title": "Gestion des plats",
+      "width": 305,
+      "path": "admin-plats.php",
+      "mode": ""
+    },
+    {
+      "overflow": [],
+      "scroll": 305,
+      "title": "Gestion des horaires",
+      "width": 305,
+      "path": "admin-horaires.php",
+      "mode": ""
+    },
+    {
+      "overflow": [],
+      "scroll": 305,
+      "title": "Gestion des avis clients",
+      "width": 305,
+      "path": "admin-avis.php",
+      "mode": ""
+    },
+    {
+      "overflow": [],
+      "scroll": 305,
+      "title": "Gestion des employés",
+      "width": 305,
+      "path": "admin-employes.php",
+      "mode": ""
+    },
+    {
+      "overflow": [],
+      "scroll": 305,
+      "title": "Ajouter un menu",
+      "width": 305,
+      "path": "ajouter-menu.php",
+      "mode": ""
+    },
+    {
+      "overflow": [],
+      "scroll": 305,
+      "title": "Modifier le menu",
+      "width": 305,
+      "path": "modifier-menu.php?id=1",
+      "mode": ""
+    },
+    {
+      "overflow": [],
+      "scroll": 305,
+      "title": "Ajouter un plat",
+      "width": 305,
+      "path": "ajouter-plat.php",
+      "mode": ""
+    },
+    {
+      "overflow": [],
+      "scroll": 305,
+      "title": "Modifier le plat",
+      "width": 305,
+      "path": "modifier-plat.php?id=1",
+      "mode": ""
+    },
+    {
+      "overflow": [],
+      "scroll": 305,
+      "title": "Horaires du\n\n        Lundi",
+      "width": 305,
+      "path": "modifier-horaire.php?jour=Lundi",
+      "mode": ""
+    },
+    {
+      "overflow": [],
+      "scroll": 305,
+      "title": "Créer un compte employé",
+      "width": 305,
+      "path": "ajouter-employe.php",
+      "mode": ""
+    },
+    {
+      "overflow": [],
+      "scroll": 305,
+      "title": "Composition du menu",
+      "width": 305,
+      "path": "gerer-menu-plats.php?id=1",
+      "mode": ""
+    },
+    {
+      "overflow": [],
+      "scroll": 305,
+      "title": "Galerie — Menu Classique",
+      "width": 305,
+      "path": "gerer-menu-images.php?id=1",
+      "mode": ""
+    },
+    {
+      "overflow": [],
+      "scroll": 305,
+      "title": "Chaque menu raconte une histoire.",
+      "width": 305,
+      "path": "admin-statistiques.php",
+      "mode": ""
+    },
+    {
+      "overflow": [],
+      "scroll": 375,
+      "title": "Une belle tablecommence par un échange.",
+      "width": 375,
+      "path": "contact.php",
+      "mode": "",
+      "requestedWidth": 390,
+      "typography": {
+        "paragraphSpacing": "1.6592px",
+        "rootFont": "16px"
+      }
+    },
+    {
+      "overflow": [],
+      "scroll": 753,
+      "title": "Une belle tablecommence par un échange.",
+      "width": 753,
+      "path": "contact.php",
+      "mode": "",
+      "requestedWidth": 768,
+      "typography": {
+        "paragraphSpacing": "1.8496px",
+        "rootFont": "16px"
+      }
+    },
+    {
+      "overflow": [],
+      "scroll": 1425,
+      "title": "Une belle tablecommence par un échange.",
+      "width": 1425,
+      "path": "contact.php",
+      "mode": "",
+      "requestedWidth": 1440,
+      "typography": {
+        "paragraphSpacing": "1.8496px",
+        "rootFont": "16px"
+      }
+    },
+    {
+      "overflow": [],
+      "scroll": 375,
+      "title": "Créer mon compte",
+      "width": 375,
+      "path": "register.php",
+      "mode": "",
+      "requestedWidth": 390,
+      "typography": {
+        "paragraphSpacing": "1.6592px",
+        "rootFont": "16px"
+      }
+    },
+    {
+      "overflow": [],
+      "scroll": 753,
+      "title": "Créer mon compte",
+      "width": 753,
+      "path": "register.php",
+      "mode": "",
+      "requestedWidth": 768,
+      "typography": {
+        "paragraphSpacing": "1.8496px",
+        "rootFont": "16px"
+      }
+    },
+    {
+      "overflow": [],
+      "scroll": 1425,
+      "title": "Créer mon compte",
+      "width": 1425,
+      "path": "register.php",
+      "mode": "",
+      "requestedWidth": 1440,
+      "typography": {
+        "paragraphSpacing": "1.8496px",
+        "rootFont": "16px"
+      }
+    },
+    {
+      "overflow": [],
+      "scroll": 375,
+      "title": "Gestion des commandes",
+      "width": 375,
+      "path": "admin-commandes.php",
+      "mode": "",
+      "requestedWidth": 390,
+      "typography": {
+        "paragraphSpacing": "normal",
+        "rootFont": "16px"
+      }
+    },
+    {
+      "overflow": [],
+      "scroll": 753,
+      "title": "Gestion des commandes",
+      "width": 753,
+      "path": "admin-commandes.php",
+      "mode": "",
+      "requestedWidth": 768,
+      "typography": {
+        "paragraphSpacing": "normal",
+        "rootFont": "16px"
+      }
+    },
+    {
+      "overflow": [],
+      "scroll": 1425,
+      "title": "Gestion des commandes",
+      "width": 1425,
+      "path": "admin-commandes.php",
+      "mode": "",
+      "requestedWidth": 1440,
+      "typography": {
+        "paragraphSpacing": "normal",
+        "rootFont": "16px"
+      }
+    },
+    {
+      "overflow": [],
+      "scroll": 375,
+      "title": "Ajouter un menu",
+      "width": 375,
+      "path": "ajouter-menu.php",
+      "mode": "",
+      "requestedWidth": 390,
+      "typography": {
+        "paragraphSpacing": "normal",
+        "rootFont": "16px"
+      }
+    },
+    {
+      "overflow": [],
+      "scroll": 753,
+      "title": "Ajouter un menu",
+      "width": 753,
+      "path": "ajouter-menu.php",
+      "mode": "",
+      "requestedWidth": 768,
+      "typography": {
+        "paragraphSpacing": "normal",
+        "rootFont": "16px"
+      }
+    },
+    {
+      "overflow": [],
+      "scroll": 1425,
+      "title": "Ajouter un menu",
+      "width": 1425,
+      "path": "ajouter-menu.php",
+      "mode": "",
+      "requestedWidth": 1440,
+      "typography": {
+        "paragraphSpacing": "normal",
+        "rootFont": "16px"
+      }
+    },
+    {
+      "width": 305,
+      "scroll": 305,
+      "title": "Plan du site",
+      "overflow": [],
+      "path": "plan-du-site.php",
+      "mode": ""
+    },
+    {
+      "width": 305,
+      "scroll": 305,
+      "title": "Aide à l’accessibilité",
+      "overflow": [],
+      "path": "accessibilite.php",
+      "mode": ""
+    },
+    {
+      "overflow": [],
+      "scroll": 1425,
+      "title": "Plan du site",
+      "width": 1425,
+      "path": "plan-du-site.php",
+      "mode": ""
+    },
+    {
+      "overflow": [],
+      "scroll": 1425,
+      "title": "Aide à l’accessibilité",
+      "width": 1425,
+      "path": "accessibilite.php",
+      "mode": ""
+    },
+    {
+      "actualPath": "/contact.php",
+      "overflow": [],
+      "rootFont": "32px",
+      "scroll": 1265,
+      "title": "Une belle tablecommence par un échange.",
+      "width": 1265,
+      "path": "contact.php",
+      "mode": "text200",
+      "requestedWidth": 1280
+    },
+    {
+      "actualPath": "/contact.php",
+      "overflow": [],
+      "rootFont": "16px",
+      "scroll": 305,
+      "title": "Une belle tablecommence par un échange.",
+      "width": 305,
+      "path": "contact.php",
+      "mode": "spacing",
+      "requestedWidth": 320
+    },
+    {
+      "actualPath": "/register.php",
+      "overflow": [],
+      "rootFont": "32px",
+      "scroll": 1265,
+      "title": "Créer mon compte",
+      "width": 1265,
+      "path": "register.php",
+      "mode": "text200",
+      "requestedWidth": 1280
+    },
+    {
+      "actualPath": "/register.php",
+      "overflow": [],
+      "rootFont": "16px",
+      "scroll": 305,
+      "title": "Créer mon compte",
+      "width": 305,
+      "path": "register.php",
+      "mode": "spacing",
+      "requestedWidth": 320
+    },
+    {
+      "actualPath": "/admin-commandes.php",
+      "overflow": [],
+      "rootFont": "32px",
+      "scroll": 1265,
+      "title": "Gestion des commandes",
+      "width": 1265,
+      "path": "admin-commandes.php",
+      "mode": "text200",
+      "requestedWidth": 1280
+    },
+    {
+      "actualPath": "/admin-commandes.php",
+      "overflow": [],
+      "rootFont": "16px",
+      "scroll": 305,
+      "title": "Gestion des commandes",
+      "width": 305,
+      "path": "admin-commandes.php",
+      "mode": "spacing",
+      "requestedWidth": 320
+    },
+    {
+      "actualPath": "/ajouter-menu.php",
+      "overflow": [],
+      "rootFont": "32px",
+      "scroll": 1265,
+      "title": "Ajouter un menu",
+      "width": 1265,
+      "path": "ajouter-menu.php",
+      "mode": "text200",
+      "requestedWidth": 1280
+    },
+    {
+      "actualPath": "/ajouter-menu.php",
+      "overflow": [],
+      "rootFont": "16px",
+      "scroll": 305,
+      "title": "Ajouter un menu",
+      "width": 305,
+      "path": "ajouter-menu.php",
+      "mode": "spacing",
+      "requestedWidth": 320
+    },
+    {
+      "actualPath": "/login.php",
+      "overflow": [],
+      "rootFont": "16px",
+      "scroll": 305,
+      "title": "Connexion",
+      "width": 305,
+      "path": "login.php",
+      "mode": "",
+      "requestedWidth": 320
+    }
+  ],
+  "contrasts": [
+    {
+      "element": "Texte",
+      "foreground": "#292c25",
+      "background": "#f7f3eb",
+      "ratio": 12.81,
+      "minimum": 4.5
+    },
+    {
+      "element": "Texte secondaire",
+      "foreground": "#62665b",
+      "background": "#fffdf8",
+      "ratio": 5.78,
+      "minimum": 4.5
+    },
+    {
+      "element": "Bouton principal",
+      "foreground": "#ffffff",
+      "background": "#672f3e",
+      "ratio": 10.23,
+      "minimum": 4.5
+    },
+    {
+      "element": "Bordure champ",
+      "foreground": "#7b806f",
+      "background": "#fffdf8",
+      "ratio": 4,
+      "minimum": 3
+    },
+    {
+      "element": "Bordure champ côté page",
+      "foreground": "#7b806f",
+      "background": "#f7f3eb",
+      "ratio": 3.68,
+      "minimum": 3
+    },
+    {
+      "element": "Placeholder",
+      "foreground": "#747769",
+      "background": "#fffdf8",
+      "ratio": 4.51,
+      "minimum": 4.5
+    },
+    {
+      "element": "Focus",
+      "foreground": "#91692d",
+      "background": "#f7f3eb",
+      "ratio": 4.45,
+      "minimum": 3
+    }
+  ]
+}

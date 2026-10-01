@@ -64,6 +64,7 @@ Sources : Prompt_Maitre_Vite_Gourmand_Transfert_IA.pdf (12 pages) relu intégral
 | Design system et cohérence des pages principales | OK | Public/style.css; Templates/layout.php; docs/captures | Revue visuelle des 22 pages | Vérifié localement. |
 | Responsive mobile/tablette/desktop | OK | docs/recette-responsive.json | 72 mesures à390/768/1440; contact320 sans débordement | Vérifié localement. |
 | Accessibilité pragmatique : lang,h1,labels,alt,focus,clavier | OK | Templates/layout.php; Public/style.css; Public/scripts.js | Lien évitement, focus visible, Menu Entrée/Échap, mesures DOM | Contrastes principaux >4,5:1; pas de certification RGAA exhaustive. |
+| Évaluation RGAA exhaustive, lecteur d’écran et zoom navigateur | À FAIRE | docs/accessibilite.md | 473 contrôles HTML ciblés et mesures de présentation effectués ; VoiceOver bloqué par les permissions Mac | Aucun taux de conformité déclaré. |
 | JavaScript séparé, fetch et absence erreur console observée | OK | Public/scripts.js; Public/assets/js/statistics.js | node --check et journaux navigateur vides | Vérifié localement. |
 | Architecture progressive, services POO et validations partagées | OK | Services; Repositories; docs/documentation-technique.md | Revue responsabilités et diagramme classes | Vérifié localement. |
 | Composer et lock conservés, PHPMailer | OK | composer.json; composer.lock | validate réussi; audit sans vulnérabilité signalée | Avertissement licence non renseignée; aucun choix juridique inventé. |
@@ -72,7 +73,7 @@ Sources : Prompt_Maitre_Vite_Gourmand_Transfert_IA.pdf (12 pages) relu intégral
 | Charte PDF palette,typographies,logo,composants | OK | docs/charte-graphique.pdf; docs/charte-graphique.md | 9 pages rendues et inspectées | Vérifié localement. |
 | 3 desktop +3 mobile : wireframes ET mockups | OK | docs/wireframes; docs/maquettes | 6 SVG/PNG wireframes et6 mockups PNG intégrés au PDF | Wireframes documentaires reconstruits depuis la version finale. |
 | MCD,classes,cas utilisation,séquences | OK | output/pdf/mcd-vite-gourmand.pdf; docs/mcd.md; docs/diagrammes.md | MCD conceptuel en 3 vues PDF/SVG, distinct du schéma SQL ; UML Mermaid | Cardinalités confrontées au SQL et règles applicatives ; PDF rendu et inspecté. |
-| Gestion projet,backlog,user stories,priorités | OK | docs/gestion-projet.md | Document et lien Trello fourni | Mise à jour du tableau distant non effectuée. |
+| Gestion projet,backlog,user stories,priorités | À FAIRE | docs/gestion-projet.md | Document et lien fournis ; tableau distant consulté, carte maquettes corrigée | Reclassement des 19 tâches livrées et accès du jury au tableau à finaliser. |
 | Documentation technique et déploiement | OK | docs/documentation-technique.md; docs/deploiement.md | Configuration,extensions,permissions,cron,rollback | Vérifié localement. |
 | Plan et preuves des tests | OK | docs/plan-tests.md; tests | 196 contrôles automatisés, captures et recette | Vérifié localement. |
 | Lint PHP,JS,diff,liens,logs | OK | docs/plan-tests.md | 68 PHP OK;2 JS OK;diff check;22 ressources sans erreur | Ancienne erreur GD corrigée;503 Firebase attendu. |

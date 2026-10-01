@@ -205,18 +205,20 @@ renderHeader('Modifier un horaire'); ?>
 
     </p>
     <?php if ($erreur !== ''): ?>
-        <p class="erreur">
+        <p class="erreur" role="alert">
             <?= htmlspecialchars($erreur) ?>
         </p>
     <?php endif; ?>
     <form method="POST">
         <?= csrfInput() ?>
+        <p id="hours-help" class="small-note">Renseignez les deux heures si l’établissement est ouvert, ou cochez « Fermé ce jour ».</p>
         <label for="heure_ouverture">
             Heure d'ouverture
         </label>
         <input
             type="time"
             id="heure_ouverture"
+            aria-describedby="hours-help"
             name="heure_ouverture"
             value="<?= htmlspecialchars(substr($heureOuverture, 0, 5)) ?>"
         >
@@ -226,6 +228,7 @@ renderHeader('Modifier un horaire'); ?>
         <input
             type="time"
             id="heure_fermeture"
+            aria-describedby="hours-help"
             name="heure_fermeture"
             value="<?= htmlspecialchars(substr($heureFermeture, 0, 5)) ?>"
         >

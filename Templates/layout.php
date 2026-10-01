@@ -58,7 +58,7 @@ function renderHeader(string $title): void
         <?php endif; ?>
     </nav>
 </header>
-<main id="main-content" class="page-shell">
+<main id="main-content" class="page-shell" tabindex="-1">
 <?php
 }
 
@@ -86,6 +86,8 @@ function renderFooter(PDO $pdo): void
                 <li><a href="contact.php">Nous contacter</a></li>
                 <li><a href="mentions-legales.php">Mentions légales</a></li>
                 <li><a href="cgv.php">Conditions générales de vente</a></li>
+                <li><a href="plan-du-site.php">Plan du site</a></li>
+                <li><a href="accessibilite.php">Aide à l’accessibilité</a></li>
             </ul>
         </div>
         <div>

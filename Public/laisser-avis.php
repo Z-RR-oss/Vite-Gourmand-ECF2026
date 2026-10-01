@@ -6,11 +6,7 @@ requireLogin();
 
 $id = $_GET['id'] ?? null;
 
-if (!$id || !is_numeric($id)) {
-    exit('Commande invalide.');
-}
-
-$id = (int) $id;
+$id = positiveId($id);
 
 $sql = '
     SELECT
@@ -35,11 +31,12 @@ $stmt->execute([
 $commande = $stmt->fetch(PDO::FETCH_ASSOC);
 
 if (!$commande) {
-    exit('Commande introuvable.');
+    abortRequest(404, 'Commande introuvable.');
 }
 
 if ($commande['statut'] !== 'terminée') {
-    exit(
+    abortRequest(
+        409,
         'Vous pourrez laisser un avis lorsque la commande sera terminée.'
     );
 }
@@ -59,7 +56,8 @@ $stmtAvis->execute([
 $avisExistant = $stmtAvis->fetch(PDO::FETCH_ASSOC);
 
 if ($avisExistant) {
-    exit(
+    abortRequest(
+        409,
         'Vous avez déjà laissé un avis pour cette commande.'
     );
 }
@@ -99,11 +97,10 @@ renderHeader('Laisser un avis'); ?>
         Commande n°
         <?= (int) $commande['id'] ?>
     </p>
+    <?php if ($erreur !== ''): ?><p class="erreur" role="alert"><?= e($erreur) ?></p><?php endif; ?>
     <form method="post">
         <?= csrfInput() ?>
-        <label for="note">
-            Note
-        </label>
+        <label for="note">Note <span class="required-label">(obligatoire)</span></label>
         <select
             id="note"
             name="note"
@@ -112,33 +109,34 @@ renderHeader('Laisser un avis'); ?>
             <option value="">
                 Choisir une note
             </option>
-            <option value="1">
+            <option value="1" <?= ($_POST['note'] ?? '') === '1' ? 'selected' : '' ?>>
                 1 / 5
             </option>
-            <option value="2">
+            <option value="2" <?= ($_POST['note'] ?? '') === '2' ? 'selected' : '' ?>>
                 2 / 5
             </option>
-            <option value="3">
+            <option value="3" <?= ($_POST['note'] ?? '') === '3' ? 'selected' : '' ?>>
                 3 / 5
             </option>
-            <option value="4">
+            <option value="4" <?= ($_POST['note'] ?? '') === '4' ? 'selected' : '' ?>>
                 4 / 5
             </option>
-            <option value="5">
+            <option value="5" <?= ($_POST['note'] ?? '') === '5' ? 'selected' : '' ?>>
                 5 / 5
             </option>
         </select>
         <br><br>
-        <label for="commentaire">
-            Commentaire
-        </label>
+        <label for="commentaire">Commentaire <span class="required-label">(obligatoire)</span></label>
         <textarea
             id="commentaire"
             name="commentaire"
             rows="5"
             cols="40"
+            maxlength="3000"
+            aria-describedby="commentaire-help"
             required
-        ></textarea>
+        ><?= e($_POST['commentaire'] ?? '') ?></textarea>
+        <p id="commentaire-help" class="small-note">De 1 à 3 000 caractères.</p>
         <br><br>
         <button type="submit">
             Envoyer mon avis

@@ -110,7 +110,7 @@ renderHeader('Commander'); ?>
         </p>
     </div>
     <?php if ($erreur !== ''): ?>
-        <p class="erreur">
+        <p class="erreur" role="alert">
             <?= htmlspecialchars($erreur) ?>
         </p>
     <?php endif; ?>
@@ -143,9 +143,7 @@ renderHeader('Commander'); ?>
         <label for="client-gsm">Téléphone du compte</label>
         <input id="client-gsm" type="tel" value="<?= e($user['gsm']) ?>" disabled>
         <p class="small-note">Pour les corriger, rendez-vous dans <a href="mon-profil.php">Mon profil</a>.</p>
-        <label for="adresse_prestation">
-            Adresse de prestation
-        </label>
+        <label for="adresse_prestation">Adresse de prestation <span class="required-label">(obligatoire)</span></label>
         <input
             type="text"
             id="adresse_prestation"
@@ -153,9 +151,7 @@ renderHeader('Commander'); ?>
             value="<?= htmlspecialchars($adressePrestation) ?>"
             required
         >
-        <label for="date_prestation">
-            Date de prestation
-        </label>
+        <label for="date_prestation">Date de prestation <span class="required-label">(obligatoire)</span></label>
         <input
             type="date"
             id="date_prestation"
@@ -163,9 +159,7 @@ renderHeader('Commander'); ?>
             value="<?= htmlspecialchars($datePrestation) ?>"
             required
         >
-        <label for="heure_prestation">
-            Heure de prestation
-        </label>
+        <label for="heure_prestation">Heure de prestation <span class="required-label">(obligatoire)</span></label>
         <input
             type="time"
             id="heure_prestation"
@@ -173,9 +167,7 @@ renderHeader('Commander'); ?>
             value="<?= htmlspecialchars($heurePrestation) ?>"
             required
         >
-        <label for="lieu_prestation">
-            Lieu de prestation
-        </label>
+        <label for="lieu_prestation">Lieu de prestation <span class="required-label">(obligatoire)</span></label>
         <input
             type="text"
             id="lieu_prestation"
@@ -183,9 +175,7 @@ renderHeader('Commander'); ?>
             value="<?= htmlspecialchars($lieuPrestation) ?>"
             required
         >
-        <label for="nb_personnes">
-            Nombre de personnes
-        </label>
+        <label for="nb_personnes">Nombre de personnes <span class="required-label">(obligatoire)</span></label>
         <input
             type="number"
             id="nb_personnes"
@@ -194,9 +184,7 @@ renderHeader('Commander'); ?>
             value="<?= $nbPersonnes ?>"
             required
         >
-        <label for="distance_km">
-            Distance hors Bordeaux en km
-        </label>
+        <label for="distance_km">Distance hors Bordeaux en km <span class="required-label">(obligatoire)</span></label>
         <input
             type="number"
             id="distance_km"
