@@ -62,7 +62,7 @@ Sources : Prompt_Maitre_Vite_Gourmand_Transfert_IA.pdf (12 pages) relu intégral
 | Échappement XSS, validation serveur, erreurs privées | OK | Config/security.php; Config/database.php; Public/scripts.js | Balises échappées, valeurs invalides, revue logs | Vérifié localement. |
 | Secrets ignorés, exemples fictifs, racine HTTP Public | OK | .gitignore; Config/*.example.php; Public/.htaccess | Scan sans valeurs; fichiers privés HTTP403/404 | Faux positifs du scan : chaînes de log et paramètre SQL; aucun secret identifié dans livrable. |
 | Design system et cohérence des pages principales | OK | Public/style.css; Templates/layout.php; docs/captures | Revue visuelle des 22 pages | Vérifié localement. |
-| Responsive mobile/tablette/desktop | OK | docs/recette-responsive.json | 72 mesures à390/768/1440; contact320 sans débordement | Vérifié localement. |
+| Responsive mobile/tablette/desktop | OK | docs/recette-responsive.json | 72 mesures initiales ; 48 mesures complémentaires à320/390/768/1440 et texte agrandi | Vérifié localement. |
 | Accessibilité pragmatique : lang,h1,labels,alt,focus,clavier | OK | Templates/layout.php; Public/style.css; Public/scripts.js | Lien évitement, focus visible, Menu Entrée/Échap, mesures DOM | Contrastes principaux >4,5:1; pas de certification RGAA exhaustive. |
 | Évaluation RGAA exhaustive, lecteur d’écran et zoom navigateur | À FAIRE | docs/accessibilite.md | 473 contrôles HTML ciblés et mesures de présentation effectués ; VoiceOver bloqué par les permissions Mac | Aucun taux de conformité déclaré. |
 | JavaScript séparé, fetch et absence erreur console observée | OK | Public/scripts.js; Public/assets/js/statistics.js | node --check et journaux navigateur vides | Vérifié localement. |
@@ -75,8 +75,8 @@ Sources : Prompt_Maitre_Vite_Gourmand_Transfert_IA.pdf (12 pages) relu intégral
 | MCD,classes,cas utilisation,séquences | OK | output/pdf/mcd-vite-gourmand.pdf; docs/mcd.md; docs/diagrammes.md | MCD conceptuel en 3 vues PDF/SVG, distinct du schéma SQL ; UML Mermaid | Cardinalités confrontées au SQL et règles applicatives ; PDF rendu et inspecté. |
 | Gestion projet,backlog,user stories,priorités | À FAIRE | docs/gestion-projet.md | Document et lien fournis ; tableau distant consulté, carte maquettes corrigée | Reclassement des 19 tâches livrées et accès du jury au tableau à finaliser. |
 | Documentation technique et déploiement | OK | docs/documentation-technique.md; docs/deploiement.md | Configuration,extensions,permissions,cron,rollback | Vérifié localement. |
-| Plan et preuves des tests | OK | docs/plan-tests.md; tests | 196 contrôles automatisés, captures et recette | Vérifié localement. |
-| Lint PHP,JS,diff,liens,logs | OK | docs/plan-tests.md | 68 PHP OK;2 JS OK;diff check;22 ressources sans erreur | Ancienne erreur GD corrigée;503 Firebase attendu. |
+| Plan et preuves des tests | OK | docs/plan-tests.md; tests | 196 contrôles métier/HTTP/statistiques/images et 473 contrôles HTML ciblés, captures et recette | Vérifié localement. |
+| Lint PHP,JS,diff,liens,logs | OK | docs/plan-tests.md | 71 PHP OK;2 JS OK;diff check;38 contrôles distants | Ancienne erreur GD corrigée;503 Firebase attendu. |
 | Application publique déployée et fonctionnelle | OK | docs/deploiement.md; docs/recette-alwaysdata.json | 29 contrôles HTTPS, trois rôles, Firebase et fichiers privés | alwaysdata Free 0 €, app/Public, données fictives, mots de passe publics remplacés. |
 | Cron installé et recette finale en ligne | OK | Scripts/verifier-retards-materiel.php; Scripts/synchroniser-statistiques.php | Jobs #33622/#33623 actifs, exécutions automatiques code 0; tâche matériel à 09:00:23 | Statistiques toutes les 15 minutes; matériel chaque jour à 09:00. |
 | Workflow feature vers develop puis main | OK | docs/rapport-final.md | Fusion develop 3397f6e puis main 3d23419; ascendance et arbres vérifiés | Historique conservé; aucune modification du code testé ni poussée forcée. |
