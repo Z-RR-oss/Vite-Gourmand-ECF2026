@@ -55,11 +55,11 @@ renderHeader('Statistiques');
             </select>
         </div>
         <div class="form-group">
-            <label for="du">Du</label>
+            <label for="du">Du <span id="du-required" class="required-label" hidden>(obligatoire)</span></label>
             <input id="du" name="du" type="date" value="<?= e($filters['du']) ?>" aria-describedby="period-help">
         </div>
         <div class="form-group">
-            <label for="au">Au inclus</label>
+            <label for="au">Au inclus <span id="au-required" class="required-label" hidden>(obligatoire)</span></label>
             <input id="au" name="au" type="date" value="<?= e($filters['au']) ?>" aria-describedby="period-help">
         </div>
         <button type="submit" class="button">Afficher</button>

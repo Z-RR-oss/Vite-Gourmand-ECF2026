@@ -158,6 +158,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
+// Une erreur ne doit pas obliger la personne à ressaisir toutes ses coordonnées.
+if ($erreur !== '') {
+    foreach (['nom', 'prenom', 'email', 'gsm', 'adresse'] as $field) {
+        $user[$field] = $_POST[$field] ?? '';
+    }
+}
 ?>
 <?php require_once __DIR__ . '/../Templates/layout.php';
 renderHeader('Mon profil'); ?>
@@ -174,63 +180,63 @@ renderHeader('Mon profil'); ?>
         </strong>
     </div>
     <?php if ($erreur !== ''): ?>
-        <p class="erreur">
+        <p class="erreur" role="alert">
             <?= htmlspecialchars($erreur) ?>
         </p>
     <?php endif; ?>
     <?php if ($succes !== ''): ?>
-        <p class="succes">
+        <p class="succes" role="status">
             <?= htmlspecialchars($succes) ?>
         </p>
     <?php endif; ?>
     <form method="POST">
         <?= csrfInput() ?>
-        <label for="nom">
-            Nom
-        </label>
+        <label for="nom">Nom <span class="required-label">(obligatoire)</span></label>
         <input
             type="text"
             id="nom"
+            maxlength="50"
+            autocomplete="family-name"
             name="nom"
             value="<?= htmlspecialchars($user['nom']) ?>"
             required
         >
-        <label for="prenom">
-            Prénom
-        </label>
+        <label for="prenom">Prénom <span class="required-label">(obligatoire)</span></label>
         <input
             type="text"
             id="prenom"
+            maxlength="50"
+            autocomplete="given-name"
             name="prenom"
             value="<?= htmlspecialchars($user['prenom']) ?>"
             required
         >
-        <label for="email">
-            Adresse email
-        </label>
+        <label for="email">Adresse email <span class="required-label">(obligatoire)</span></label>
         <input
             type="email"
             id="email"
+            maxlength="100"
+            autocomplete="email"
             name="email"
             value="<?= htmlspecialchars($user['email']) ?>"
             required
         >
-        <label for="gsm">
-            Téléphone
-        </label>
+        <label for="gsm">Téléphone <span class="required-label">(obligatoire)</span></label>
         <input
-            type="text"
+            type="tel"
             id="gsm"
+            maxlength="20"
+            autocomplete="tel"
             name="gsm"
             value="<?= htmlspecialchars($user['gsm']) ?>"
             required
         >
-        <label for="adresse">
-            Adresse postale
-        </label>
+        <label for="adresse">Adresse postale <span class="required-label">(obligatoire)</span></label>
         <input
             type="text"
             id="adresse"
+            maxlength="255"
+            autocomplete="street-address"
             name="adresse"
             value="<?= htmlspecialchars($user['adresse']) ?>"
             required

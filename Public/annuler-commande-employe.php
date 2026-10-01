@@ -66,7 +66,7 @@ renderHeader('Annuler une commande'); ?>
         </p>
     </div>
     <?php if ($erreur !== ''): ?>
-        <p class="erreur">
+        <p class="erreur" role="alert">
             <?= htmlspecialchars($erreur) ?>
         </p>
     <?php endif; ?>
@@ -76,9 +76,7 @@ renderHeader('Annuler une commande'); ?>
     </p>
     <form method="POST">
         <?= csrfInput() ?>
-        <label for="mode_contact">
-            Mode de contact utilisé
-        </label>
+        <label for="mode_contact">Mode de contact utilisé <span class="required-label">(obligatoire)</span></label>
         <select
             id="mode_contact"
             name="mode_contact"
@@ -97,9 +95,7 @@ renderHeader('Annuler une commande'); ?>
                 SMS
             </option>
         </select>
-        <label for="motif">
-            Motif de l'annulation
-        </label>
+        <label for="motif">Motif de l'annulation <span class="required-label">(obligatoire)</span></label>
         <textarea
             id="motif"
             name="motif"

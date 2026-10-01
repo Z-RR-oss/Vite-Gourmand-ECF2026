@@ -15,6 +15,8 @@ La branche `main` contient la version finale testée, après fusion de la branch
 - `../output/pdf/mcd-vite-gourmand.pdf` : MCD conceptuel en trois vues, avec associations et cardinalités ; sources et règles dans [mcd.md](mcd.md).
 - `documentation-technique.md`, `diagrammes.md`, `deploiement.md`, `nosql.md`.
 - `gestion-projet.md`, `plan-tests.md`, `checklist-finale.md`, `rapport-final.md`.
+- `accessibilite.md`, `recette-accessibilite-responsive.json` : corrections, mesures et limites de l'évaluation.
+- `preparation-copie-ecf.md`, `parcours-jury.md` : aide à la remise et à la présentation, sans remplacer le modèle officiel Studi.
 - `recette-alwaysdata.json`, `recette-finale-hebergement.json` et `recette-nettoyage-visuels.json` : contrôles distants.
 - `vite_gourmand.sql.sql` : schéma complet et données fictives; import uniquement sur une base vide.
 
@@ -33,3 +35,5 @@ Le site est pédagogique : aucun paiement réel et aucune prestation commerciale
 ## Dernières actions de remise
 
 La copie officielle est à compléter et déposer par l'étudiante avec ses propres explications et les liens ci-dessus. Reporter les preuves dans le tableau de gestion de projet si nécessaire. Ces démarches de dépôt de l'examen ne sont pas effectuées automatiquement.
+
+Le lien Trello nécessite actuellement une connexion dans une session non authentifiée. Vérifier l'accès du jury avant remise. L'évaluation RGAA exhaustive n'est pas achevée : voir les contrôles effectués et les limites dans `accessibilite.md`.

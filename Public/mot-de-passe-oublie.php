@@ -249,20 +249,18 @@ renderHeader('Mot de passe oublié'); ?>
         à votre compte.
     </p>
     <?php if ($message !== ''): ?>
-        <p class="message">
+        <p class="message" role="status">
             <?= htmlspecialchars($message) ?>
         </p>
     <?php endif; ?>
     <?php if ($erreur !== ''): ?>
-        <p class="erreur">
+        <p class="erreur" role="alert">
             <?= htmlspecialchars($erreur) ?>
         </p>
     <?php endif; ?>
     <form method="POST">
         <?= csrfInput() ?>
-        <label for="email">
-            Adresse email
-        </label>
+        <label for="email">Adresse email <span class="required-label">(obligatoire)</span></label>
         <input
             type="email"
             id="email"

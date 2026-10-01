@@ -161,15 +161,13 @@ renderHeader('Modifier un menu'); ?>
         Modifier le menu
     </h1>
     <?php if ($erreur !== ''): ?>
-        <p class="erreur">
+        <p class="erreur" role="alert">
             <?= htmlspecialchars($erreur) ?>
         </p>
     <?php endif; ?>
     <form method="POST">
         <?= csrfInput() ?>
-        <label for="titre">
-            Titre *
-        </label>
+        <label for="titre">Titre <span class="required-label">(obligatoire)</span></label>
         <input
             type="text"
             id="titre"
@@ -177,17 +175,13 @@ renderHeader('Modifier un menu'); ?>
             value="<?= htmlspecialchars($menu['titre']) ?>"
             required
         >
-        <label for="description">
-            Description *
-        </label>
+        <label for="description">Description <span class="required-label">(obligatoire)</span></label>
         <textarea
             id="description"
             name="description"
             required
         ><?= htmlspecialchars($menu['description']) ?></textarea>
-        <label for="prix">
-            Prix (€) *
-        </label>
+        <label for="prix">Prix (€) <span class="required-label">(obligatoire)</span></label>
         <input
             type="number"
             id="prix"
@@ -197,9 +191,7 @@ renderHeader('Modifier un menu'); ?>
             value="<?= htmlspecialchars($menu['prix']) ?>"
             required
         >
-        <label for="nb_personnes_min">
-            Nombre minimum de personnes *
-        </label>
+        <label for="nb_personnes_min">Nombre minimum de personnes <span class="required-label">(obligatoire)</span></label>
         <input
             type="number"
             id="nb_personnes_min"
@@ -208,9 +200,7 @@ renderHeader('Modifier un menu'); ?>
             value="<?= (int) $menu['nb_personnes_min'] ?>"
             required
         >
-        <label for="theme">
-            Thème *
-        </label>
+        <label for="theme">Thème <span class="required-label">(obligatoire)</span></label>
         <input
             type="text"
             id="theme"
@@ -218,9 +208,7 @@ renderHeader('Modifier un menu'); ?>
             value="<?= htmlspecialchars($menu['theme']) ?>"
             required
         >
-        <label for="regime">
-            Régime alimentaire *
-        </label>
+        <label for="regime">Régime alimentaire <span class="required-label">(obligatoire)</span></label>
         <input
             type="text"
             id="regime"
@@ -228,9 +216,7 @@ renderHeader('Modifier un menu'); ?>
             value="<?= htmlspecialchars($menu['regime']) ?>"
             required
         >
-        <label for="stock_disponible">
-            Stock disponible
-        </label>
+        <label for="stock_disponible">Stock disponible <span class="required-label">(obligatoire)</span></label>
         <input
             type="number"
             id="stock_disponible"
@@ -246,9 +232,7 @@ renderHeader('Modifier un menu'); ?>
             id="conditions_menu"
             name="conditions_menu"
         ><?= htmlspecialchars($menu['conditions_menu'] ?? '') ?></textarea>
-        <label for="delai_commande_heures">
-            Délai minimum de commande en heures
-        </label>
+        <label for="delai_commande_heures">Délai minimum de commande en heures <span class="required-label">(obligatoire)</span></label>
         <input
             type="number"
             id="delai_commande_heures"

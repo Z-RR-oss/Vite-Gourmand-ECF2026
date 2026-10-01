@@ -131,72 +131,74 @@ renderHeader('Créer un employé'); ?>
         <strong>employé</strong>.
     </p>
     <?php if ($erreur !== ''): ?>
-        <p class="erreur">
+        <p class="erreur" role="alert">
             <?= htmlspecialchars($erreur) ?>
         </p>
     <?php endif; ?>
     <form method="POST">
         <?= csrfInput() ?>
-        <label for="nom">
-            Nom
-        </label>
+        <label for="nom">Nom <span class="required-label">(obligatoire)</span></label>
         <input
             type="text"
             id="nom"
+            maxlength="50"
+            autocomplete="family-name"
             name="nom"
             value="<?= htmlspecialchars($_POST['nom'] ?? '') ?>"
             required
         >
-        <label for="prenom">
-            Prénom
-        </label>
+        <label for="prenom">Prénom <span class="required-label">(obligatoire)</span></label>
         <input
             type="text"
             id="prenom"
+            maxlength="50"
+            autocomplete="given-name"
             name="prenom"
             value="<?= htmlspecialchars($_POST['prenom'] ?? '') ?>"
             required
         >
-        <label for="email">
-            Email
-        </label>
+        <label for="email">Email <span class="required-label">(obligatoire)</span></label>
         <input
             type="email"
             id="email"
+            maxlength="100"
+            autocomplete="email"
             name="email"
             value="<?= htmlspecialchars($_POST['email'] ?? '') ?>"
             required
         >
-        <label for="gsm">
-            Téléphone
-        </label>
+        <label for="gsm">Téléphone <span class="required-label">(obligatoire)</span></label>
         <input
-            type="text"
+            type="tel"
             id="gsm"
+            maxlength="20"
+            autocomplete="tel"
             name="gsm"
             value="<?= htmlspecialchars($_POST['gsm'] ?? '') ?>"
             required
         >
-        <label for="adresse">
-            Adresse
-        </label>
+        <label for="adresse">Adresse <span class="required-label">(obligatoire)</span></label>
         <input
             type="text"
             id="adresse"
+            maxlength="255"
+            autocomplete="street-address"
             name="adresse"
             value="<?= htmlspecialchars($_POST['adresse'] ?? '') ?>"
             required
         >
-        <label for="password">
-            Mot de passe
-        </label>
+        <label for="password">Mot de passe <span class="required-label">(obligatoire)</span></label>
         <input
             type="password"
             id="password"
+            autocomplete="new-password"
+            minlength="10"
+            maxlength="72"
+            aria-describedby="password-help"
             name="password"
             required
         >
-        <p>
+        <p id="password-help">
             Minimum 10 caractères avec une majuscule,
             une minuscule, un chiffre et un caractère spécial.
         </p>

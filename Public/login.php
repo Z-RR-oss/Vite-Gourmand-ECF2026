@@ -72,10 +72,10 @@ renderHeader('Connexion');
         <?php endif; ?>
         <form method="post">
             <?= csrfInput() ?>
-            <label for="email">Adresse email</label>
+            <label for="email">Adresse email <span class="required-label">(obligatoire)</span></label>
             <input type="email" id="email" name="email"
                 value="<?= e($_POST['email'] ?? '') ?>" autocomplete="email" required>
-            <label for="password">Mot de passe</label>
+            <label for="password">Mot de passe <span class="required-label">(obligatoire)</span></label>
             <input type="password" id="password" name="password" autocomplete="current-password" required>
             <p class="oubli"><a href="mot-de-passe-oublie.php">Mot de passe oublié ?</a></p>
             <button type="submit">Connexion</button>

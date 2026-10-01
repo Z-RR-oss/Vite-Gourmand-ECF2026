@@ -79,6 +79,7 @@ function renderMenuCard(array $menu): void
     </a>
     <div class="menu-card-body">
         <div class="menu-card-meta">
+            <span class="sr-only">Thème : <?= e($menu['theme']) ?>.</span>
             <span><?= e($menu['regime']) ?></span>
             <span><?= (int) $menu['nb_personnes_min'] ?> pers. minimum</span>
         </div>

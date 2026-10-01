@@ -43,9 +43,7 @@ renderHeader('Modifier ma commande'); ?>
     <?php if ($message): ?><p class="erreur" role="alert"><?= e($message) ?></p><?php endif; ?>
     <form method="POST">
         <?= csrfInput() ?>
-        <label for="nb_personnes">
-            Nombre de personnes
-        </label>
+        <label for="nb_personnes">Nombre de personnes <span class="required-label">(obligatoire)</span></label>
         <input
             type="number"
             id="nb_personnes"
@@ -54,9 +52,7 @@ renderHeader('Modifier ma commande'); ?>
             value="<?= (int) $commande['nb_personnes'] ?>"
             required
         >
-        <label for="date_prestation">
-            Date de prestation
-        </label>
+        <label for="date_prestation">Date de prestation <span class="required-label">(obligatoire)</span></label>
         <input
             type="date"
             id="date_prestation"
@@ -64,9 +60,7 @@ renderHeader('Modifier ma commande'); ?>
             value="<?= htmlspecialchars($commande['date_prestation'] ?? '') ?>"
             required
         >
-        <label for="heure_prestation">
-            Heure de prestation
-        </label>
+        <label for="heure_prestation">Heure de prestation <span class="required-label">(obligatoire)</span></label>
         <input
             type="time"
             id="heure_prestation"
@@ -74,9 +68,7 @@ renderHeader('Modifier ma commande'); ?>
             value="<?= htmlspecialchars($commande['heure_prestation'] ?? '') ?>"
             required
         >
-        <label for="lieu_prestation">
-            Lieu
-        </label>
+        <label for="lieu_prestation">Lieu <span class="required-label">(obligatoire)</span></label>
         <input
             type="text"
             id="lieu_prestation"
@@ -84,9 +76,7 @@ renderHeader('Modifier ma commande'); ?>
             value="<?= htmlspecialchars($commande['lieu_prestation'] ?? '') ?>"
             required
         >
-        <label for="adresse_prestation">
-            Adresse
-        </label>
+        <label for="adresse_prestation">Adresse <span class="required-label">(obligatoire)</span></label>
         <input
             type="text"
             id="adresse_prestation"

@@ -4,6 +4,11 @@
     gap: 100px;
     padding: 40px 50px 30px;
 }
+/* Les longues lignes restent dans leur colonne après agrandissement ou espacement. */
+.contact-layout > * {
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
 .contact-intro h1 {
     font-size: 4rem;
 }

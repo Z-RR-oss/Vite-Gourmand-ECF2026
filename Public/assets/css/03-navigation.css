@@ -16,6 +16,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    flex-wrap: wrap;
     gap: 15px;
     background: var(--color-primary);
     color: var(--color-background);
@@ -28,6 +29,8 @@
     min-height: 102px;
     padding: 22px 32px;
     display: flex;
+    /* Une police agrandie doit pouvoir faire passer la navigation à la ligne. */
+    flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
     gap: 30px;
@@ -58,6 +61,7 @@
 }
 .navbar-links {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     gap: 27px;
 }

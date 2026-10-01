@@ -315,15 +315,13 @@ renderHeader('Modifier un plat'); ?>
         Modifier le plat
     </h1>
     <?php if ($erreur !== ''): ?>
-        <p class="erreur">
+        <p class="erreur" role="alert">
             <?= htmlspecialchars($erreur) ?>
         </p>
     <?php endif; ?>
     <form method="POST">
         <?= csrfInput() ?>
-        <label for="nom">
-            Nom du plat *
-        </label>
+        <label for="nom">Nom du plat <span class="required-label">(obligatoire)</span></label>
         <input
             type="text"
             id="nom"
@@ -338,9 +336,7 @@ renderHeader('Modifier un plat'); ?>
             id="description"
             name="description"
         ><?= htmlspecialchars($plat['description'] ?? '') ?></textarea>
-        <label for="type_plat">
-            Type de plat *
-        </label>
+        <label for="type_plat">Type de plat <span class="required-label">(obligatoire)</span></label>
         <select
             id="type_plat"
             name="type_plat"

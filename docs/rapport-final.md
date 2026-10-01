@@ -249,3 +249,10 @@ Ajout de deux visuels culinaires générés pour les menus Vegan et Noël, optim
 Le PHP applicatif est harmonisé, les blocs d’affichage historiques sont simplifiés et les contrôles d’authentification redondants sont retirés lorsque la garde de rôle les réalise déjà. Des commentaires expliquent les règles de prix, verrous de stock, sessions et requêtes asynchrones. Le CSS est réparti en 12 modules puis assemblé en une ressource ; les règles de formatage et les commandes d’entretien sont documentées dans `conventions-code.md`. Les 196 contrôles automatisés sont repassés avec succès ; les nouveaux visuels sont vérifiés sur ordinateur et mobile.
 
 Ces améliorations sont publiées sur alwaysdata et dans `main` après intégration de `feature/statistiques-admin` (commit applicatif `2e80ccb`). Les 34 contrôles en ligne supplémentaires sont tous réussis ; les deux JPEG et le CSS servis correspondent aux fichiers testés.
+
+
+## Complément du 1er octobre : finalisation et limites de remise
+
+Les formulaires affichent leurs champs obligatoires et conservent les coordonnées/avis après erreur ; le message serveur d'un avis rejeté est désormais visible. Le focus rejoint les erreurs, les champs ont des bordures plus contrastées et l'en-tête accepte le texte agrandi. Ajout du plan du site et de l'aide à l'accessibilité. Dernière recette : 473 contrôles HTML/validation, 126 HTTP/SQL/SMTP, 71 fichiers PHP valides et 48 mesures de présentation sans débordement du document. Les suites métier/statistiques/images ont également réussi sur la base isolée de cette finalisation.
+
+Les guides `preparation-copie-ecf.md` et `parcours-jury.md` préparent la remise et la démonstration. Le reclassement des cartes Trello attend une autorisation explicite après refus du contrôle automatique ; l'accès du jury au tableau reste à vérifier. L'essai VoiceOver, autorisé, est bloqué par les permissions Mac. Le contrôle complet RGAA n'est pas terminé. La copie officielle Studi et son dépôt restent à effectuer par l'étudiante. Ces éléments empêchent de présenter la préparation à l'examen comme intégralement terminée.
