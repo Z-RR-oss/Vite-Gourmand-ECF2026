@@ -17,7 +17,7 @@ La branche `main` contient la version finale testée, après fusion de la branch
 - `gestion-projet.md`, `plan-tests.md`, `checklist-finale.md`, `rapport-final.md`.
 - `accessibilite.md`, `recette-accessibilite-responsive.json` : corrections, mesures et limites de l'évaluation.
 - `preparation-copie-ecf.md`, `parcours-jury.md` : aide à la remise et à la présentation, sans remplacer le modèle officiel Studi.
-- `recette-alwaysdata.json`, `recette-finale-hebergement.json` et `recette-nettoyage-visuels.json` : contrôles distants.
+- `recette-accessibilite-en-ligne.json`, `recette-alwaysdata.json`, `recette-finale-hebergement.json` et `recette-nettoyage-visuels.json` : contrôles distants.
 - `vite_gourmand.sql.sql` : schéma complet et données fictives; import uniquement sur une base vide.
 
 Les identifiants du site public sont dans le fichier privé local `var/deployment/acces-site-alwaysdata.md`. Le transmettre séparément au jury par un canal privé. Il est volontairement exclu du dépôt public et de l'archive publique. Les clés Firebase/SSH et les configurations privées ne doivent jamais accompagner un dépôt public.
