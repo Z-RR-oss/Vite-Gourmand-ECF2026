@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-/** Firebase REST access only: this class has no PDO or local statistics cache. */
+/** Accès REST Firebase uniquement : ni PDO ni fichier local remplaçant les statistiques. */
 final class StatisticsRepository
 {
     private array $config;
@@ -10,6 +10,7 @@ final class StatisticsRepository
     private ?string $accessToken = null;
     private int $tokenExpiresAt = 0;
 
+    /** Le transport injectable permet de tester les erreurs réseau sans contacter Firebase. */
     public function __construct(array $config, ?callable $transport = null)
     {
         $url = rtrim((string) ($config['database_url'] ?? ''), '/');
@@ -52,7 +53,7 @@ final class StatisticsRepository
             || !is_array($data['menus'] ?? []) || !is_array($data['days'] ?? [])) {
             throw new RuntimeException('Le format des statistiques Firebase est invalide.');
         }
-        // Firebase drops empty collections: normalize those only, never invent figures.
+        // Firebase omet les collections vides : les restaurer sans inventer de chiffres.
         $data['menus'] = $data['menus'] ?? [];
         $data['days'] = $data['days'] ?? [];
         return $data;
@@ -60,7 +61,7 @@ final class StatisticsRepository
 
     public function publish(array $snapshot): void
     {
-        // One atomic replacement avoids partial snapshots and double counting on retries.
+        // Remplacer l'instantané en une fois évite les résultats partiels et les cumuls à la relance.
         $this->request('PUT', $snapshot);
     }
 
@@ -87,6 +88,7 @@ final class StatisticsRepository
 
     private function getAccessToken(): string
     {
+        // Renouveler une minute avant l'expiration pour couvrir la durée d'une requête réseau.
         if ($this->accessToken !== null && time() < $this->tokenExpiresAt - 60) {
             return $this->accessToken;
         }
@@ -115,6 +117,7 @@ final class StatisticsRepository
             'iat' => $now,
             'exp' => $now + 3600,
         ], JSON_THROW_ON_ERROR));
+        // Le JWT signé est échangé contre un jeton OAuth ; la clé privée reste sur le serveur.
         $unsigned = $header . '.' . $claims;
         if (!@openssl_sign($unsigned, $signature, $account['private_key'], OPENSSL_ALGO_SHA256)) {
             throw new RuntimeException('Impossible de signer la demande OAuth Firebase.');
@@ -140,7 +143,7 @@ final class StatisticsRepository
         try {
             $response = ($this->transport)($method, $url, $headers, $body, $this->config['timeout']);
         } catch (Throwable $exception) {
-            // Transport exceptions can contain full URLs, tokens or keys. Do not propagate them.
+            // Les exceptions du transport peuvent contenir des jetons/URLs : ne pas les propager.
             throw new RuntimeException('Connexion sécurisée à Firebase impossible ou délai dépassé.');
         }
         $status = (int) ($response['status'] ?? 0);
@@ -184,7 +187,7 @@ final class StatisticsRepository
             CURLOPT_SSL_VERIFYHOST => 2,
             CURLOPT_PROTOCOLS => CURLPROTO_HTTPS,
         ]);
-        // Optional hosting workaround for an unavailable IPv6 route; TLS remains verified.
+        // Repli IPv4 propre à l'hébergement ; la vérification du certificat TLS reste active.
         if ($forceIpv4) {
             curl_setopt($handle, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
         }

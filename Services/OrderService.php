@@ -2,6 +2,7 @@
 
 require_once __DIR__ . '/OrderRules.php';
 
+/** Mutations atomiques du métier ; les rôles HTTP sont contrôlés par les pages appelantes. */
 final class OrderService
 {
     public function __construct(private PDO $pdo)
@@ -26,6 +27,7 @@ final class OrderService
 
     private function order(int $id): array
     {
+        // Appel réservé aux transactions du service : le verrou vit jusqu'au commit/rollback.
         $stmt = $this->pdo->prepare('SELECT * FROM commandes WHERE id = ? FOR UPDATE');
         $stmt->execute([$id]);
         $order = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -88,6 +90,7 @@ final class OrderService
     {
         $this->transaction(function () use ($id, $actor, $staff, $contact, $reason): void {
             $order = $this->order($id);
+            // Refuser un état final avant de restituer le stock évite un second incrément.
             if (in_array($order['statut'], ['annulée', 'terminée'], true)) {
                 throw new DomainException('Cette commande est déjà clôturée.');
             }

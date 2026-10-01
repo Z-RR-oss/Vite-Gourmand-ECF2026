@@ -62,8 +62,9 @@ function catalogueMenus(PDO $pdo, array $filters): array
         FROM menus m WHERE ' . implode(' AND ', $conditions) . ' ORDER BY m.id');
     $query->execute($params);
     $menus = $query->fetchAll(PDO::FETCH_ASSOC);
-    foreach ($menus as &$menu) {
-        $menu['image'] = catalogueImage($menu['image']);
+    // Éviter une référence persistante sur le dernier élément après la boucle.
+    foreach ($menus as $index => $menu) {
+        $menus[$index]['image'] = catalogueImage($menu['image']);
     }
     return $menus;
 }

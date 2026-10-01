@@ -1,6 +1,6 @@
 <?php
 
-/** Run daily using CLI. Never expose this file through the public document root. */
+/** Tâche CLI quotidienne ; ce fichier doit rester hors de la racine HTTP publique. */
 if (PHP_SAPI !== 'cli') {
     http_response_code(404);
     exit;
@@ -9,7 +9,7 @@ require_once __DIR__ . '/../Config/database.php';
 require_once __DIR__ . '/../Config/mail.php';
 require_once __DIR__ . '/../Services/OrderRules.php';
 
-// A database advisory lock also serializes cron runs on different application servers.
+// Le verrou MySQL empêche deux serveurs applicatifs de traiter les mêmes rappels en parallèle.
 $lock = $pdo->query("SELECT GET_LOCK('vite_gourmand_equipment_reminders', 0)")->fetchColumn();
 if ((int) $lock !== 1) {
     fwrite(STDERR, "Une vérification est déjà en cours.\n");
@@ -35,9 +35,9 @@ try {
             $stmt = $pdo->prepare('SELECT nom, prenom, email FROM users WHERE id = ?');
             $stmt->execute([$order['user_id']]);
             $user = $stmt->fetch(PDO::FETCH_ASSOC);
-            // Hold this row while sending: no return/cancellation can race the reminder.
-            // SMTP and SQL cannot form one atomic transaction: a crash immediately after
-            // SMTP acceptance may cause one retry. Failed sends remain eligible for retry.
+            // Garder la ligne verrouillée empêche un retour/une annulation pendant l'envoi.
+            // SMTP et SQL ne sont pas atomiques ensemble : un arrêt juste après acceptation
+            // SMTP peut produire un doublon à la relance. Un envoi refusé reste à réessayer.
             $sent = envoyerEmail(
                 $user['email'],
                 $user['prenom'] . ' ' . $user['nom'],

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 require_once __DIR__ . '/../Repositories/StatisticsRepository.php';
 
+/** Prépare des agrégats sans données clients ; le tableau de bord lit uniquement Firebase. */
 final class StatisticsService
 {
     public function __construct(private StatisticsRepository $repository)
@@ -12,6 +13,7 @@ final class StatisticsService
 
     public function synchronize(PDO $pdo): array
     {
+        // Lire catalogue et agrégats dans une même transaction, puis fermer SQL avant l'appel réseau.
         $pdo->beginTransaction();
         try {
             $menus = $pdo->query('SELECT id, titre FROM menus ORDER BY id')->fetchAll(PDO::FETCH_ASSOC);
@@ -34,7 +36,7 @@ final class StatisticsService
         return $snapshot;
     }
 
-    /** Pure normalization of the SQL aggregate; public to test without a database. */
+    /** Normalisation pure des agrégats SQL, testable sans réseau ni base de données. */
     public static function buildSnapshot(array $menus, array $rows, string $syncedAt): array
     {
         $snapshot = ['schema_version' => 1, 'synced_at' => $syncedAt,
@@ -54,12 +56,17 @@ final class StatisticsService
         return $snapshot;
     }
 
-    /** All displayed statistical values and menu names come from Firebase. */
+    /** Les libellés et valeurs affichés proviennent tous du même instantané Firebase. */
     public function dashboard(array $filters): array
     {
         return self::summarize($this->repository->read(), $filters);
     }
 
+    /**
+     * Normalise la période en dates inclusives, dans le fuseau métier.
+     *
+     * @return array{periode: string, menu: ?int, du: string, au: string}
+     */
     public static function parseFilters(array $query, ?DateTimeImmutable $today = null): array
     {
         $today ??= new DateTimeImmutable('today', new DateTimeZone('Europe/Paris'));
@@ -126,6 +133,7 @@ final class StatisticsService
                 }
             }
         }
+        // Départager par titre garantit un classement stable lorsque les volumes sont égaux.
         uasort($rows, static fn (array $a, array $b): int => $b['commandes'] <=> $a['commandes'] ?: strcasecmp($a['titre'], $b['titre']));
         $totals = self::emptyTotals();
         foreach ($rows as $row) {

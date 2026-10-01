@@ -7,6 +7,7 @@ require_once __DIR__ . '/bootstrap.php';
 $databaseConfig = is_file(__DIR__ . '/database.local.php')
     ? require __DIR__ . '/database.local.php' : [];
 $databaseConfig = is_array($databaseConfig) ? $databaseConfig : [];
+// L'environnement prime sur le fichier privé : la recette peut utiliser une base isolée.
 $databaseValue = static function (string $key, string $default = '') use ($databaseConfig): string {
     $value = getenv($key);
     return $value !== false ? $value : (string) ($databaseConfig[$key] ?? $default);

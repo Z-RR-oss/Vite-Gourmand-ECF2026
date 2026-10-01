@@ -11,6 +11,19 @@
 
 Ne pas déplacer une règle métier dans JavaScript : le serveur reste responsable du prix, du stock et des autorisations. Les commentaires expliquent les invariants (centimes, concurrence, révocation de session), plutôt que de répéter chaque instruction. Échapper les valeurs lors de leur affichage, lier les paramètres PDO et ne jamais versionner les secrets locaux.
 
+## Repères dans le code commenté
+
+| Sujet | Où lire | Choix expliqué |
+| --- | --- | --- |
+| Connexion | `Public/login.php`, `Config/auth.php` | Session renouvelée, destinations internes, révocation après changement de mot de passe |
+| Commandes | `Public/commander.php`, `Services/OrderService.php` | Récapitulatif conservé côté serveur, stock verrouillé et historique atomique |
+| Emails | `Services/OrderNotifications.php`, `Scripts/verifier-retards-materiel.php` | Envoi après commit, relance des échecs et limite de l'atomicité SMTP/SQL |
+| Images | `Services/MenuImages.php`, `Public/gerer-menu-images.php` | Validation commune de l'alternative, réencodage et nettoyage après échec SQL |
+| Statistiques | `Services/StatisticsService.php`, `Repositories/StatisticsRepository.php` | Agrégats sans données clients, instantané complet, OAuth et erreurs réseau neutralisées |
+| Interface | `Public/scripts.js`, `Public/assets/css/` | Focus clavier, état accessible du menu, ordre de la cascade et variables de thème |
+
+Les PHPDoc précisent les contrats utiles (forme du tableau renvoyé, exception métier, chemin relatif), sans répéter systématiquement les types déjà visibles dans les signatures. Lors d'un changement de logique, mettre à jour son commentaire dans le même commit. Les fonctions `authenticatedHomePath()` et `validateMenuImageAlt()` centralisent chacune une règle auparavant dupliquée.
+
 ## PHP
 
 `.editorconfig` impose UTF-8, LF et quatre espaces. `.php-cs-fixer.dist.php` applique PSR-12 et des règles de lisibilité sans transformation risquée. Les fichiers `*.local.php`, les dépendances et les données d’exploitation restent hors du périmètre.

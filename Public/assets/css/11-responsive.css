@@ -1,3 +1,4 @@
+/* Du plus large au plus étroit : les règles mobiles doivent pouvoir surcharger les précédentes. */
 @media (max-width: 1340px) {
     .page-shell {
         margin: 0 40px;

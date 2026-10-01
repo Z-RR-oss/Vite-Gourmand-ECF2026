@@ -1,5 +1,6 @@
 <?php
 
+/** Renvoie la première erreur affichable, ou null ; aucun accès SQL ni écriture ici. */
 function menuValidationError(array $input): ?string
 {
     foreach (['titre' => 255, 'description' => 10000, 'theme' => 100, 'regime' => 100] as $field => $max) {
@@ -21,6 +22,7 @@ function menuValidationError(array $input): ?string
     }
     return null;
 }
+/** Les identifiants proposés doivent appartenir aux allergènes réellement lus en base. */
 function dishValidationError(array $input, array $available): ?string
 {
     if (mb_strlen(trim($input['nom'] ?? '')) > 255 || mb_strlen($input['description'] ?? '') > 10000) {

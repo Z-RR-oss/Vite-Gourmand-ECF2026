@@ -1,5 +1,6 @@
 <?php
 
+/** Conserve la session PHP, mais invalide l'identité et les jetons qui lui étaient liés. */
 function clearAuthentication(): void
 {
     $_SESSION = [];
@@ -27,6 +28,14 @@ function refreshAuthentication(PDO $pdo): void
     }
 }
 
+/** Destination interne commune aux connexions et aux sessions déjà authentifiées. */
+function authenticatedHomePath(string $role): string
+{
+    return in_array($role, ['admin', 'employe'], true)
+        ? 'admin-commandes.php'
+        : 'mes-commandes.php';
+}
+
 function requireLogin(): void
 {
     if (empty($_SESSION['user_id'])) {
@@ -38,6 +47,7 @@ function requireLogin(): void
     }
 }
 
+/** La visibilité d'un lien ne suffit pas : chaque contrôleur protégé appelle cette garde. */
 function requireRole(string|array $roles): void
 {
     requireLogin();

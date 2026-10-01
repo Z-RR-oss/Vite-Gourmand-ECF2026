@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-/** Server-only Firebase configuration. Environment variables override the local file. */
+/** Configuration réservée au serveur ; l'environnement prime sur le fichier privé local. */
 $localFile = __DIR__ . '/nosql.local.php';
 $local = is_file($localFile) ? require $localFile : [];
 if (!is_array($local)) {
