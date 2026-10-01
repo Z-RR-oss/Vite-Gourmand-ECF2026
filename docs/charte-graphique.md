@@ -35,3 +35,9 @@ Boutons principaux bordeaux, hauteur minimale 46 px, coins 6 px, variante second
 Trois écrans : accueil, détail du menu, contact. Pour chacun : version desktop 1 440 × 1 000 et mobile 390 × 844. Les six wireframes sont disponibles en SVG éditable et PNG dans `wireframes/`. Les six mockups PNG dans `maquettes/` sont des captures du résultat implémenté, non une invention de chiffres métier. Les wireframes documentent rétrospectivement l'organisation finale; ils ne prétendent pas avoir précédé le développement.
 
 Le PDF réunit les douze vues. Les captures montrent la fenêtre initiale; le contenu continue au défilement, particulièrement sur mobile. Les pages principales ont été contrôlées à 390, 768 et 1 440 px (72 mesures dans `recette-responsive.json`), et contact à 320 px. Revue pragmatique sans certification RGAA exhaustive.
+
+| Écran | Wireframe ordinateur | Wireframe mobile | Mockup ordinateur | Mockup mobile |
+| --- | --- | --- | --- | --- |
+| Accueil | [SVG](wireframes/accueil-desktop.svg) | [SVG](wireframes/accueil-mobile.svg) | [PNG](maquettes/accueil-desktop.png) | [PNG](maquettes/accueil-mobile.png) |
+| Détail menu | [SVG](wireframes/detail-menu-desktop.svg) | [SVG](wireframes/detail-menu-mobile.svg) | [PNG](maquettes/detail-menu-desktop.png) | [PNG](maquettes/detail-menu-mobile.png) |
+| Contact | [SVG](wireframes/contact-desktop.svg) | [SVG](wireframes/contact-mobile.svg) | [PNG](maquettes/contact-desktop.png) | [PNG](maquettes/contact-mobile.png) |

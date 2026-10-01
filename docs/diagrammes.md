@@ -1,8 +1,10 @@
 # Modèle des données et diagrammes
 
-Sources Mermaid éditables. Le diagramme relationnel ci-dessous matérialise le MCD par les tables et leurs clés effectives, y compris les deux associations porteuses. Les cardinalités sont celles du schéma final; les règles applicatives ajoutent notamment propriétaire d'avis = propriétaire de commande.
+Le [MCD conceptuel](mcd.md) dispose d'un [export PDF](../output/pdf/mcd-vite-gourmand.pdf) et de trois vues SVG éditables : entités, associations et cardinalités, sans clés étrangères ni types SQL. Le présent fichier rassemble le schéma relationnel et les diagrammes UML en sources Mermaid éditables.
 
-## MCD / modèle relationnel
+## Modèle relationnel / schéma SQL
+
+Ce schéma représente les tables, clés et types réellement implémentés. Les associations plusieurs-à-plusieurs du MCD deviennent les tables `menu_plat` et `plat_allergene`. Les règles applicatives ajoutent notamment l'égalité entre propriétaire de l'avis et propriétaire de sa commande.
 
 ```mermaid
 erDiagram

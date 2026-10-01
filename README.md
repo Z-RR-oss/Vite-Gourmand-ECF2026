@@ -68,7 +68,7 @@ PDO préparé, sorties échappées, CSRF, rôles serveur, sessions renouvelées/
 
 - [Manuel PDF](docs/manuel-utilisateur.pdf) et [source](docs/manuel-utilisateur.md).
 - [Charte PDF](docs/charte-graphique.pdf), [source](docs/charte-graphique.md), [exports](docs/maquettes/).
-- [Documentation technique](docs/documentation-technique.md), [MCD et UML](docs/diagrammes.md).
+- [Documentation technique](docs/documentation-technique.md), [MCD conceptuel PDF](output/pdf/mcd-vite-gourmand.pdf), [règles du MCD](docs/mcd.md), [schéma relationnel et UML](docs/diagrammes.md).
 - [Gestion de projet](docs/gestion-projet.md), [audit initial](docs/audit-initial.md).
 - [Dépôt GitHub](https://github.com/Z-RR-oss/Vite-Gourmand-ECF2026), [Trello communiqué](https://trello.com/b/mHfEGdUL/vite-gourmand-projet-ecf).
 
