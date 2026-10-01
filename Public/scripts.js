@@ -1,6 +1,14 @@
 'use strict';
 document.documentElement.classList.add('js-enabled');
 
+// Une erreur rendue après POST doit être atteignable immédiatement au clavier.
+// Le message existe aussi sans JavaScript ; seul le déplacement du focus est ajouté.
+const formError = document.querySelector('main [role="alert"]');
+if (formError) {
+    formError.setAttribute('tabindex', '-1');
+    formError.focus();
+}
+
 // La navigation reste visible sans JS ; aria-expanded reflète son état pour les lecteurs d'écran.
 const burger = document.querySelector('.burger-menu');
 const navigation = document.querySelector('#main-navigation');
@@ -22,6 +30,14 @@ if (burger && navigation) {
     });
     document.addEventListener('click', (event) => {
         if (!navigation.contains(event.target) && !burger.contains(event.target)) closeNavigation();
+    });
+    navigation.addEventListener('focusout', (event) => {
+        if (
+            event.relatedTarget &&
+            !navigation.contains(event.relatedTarget) &&
+            event.relatedTarget !== burger
+        )
+            closeNavigation();
     });
 }
 
@@ -54,6 +70,7 @@ function menuCard(menu) {
     const body = element('div', 'menu-card-body');
     const meta = element('div', 'menu-card-meta');
     meta.append(
+        element('span', 'sr-only', `Thème : ${menu.theme}.`),
         element('span', '', menu.regime),
         element('span', '', `${Number(menu.nb_personnes_min)} pers. minimum`),
     );

@@ -125,3 +125,14 @@ Sur `vite_gourmand_test_comments_20261001`, les 25 assertions métier, 41 statis
 ## Modélisation et livrables graphiques - 1er octobre 2026
 
 Ajout d'un MCD conceptuel distinct du schéma SQL : dix entités, dix associations, trois vues PDF/SVG. Les cardinalités sont confrontées aux clés étrangères, à l'unicité de l'avis par commande et aux règles applicatives. Le PDF de trois pages est rendu en PNG et chaque page inspectée ; les liens locaux des documents modifiés sont vérifiés. Les six wireframes et six mockups existants ont les dimensions attendues (1440 × 1000 ou 390 × 844), et la charte conserve ses neuf pages. Ce changement documentaire ne modifie ni le code PHP ni la base de données.
+
+
+## Finalisation accessibilité et préparation du jury — 1er octobre 2026
+
+Sur `vite_gourmand_test_final_20261001`, la suite métier donne 25 assertions, les statistiques 41 et les images 4. Après les derniers changements PHP, la recette HTTP/SQL/SMTP a été rejouée : 126 assertions réussies. La nouvelle suite `tests/accessibility_http.py`, exécutée avant les mutations de fixtures HTTP, vérifie 32 pages/états et 473 assertions HTML/validation. Les emails de ces tests restent capturés localement.
+
+71 fichiers PHP hors dépendances/configurations privées passent le contrôle syntaxique. Les deux JavaScript, le formatage PHP/CSS/JS, les 12 modules CSS assemblés et `git diff --check` sont vérifiés. Le routeur `tests/viewport-router.php` refuse les accès non locaux et les bases qui ne contiennent pas `_test_` ; il est exclu de l'archive applicative de production.
+
+48 mesures de présentation sont conservées dans `recette-accessibilite-responsive.json` : repli à 320 px, tailles 390/768/1440, texte doublé et espacement augmenté sur un échantillon représentatif. Les mesures d'espacement ont été reprises après attente explicite de l'application des styles ; le débordement ainsi détecté sur Contact est corrigé en autorisant les colonnes à rétrécir et les longs mots à se replier. Les 48 mesures finales ne présentent pas de débordement horizontal du document. Les tableaux peuvent défiler dans leur propre région.
+
+VoiceOver a été autorisé par la propriétaire mais l'accès à l'utilitaire a été refusé par les permissions Mac : ce test n'a pas pu être exécuté. Une revue complète des critères RGAA et du zoom navigateur reste à effectuer ; aucun taux de conformité n'est calculé. Voir `accessibilite.md` pour la portée exacte.

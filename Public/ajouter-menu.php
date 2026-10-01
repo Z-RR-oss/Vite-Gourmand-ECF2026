@@ -121,15 +121,13 @@ renderHeader('Ajouter un menu'); ?>
         Ajouter un menu
     </h1>
     <?php if ($erreur !== ''): ?>
-        <p class="erreur">
+        <p class="erreur" role="alert">
             <?= htmlspecialchars($erreur) ?>
         </p>
     <?php endif; ?>
     <form method="POST">
         <?= csrfInput() ?>
-        <label for="titre">
-            Titre *
-        </label>
+        <label for="titre">Titre <span class="required-label">(obligatoire)</span></label>
         <input
             type="text"
             id="titre"
@@ -137,17 +135,13 @@ renderHeader('Ajouter un menu'); ?>
             value="<?= htmlspecialchars($_POST['titre'] ?? '') ?>"
             required
         >
-        <label for="description">
-            Description *
-        </label>
+        <label for="description">Description <span class="required-label">(obligatoire)</span></label>
         <textarea
             id="description"
             name="description"
             required
         ><?= htmlspecialchars($_POST['description'] ?? '') ?></textarea>
-        <label for="prix">
-            Prix correspondant au minimum de personnes (€) *
-        </label>
+        <label for="prix">Prix correspondant au minimum de personnes (€) <span class="required-label">(obligatoire)</span></label>
         <input
             type="number"
             id="prix"
@@ -157,9 +151,7 @@ renderHeader('Ajouter un menu'); ?>
             value="<?= htmlspecialchars($_POST['prix'] ?? '') ?>"
             required
         >
-        <label for="nb_personnes_min">
-            Nombre minimum de personnes *
-        </label>
+        <label for="nb_personnes_min">Nombre minimum de personnes <span class="required-label">(obligatoire)</span></label>
         <input
             type="number"
             id="nb_personnes_min"
@@ -168,9 +160,7 @@ renderHeader('Ajouter un menu'); ?>
             value="<?= htmlspecialchars($_POST['nb_personnes_min'] ?? '') ?>"
             required
         >
-        <label for="theme">
-            Thème *
-        </label>
+        <label for="theme">Thème <span class="required-label">(obligatoire)</span></label>
         <input
             type="text"
             id="theme"
@@ -179,9 +169,7 @@ renderHeader('Ajouter un menu'); ?>
             value="<?= htmlspecialchars($_POST['theme'] ?? '') ?>"
             required
         >
-        <label for="regime">
-            Régime alimentaire *
-        </label>
+        <label for="regime">Régime alimentaire <span class="required-label">(obligatoire)</span></label>
         <input
             type="text"
             id="regime"
@@ -190,9 +178,7 @@ renderHeader('Ajouter un menu'); ?>
             value="<?= htmlspecialchars($_POST['regime'] ?? '') ?>"
             required
         >
-        <label for="stock_disponible">
-            Stock disponible
-        </label>
+        <label for="stock_disponible">Stock disponible <span class="required-label">(obligatoire)</span></label>
         <input
             type="number"
             id="stock_disponible"
@@ -209,9 +195,7 @@ renderHeader('Ajouter un menu'); ?>
             name="conditions_menu"
             placeholder="Exemple : commander 48 h à l'avance..."
         ><?= htmlspecialchars($_POST['conditions_menu'] ?? '') ?></textarea>
-        <label for="delai_commande_heures">
-            Délai minimum de commande en heures
-        </label>
+        <label for="delai_commande_heures">Délai minimum de commande en heures <span class="required-label">(obligatoire)</span></label>
         <input
             type="number"
             id="delai_commande_heures"

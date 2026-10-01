@@ -56,13 +56,13 @@ renderHeader('Images du menu');
 <?php foreach ($images as $item): ?><article class="card">
 <img src="<?= e(catalogueImage($item['chemin_image'])) ?>" alt="<?= e($item['texte_alternatif']) ?>" width="300" height="210" class="gallery-preview">
 <form method="post"><?= csrfInput() ?><input type="hidden" name="image_id" value="<?= (int) $item['id'] ?>">
-<label for="alt-<?= (int) $item['id'] ?>">Description de cette image</label><input id="alt-<?= (int) $item['id'] ?>" name="texte_alternatif" maxlength="255" required value="<?= e($item['texte_alternatif']) ?>">
+<label for="alt-<?= (int) $item['id'] ?>">Description de cette image <span class="required-label">(obligatoire)</span></label><input id="alt-<?= (int) $item['id'] ?>" name="texte_alternatif" maxlength="255" required value="<?= e($item['texte_alternatif']) ?>">
 <button name="action" value="modifier">Enregistrer la description</button><button name="action" value="supprimer" class="button-secondary" formnovalidate>Retirer de la galerie</button></form>
 </article><?php endforeach; ?>
 </div>
 <h2>Ajouter une photo</h2><form method="post" enctype="multipart/form-data"><?= csrfInput() ?>
-<label for="image">Image JPEG, PNG ou WebP (5 Mo maximum)</label><input id="image" type="file" name="image" accept="image/jpeg,image/png,image/webp" required>
-<label for="texte_alternatif">Description pour les personnes ne voyant pas l’image</label><input id="texte_alternatif" name="texte_alternatif" maxlength="255" required>
+<label for="image">Image JPEG, PNG ou WebP (5 Mo maximum) <span class="required-label">(obligatoire)</span></label><input id="image" type="file" name="image" accept="image/jpeg,image/png,image/webp" required>
+<label for="texte_alternatif">Description pour les personnes ne voyant pas l’image <span class="required-label">(obligatoire)</span></label><input id="texte_alternatif" name="texte_alternatif" maxlength="255" required>
 <button name="action" value="ajouter">Ajouter l’image</button></form>
 <p><a href="admin-menus.php">Retour aux menus</a> · <a href="menu.php?id=<?= $id ?>">Voir la fiche publique</a></p>
 </section><?php renderFooter($pdo); ?>

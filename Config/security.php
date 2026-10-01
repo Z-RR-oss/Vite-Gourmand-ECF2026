@@ -80,9 +80,13 @@ function passwordValidationError(string $password): ?string
 
 function identityValidationError(array $data): ?string
 {
+    $labels = ['nom' => 'Nom', 'prenom' => 'Prénom', 'adresse' => 'Adresse', 'email' => 'Adresse email', 'gsm' => 'Téléphone'];
     foreach (['nom' => 50, 'prenom' => 50, 'adresse' => 255, 'email' => 100, 'gsm' => 20] as $key => $max) {
-        if (!isset($data[$key]) || !is_string($data[$key]) || trim($data[$key]) === '' || mb_strlen($data[$key]) > $max) {
-            return 'Renseignez tous les champs en respectant leur longueur maximale.';
+        if (!isset($data[$key]) || !is_string($data[$key]) || trim($data[$key]) === '') {
+            return 'Le champ « ' . $labels[$key] . ' » est obligatoire.';
+        }
+        if (mb_strlen($data[$key]) > $max) {
+            return 'Le champ « ' . $labels[$key] . ' » doit contenir au maximum ' . $max . ' caractères.';
         }
     }
     if (!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {

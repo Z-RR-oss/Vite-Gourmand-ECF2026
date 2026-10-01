@@ -41,10 +41,10 @@ renderHeader('Créer mon compte');
 <form action="register.php" method="post">
 <?= csrfInput() ?>
 <?php foreach (['nom' => 'Nom', 'prenom' => 'Prénom', 'email' => 'Adresse email', 'gsm' => 'Téléphone', 'adresse' => 'Adresse postale'] as $field => $label): ?>
-<label for="<?= $field ?>"><?= $label ?></label>
+<label for="<?= $field ?>"><?= $label ?> <span class="required-label">(obligatoire)</span></label>
 <input id="<?= $field ?>" name="<?= $field ?>" type="<?= $field === 'email' ? 'email' : ($field === 'gsm' ? 'tel' : 'text') ?>" autocomplete="<?= ['nom' => 'family-name', 'prenom' => 'given-name', 'email' => 'email', 'gsm' => 'tel', 'adresse' => 'street-address'][$field] ?>" value="<?= e($values[$field]) ?>" maxlength="<?= ['nom' => 50, 'prenom' => 50, 'email' => 100, 'gsm' => 20, 'adresse' => 255][$field] ?>" required>
 <?php endforeach; ?>
-<label for="password">Mot de passe</label>
+<label for="password">Mot de passe <span class="required-label">(obligatoire)</span></label>
 <input id="password" type="password" name="password" minlength="10" maxlength="72" autocomplete="new-password" aria-describedby="password-help" required>
 <p id="password-help" class="hint">10 à 72 caractères, dont une majuscule, une minuscule, un chiffre et un caractère spécial.</p>
 <button type="submit">Créer mon compte</button>

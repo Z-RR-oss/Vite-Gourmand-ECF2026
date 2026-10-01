@@ -70,6 +70,7 @@ PDO préparé, sorties échappées, CSRF, rôles serveur, sessions renouvelées/
 - [Charte PDF](docs/charte-graphique.pdf), [source](docs/charte-graphique.md), [exports](docs/maquettes/).
 - [Documentation technique](docs/documentation-technique.md), [MCD conceptuel PDF](output/pdf/mcd-vite-gourmand.pdf), [règles du MCD](docs/mcd.md), [schéma relationnel et UML](docs/diagrammes.md).
 - [Gestion de projet](docs/gestion-projet.md), [audit initial](docs/audit-initial.md).
+- [Revue d'accessibilité](docs/accessibilite.md), [préparation de la copie officielle](docs/preparation-copie-ecf.md), [parcours jury](docs/parcours-jury.md).
 - [Dépôt GitHub](https://github.com/Z-RR-oss/Vite-Gourmand-ECF2026), [Trello communiqué](https://trello.com/b/mHfEGdUL/vite-gourmand-projet-ecf).
 
 Workflow demandé par le sujet : feature -> develop -> recette -> main. Les pull requests figurent dans le prompt de travail, mais ne sont pas une obligation explicite du sujet Studi. L’accès Git SSH est opérationnel ; une connexion au navigateur GitHub n’est pas nécessaire pour fusionner les branches.

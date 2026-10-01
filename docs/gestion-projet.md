@@ -2,7 +2,7 @@
 
 Application réalisée dans le cadre de l'ECF DWWM. Le travail est organisé par parcours et risques, avec une priorité aux règles métier, à la sécurité et à la possibilité de recréer l'application.
 
-Tableau existant communiqué dans le dépôt : https://trello.com/b/mHfEGdUL/vite-gourmand-projet-ecf . Son contenu distant n'a pas été modifié par cette intervention. Publier les tâches ci-dessous et les preuves de recette dans ce tableau avant remise.
+Tableau existant : https://trello.com/b/mHfEGdUL/vite-gourmand-projet-ecf . Relecture du 1er octobre 2026 : 19 cartes en « A faire », aucune en « En cours » et 4 en « Terminé ». La carte des maquettes a été renommée et complétée avec les exports réellement produits et leur méthode, sans prétendre à une utilisation de Figma. Le reclassement global des tâches reste à effectuer. Ce suivi est une mise à jour de l'état réel, pas une reconstitution de sprints historiques. Le tableau demande une connexion dans une session non authentifiée : prévoir son accès pour le jury.
 
 ## Backlog et critères d'acceptation
 
