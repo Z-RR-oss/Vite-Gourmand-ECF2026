@@ -67,8 +67,8 @@ PDO préparé, sorties échappées, CSRF, rôles serveur, sessions renouvelées/
 [Plan de tests reproductible](docs/plan-tests.md) : 25 assertions métier/concurrence, 41 statistiques locales, 126 HTTP/SQL/SMTP, 4 uploads. Import SQL réel en base jetable.
 
 - [Manuel PDF](docs/manuel-utilisateur.pdf) et [source](docs/manuel-utilisateur.md).
-- [Charte PDF](docs/charte-graphique.pdf), [source](docs/charte-graphique.md), [exports](docs/maquettes/).
-- [Documentation technique](docs/documentation-technique.md), [MCD conceptuel PDF](output/pdf/mcd-vite-gourmand.pdf), [règles du MCD](docs/mcd.md), [schéma relationnel et UML](docs/diagrammes.md).
+- [Charte PDF](docs/charte-graphique.pdf), [source](docs/charte-graphique.md), [exports](Livrables-jury/Mockups/).
+- [Documentation technique](docs/documentation-technique.md), [MCD conceptuel PDF](Livrables-jury/MCD/mcd-vite-gourmand.pdf), [règles du MCD](docs/mcd.md), [schéma relationnel et UML](docs/diagrammes.md).
 - [Gestion de projet](docs/gestion-projet.md), [audit initial](docs/audit-initial.md).
 - [Revue d'accessibilité](docs/accessibilite.md), [préparation de la copie officielle](docs/preparation-copie-ecf.md), [parcours jury](docs/parcours-jury.md).
 - [Dépôt GitHub](https://github.com/Z-RR-oss/Vite-Gourmand-ECF2026), [Trello communiqué](https://trello.com/b/mHfEGdUL/vite-gourmand-projet-ecf).
@@ -80,3 +80,5 @@ Workflow demandé par le sujet : feature -> develop -> recette -> main. Les pull
 Le PHP suit les règles de `.php-cs-fixer.dist.php`, le CSS et le JavaScript celles de `.prettierrc.json`. Les 12 modules CSS de `Public/assets/css/` sont assemblés par `python3 Scripts/construire-css.py`; utiliser `--check` pour vérifier la synchronisation. Voir les [conventions de code](docs/conventions-code.md).
 
 Les menus Vegan et Noël disposent de [visuels générés et optimisés](docs/visuels-menus.md). Pour compléter une base existante sans réimporter le dump : examiner `php Scripts/installer-images-menus.php`, puis ajouter `--apply`. Les photos personnelles restent conservées.
+
+Les visuels de remise sont regroupés à la racine dans [Livrables-jury](Livrables-jury/README.md) : MCD, mockups et wireframes.

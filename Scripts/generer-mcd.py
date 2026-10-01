@@ -153,8 +153,8 @@ def access():
 
 
 def main():
-    output = ROOT / 'output/pdf'
-    svg_output = ROOT / 'docs/mcd'
+    output = ROOT / 'Livrables-jury/MCD'
+    svg_output = ROOT / 'Livrables-jury/MCD'
     output.mkdir(parents=True, exist_ok=True)
     svg_output.mkdir(parents=True, exist_ok=True)
     pdf = Canvas(str(output / 'mcd-vite-gourmand.pdf'), pagesize=(WIDTH, HEIGHT), invariant=1)

@@ -71,9 +71,9 @@ Sources : Prompt_Maitre_Vite_Gourmand_Transfert_IA.pdf (12 pages) relu intégral
 | README et installation locale reproductible | OK | README.md; docs/deploiement.md | Procédure + import et démarrage isolés | Vérifié localement. |
 | Manuel PDF avec comptes et parcours | OK | docs/manuel-utilisateur.pdf; docs/manuel-utilisateur.md | 4 pages rendues et inspectées | Vérifié localement. |
 | Charte PDF palette,typographies,logo,composants | OK | docs/charte-graphique.pdf; docs/charte-graphique.md | 9 pages rendues et inspectées | Vérifié localement. |
-| 3 desktop +3 mobile : wireframes ET mockups | OK | docs/wireframes; docs/maquettes | 6 SVG/PNG wireframes et6 mockups PNG intégrés au PDF | Wireframes documentaires reconstruits depuis la version finale. |
-| MCD,classes,cas utilisation,séquences | OK | output/pdf/mcd-vite-gourmand.pdf; docs/mcd.md; docs/diagrammes.md | MCD conceptuel en 3 vues PDF/SVG, distinct du schéma SQL ; UML Mermaid | Cardinalités confrontées au SQL et règles applicatives ; PDF rendu et inspecté. |
-| Gestion projet,backlog,user stories,priorités | À FAIRE | docs/gestion-projet.md | Document et lien fournis ; tableau distant consulté, carte maquettes corrigée | Reclassement des 19 tâches livrées et accès du jury au tableau à finaliser. |
+| 3 desktop +3 mobile : wireframes ET mockups | OK | Livrables-jury/Wireframes; Livrables-jury/Mockups | 6 SVG/PNG wireframes et6 mockups PNG intégrés au PDF | Wireframes documentaires reconstruits depuis la version finale. |
+| MCD,classes,cas utilisation,séquences | OK | Livrables-jury/MCD/mcd-vite-gourmand.pdf; docs/mcd.md; docs/diagrammes.md | MCD conceptuel en 3 vues PDF/SVG, distinct du schéma SQL ; UML Mermaid | Cardinalités confrontées au SQL et règles applicatives ; PDF rendu et inspecté. |
+| Gestion projet,backlog,user stories,priorités | À FAIRE | docs/gestion-projet.md | Document et lien fournis ; tableau distant consulté, carte maquettes corrigée | 19 cartes livrées déplacées ; 23 en Terminé. Accès du jury au tableau encore à vérifier. |
 | Documentation technique et déploiement | OK | docs/documentation-technique.md; docs/deploiement.md | Configuration,extensions,permissions,cron,rollback | Vérifié localement. |
 | Plan et preuves des tests | OK | docs/plan-tests.md; tests | 196 contrôles métier/HTTP/statistiques/images et 473 contrôles HTML ciblés, captures et recette | Vérifié localement. |
 | Lint PHP,JS,diff,liens,logs | OK | docs/plan-tests.md | 71 PHP OK;2 JS OK;diff check;38 contrôles distants | Ancienne erreur GD corrigée;503 Firebase attendu. |

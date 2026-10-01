@@ -1,6 +1,6 @@
 """Generate pedagogical PDFs and final-state wireframes. Dev-only: reportlab, Pillow.
 Run from any directory with a Python environment providing those two packages.
-Screenshots in docs/maquettes must already exist; no browser is automated here.
+Screenshots in Livrables-jury/Mockups must already exist; no browser is automated here.
 """
 from pathlib import Path
 import sys
@@ -16,6 +16,7 @@ from reportlab.lib.styles import ParagraphStyle
 
 ROOT = Path(__file__).resolve().parents[1]
 DOC = ROOT / 'docs'
+DELIVERABLES = ROOT / 'Livrables-jury'
 FONT = Path('/System/Library/Fonts/Supplemental/Arial.ttf')
 if FONT.exists():
     pdfmetrics.registerFont(TTFont('Body', str(FONT)))
@@ -72,7 +73,7 @@ def wireframe(name, mobile):
             box(60,730,1320,100,'Informations sur les données et erreurs')
         box(60,860,1320,100,'Footer : contact / liens légaux / horaires lundi-dimanche')
     file=f'{name}-'+('mobile' if mobile else 'desktop')
-    dest=DOC/'wireframes';dest.mkdir(exist_ok=True)
+    dest=DELIVERABLES/'Wireframes';dest.mkdir(exist_ok=True)
     im.save(dest/(file+'.png')); (dest/(file+'.svg')).write_text(''.join(svg)+'</svg>')
 
 if '--manual-only' not in sys.argv:
@@ -90,13 +91,14 @@ def footer(c,doc):
     c.drawString(44,28,'VITE & GOURMAND  /  MANUEL UTILISATEUR  /  ECF 2026')
     c.drawRightString(A4[0]-44,28,str(doc.page))
 story=[Spacer(1,40),Paragraph('Vite & Gourmand',styles['title']),Paragraph('Manuel utilisateur',styles['h']),Paragraph('Les parcours client, employé et administrateur',styles['p']),Spacer(1,15)]
-im=PILImage.open(DOC/'maquettes/accueil-desktop.png');story.append(Image(str(DOC/'maquettes/accueil-desktop.png'),width=500,height=500*im.height/im.width))
+im=PILImage.open(DELIVERABLES/'Mockups/accueil-desktop.png');story.append(Image(str(DELIVERABLES/'Mockups/accueil-desktop.png'),width=500,height=500*im.height/im.width))
 story += [Spacer(1,20),Paragraph('Édition de mise en ligne · 30 septembre 2026',styles['p']),Paragraph('Site publié sur alwaysdata, avec MySQL et Firebase réels. Les mots de passe du site public sont remis séparément dans un fichier privé.',styles['small']),PageBreak()]
 for block in (DOC/'manuel-utilisateur.md').read_text().split('\n\n'):
     if block.startswith('# '):continue
     if block.startswith('## '):story.append(Paragraph(escape(block[3:]),styles['h']))
     else:story.append(Paragraph(escape(block).replace('\n',' '),styles['p']))
-SimpleDocTemplate(str(DOC/'manuel-utilisateur.pdf'),pagesize=A4,rightMargin=44,leftMargin=44,topMargin=40,bottomMargin=50,title='Vite & Gourmand - Manuel utilisateur',author='Vite & Gourmand - Projet ECF').build(story,onFirstPage=footer,onLaterPages=footer)
+if '--charte-only' not in sys.argv:
+    SimpleDocTemplate(str(DOC/'manuel-utilisateur.pdf'),pagesize=A4,rightMargin=44,leftMargin=44,topMargin=40,bottomMargin=50,title='Vite & Gourmand - Manuel utilisateur',author='Vite & Gourmand - Projet ECF').build(story,onFirstPage=footer,onLaterPages=footer)
 
 if '--manual-only' in sys.argv:
     sys.exit(0)
@@ -125,7 +127,7 @@ c.setFillColor(colors.HexColor('#d9b788'));p=c.beginPath();p.moveTo(31,14);p.cur
 y=para('Un sceau rond, un monogramme et une feuille : le logo associe la signature de la maison et une évocation végétale. La version vectorielle exacte est conservée dans Public/assets/images/embleme.svg.',177,420,600)
 y=para('L’univers évite les codes d’une plateforme générique. Grandes compositions éditoriales, titres à empattements, illustrations de table et couleurs inspirées du vin, des nappes et des herbes.',177,y,600)
 y=para('Les illustrations SVG du projet sont des créations graphiques locales. Les mockups qui suivent sont des exports de l’interface développée; les wireframes sont une reconstruction documentaire de son organisation finale.',38,235,765)
-para('Livrables : 3 wireframes desktop + 3 mobile, et 3 mockups desktop + 3 mobile. Les sources SVG/PNG et les captures restent disponibles dans docs/wireframes et docs/maquettes.',38,y,765)
+para('Livrables : 3 wireframes desktop + 3 mobile, et 3 mockups desktop + 3 mobile. Sources et captures : Livrables-jury/Wireframes et Livrables-jury/Mockups.',38,y,765)
 c.showPage()
 start('Palette et typographies','Des couleurs partagées par le catalogue, les formulaires et les espaces de gestion.')
 for i,(label,hexa) in enumerate([('Bordeaux','#672f3e'),('Sauge','#526b57'),('Blé','#d9b788'),('Crème','#f7f3eb'),('Encre','#292c25'),('Texte discret','#62665b')]):
@@ -141,12 +143,12 @@ y=para('Navigation : liens selon le rôle, bouton Menu sur petit écran, ouvertu
 y=para('Catalogue : image de couverture, régime, minimum, titre, description et prix de forfait. Conditions du détail mises en évidence. Gestion : panneaux, filtres et badges textuels cohérents, tableaux défilables si nécessaire.',38,y)
 y=para('Responsive : colonnes qui se replient, largeur de lecture limitée, contrôles accessibles au toucher. Les tests à 390/768/1 440 px sont consignés dans recette-responsive.json. Audit RGAA pragmatique, sans certification exhaustive.',38,y)
 c.showPage()
-for kind,folder in [('Wireframe','wireframes'),('Mockup','maquettes')]:
+for kind,folder in [('Wireframe','Wireframes'),('Mockup','Mockups')]:
     for name,title in [('accueil','Accueil'),('detail-menu','Détail du menu'),('contact','Contact')]:
         start(f'{kind} / {title}','Desktop 1 440 × 1 000 px et mobile 390 × 844 px · écran initial, contenu poursuivi au défilement.')
-        pic(DOC/folder/(name+'-desktop.png'),38,110,560,389)
-        pic(DOC/folder/(name+'-mobile.png'),628,106,176,381)
+        pic(DELIVERABLES/folder/(name+'-desktop.png'),38,110,560,389)
+        pic(DELIVERABLES/folder/(name+'-mobile.png'),628,106,176,381)
         c.setFont(BODY,9);c.setFillColor(colors.HexColor(INK));c.drawString(38,78,'Desktop : hiérarchie et colonnes');c.drawString(628,78,'Mobile : lecture verticale')
         c.showPage()
 c.save()
-print('PDF créés : manuel-utilisateur.pdf et charte-graphique.pdf; 6 wireframes SVG/PNG.')
+print('Charte graphique et 6 wireframes SVG/PNG créés.' if '--charte-only' in sys.argv else 'PDF créés : manuel-utilisateur.pdf et charte-graphique.pdf; 6 wireframes SVG/PNG.')
