@@ -24,7 +24,7 @@ Environnement vérifié : macOS, XAMPP, PHP 8.2.4, MariaDB, virtual host Public/
 | Repositories/StatisticsRepository.php | Transport REST Firebase et authentification OAuth |
 | Scripts | Migration additive et tâches CLI |
 
-Il s'agit d'une évolution progressive, pas d'un MVC intégral. Les petits CRUD restent procéduraux; les règles risquées sont centralisées. Voir le [MCD conceptuel](mcd.md), son [PDF](../output/pdf/mcd-vite-gourmand.pdf) et les [diagrammes relationnel et UML](diagrammes.md).
+Il s'agit d'une évolution progressive, pas d'un MVC intégral. Les petits CRUD restent procéduraux; les règles risquées sont centralisées. Voir le [MCD conceptuel](mcd.md), son [PDF](../Livrables-jury/MCD/mcd-vite-gourmand.pdf) et les [diagrammes relationnel et UML](diagrammes.md).
 
 ## Modèle SQL
 

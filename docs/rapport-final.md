@@ -142,12 +142,12 @@ README complet; SQL complet et données fictives; manuel PDF de 4 pages; charte 
 - `docs/gestion-projet.md`
 - `docs/manuel-utilisateur.md`
 - `docs/manuel-utilisateur.pdf`
-- `docs/maquettes/accueil-desktop.png`
-- `docs/maquettes/accueil-mobile.png`
-- `docs/maquettes/contact-desktop.png`
-- `docs/maquettes/contact-mobile.png`
-- `docs/maquettes/detail-menu-desktop.png`
-- `docs/maquettes/detail-menu-mobile.png`
+- `Livrables-jury/Mockups/accueil-desktop.png`
+- `Livrables-jury/Mockups/accueil-mobile.png`
+- `Livrables-jury/Mockups/contact-desktop.png`
+- `Livrables-jury/Mockups/contact-mobile.png`
+- `Livrables-jury/Mockups/detail-menu-desktop.png`
+- `Livrables-jury/Mockups/detail-menu-mobile.png`
 - `docs/nosql.md`
 - `docs/plan-tests.md`
 - `docs/rapport-final.md`
@@ -155,18 +155,18 @@ README complet; SQL complet et données fictives; manuel PDF de 4 pages; charte 
 - `docs/recette-finale-hebergement.json`
 - `docs/recette-responsive.json`
 - `docs/remise-jury.md`
-- `docs/wireframes/accueil-desktop.png`
-- `docs/wireframes/accueil-desktop.svg`
-- `docs/wireframes/accueil-mobile.png`
-- `docs/wireframes/accueil-mobile.svg`
-- `docs/wireframes/contact-desktop.png`
-- `docs/wireframes/contact-desktop.svg`
-- `docs/wireframes/contact-mobile.png`
-- `docs/wireframes/contact-mobile.svg`
-- `docs/wireframes/detail-menu-desktop.png`
-- `docs/wireframes/detail-menu-desktop.svg`
-- `docs/wireframes/detail-menu-mobile.png`
-- `docs/wireframes/detail-menu-mobile.svg`
+- `Livrables-jury/Wireframes/accueil-desktop.png`
+- `Livrables-jury/Wireframes/accueil-desktop.svg`
+- `Livrables-jury/Wireframes/accueil-mobile.png`
+- `Livrables-jury/Wireframes/accueil-mobile.svg`
+- `Livrables-jury/Wireframes/contact-desktop.png`
+- `Livrables-jury/Wireframes/contact-desktop.svg`
+- `Livrables-jury/Wireframes/contact-mobile.png`
+- `Livrables-jury/Wireframes/contact-mobile.svg`
+- `Livrables-jury/Wireframes/detail-menu-desktop.png`
+- `Livrables-jury/Wireframes/detail-menu-desktop.svg`
+- `Livrables-jury/Wireframes/detail-menu-mobile.png`
+- `Livrables-jury/Wireframes/detail-menu-mobile.svg`
 - `tests/images.php`
 - `tests/integration_http.py`
 - `tests/orders.php`
@@ -255,6 +255,6 @@ Ces améliorations sont publiées sur alwaysdata et dans `main` après intégrat
 
 Les formulaires affichent leurs champs obligatoires et conservent les coordonnées/avis après erreur ; le message serveur d'un avis rejeté est désormais visible. Le focus rejoint les erreurs, les champs ont des bordures plus contrastées et l'en-tête accepte le texte agrandi. Ajout du plan du site et de l'aide à l'accessibilité. Dernière recette : 473 contrôles HTML/validation, 126 HTTP/SQL/SMTP, 71 fichiers PHP valides et 48 mesures de présentation sans débordement du document. Les suites métier/statistiques/images ont également réussi sur la base isolée de cette finalisation.
 
-Les guides `preparation-copie-ecf.md` et `parcours-jury.md` préparent la remise et la démonstration. Le reclassement des cartes Trello attend une autorisation explicite après refus du contrôle automatique ; l'accès du jury au tableau reste à vérifier. L'essai VoiceOver, autorisé, est bloqué par les permissions Mac. Le contrôle complet RGAA n'est pas terminé. La copie officielle Studi et son dépôt restent à effectuer par l'étudiante. Ces éléments empêchent de présenter la préparation à l'examen comme intégralement terminée.
+Les guides `preparation-copie-ecf.md` et `parcours-jury.md` préparent la remise et la démonstration. Les 19 cartes livrées ont été déplacées vers « Terminé » après accord explicite de la propriétaire ; l'accès du jury au tableau reste à vérifier. L'essai VoiceOver, autorisé, est bloqué par les permissions Mac. Le contrôle complet RGAA n'est pas terminé. La copie officielle Studi et son dépôt restent à effectuer par l'étudiante. Ces éléments empêchent de présenter la préparation à l'examen comme intégralement terminée.
 
 Publication de ces ajustements confirmée sur alwaysdata (version applicative `3e02e2c`) : 38 contrôles HTTPS/authentification/Firebase réussis. Preuve dans `recette-accessibilite-en-ligne.json`.

@@ -12,7 +12,7 @@ La branche `main` contient la version finale testée, après fusion de la branch
 
 - `manuel-utilisateur.pdf` : parcours et comptes du dump local.
 - `charte-graphique.pdf` : identité, 6 wireframes et 6 mockups (pour chacun : 3 ordinateur et 3 mobile).
-- `../output/pdf/mcd-vite-gourmand.pdf` : MCD conceptuel en trois vues, avec associations et cardinalités ; sources et règles dans [mcd.md](mcd.md).
+- `../Livrables-jury/MCD/mcd-vite-gourmand.pdf` : MCD conceptuel en trois vues, avec associations et cardinalités ; sources et règles dans [mcd.md](mcd.md).
 - `documentation-technique.md`, `diagrammes.md`, `deploiement.md`, `nosql.md`.
 - `gestion-projet.md`, `plan-tests.md`, `checklist-finale.md`, `rapport-final.md`.
 - `accessibilite.md`, `recette-accessibilite-responsive.json` : corrections, mesures et limites de l'évaluation.

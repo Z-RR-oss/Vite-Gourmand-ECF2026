@@ -6,10 +6,10 @@ Le sujet demande un **MCD ou un diagramme de classes** dans la documentation tec
 
 ## Exports et sources
 
-- [PDF vectoriel, trois pages A3 paysage](../output/pdf/mcd-vite-gourmand.pdf).
-- [Vue 1 : catalogue](mcd/01-catalogue.svg).
-- [Vue 2 : commandes](mcd/02-commandes.svg).
-- [Vue 3 : accès et horaires](mcd/03-acces-horaires.svg).
+- [PDF vectoriel, trois pages A3 paysage](../Livrables-jury/MCD/mcd-vite-gourmand.pdf).
+- [Vue 1 : catalogue](../Livrables-jury/MCD/01-catalogue.svg).
+- [Vue 2 : commandes](../Livrables-jury/MCD/02-commandes.svg).
+- [Vue 3 : accès et horaires](../Livrables-jury/MCD/03-acces-horaires.svg).
 - [Générateur Python](../Scripts/generer-mcd.py), avec ReportLab : `python3 Scripts/generer-mcd.py`.
 - [Schéma relationnel et diagrammes UML](diagrammes.md).
 
