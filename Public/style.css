@@ -2,6 +2,7 @@
 
 /* ===== 01-fondations.css ===== */
 /* Vite & Gourmand · Une maison bordelaise, une table à partager. */
+/* Modifier ces variables pour faire évoluer le thème sans multiplier les valeurs locales. */
 :root {
     --color-primary: #672f3e;
     --color-primary-dark: #49202d;
@@ -1283,6 +1284,7 @@ meter.chart-bar::-moz-meter-bar {
 }
 
 /* ===== 11-responsive.css ===== */
+/* Du plus large au plus étroit : les règles mobiles doivent pouvoir surcharger les précédentes. */
 @media (max-width: 1340px) {
     .page-shell {
         margin: 0 40px;

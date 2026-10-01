@@ -19,28 +19,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $query = $pdo->prepare('DELETE FROM menu_images WHERE id = ? AND menu_id = ?');
             $query->execute([positiveId($_POST['image_id'] ?? null), $id]);
         } elseif ($action === 'ajouter') {
-            $alt = trim($_POST['texte_alternatif'] ?? '');
-            if ($alt === '' || mb_strlen($alt) > 255) {
-                throw new DomainException('Décrivez l’image en 1 à 255 caractères.');
-            }
+            $alt = validateMenuImageAlt($_POST['texte_alternatif'] ?? '');
             $path = storeMenuImage($_FILES['image'] ?? []);
             try {
                 $query = $pdo->prepare('INSERT INTO menu_images (menu_id, chemin_image, texte_alternatif) VALUES (?, ?, ?)');
                 $query->execute([$id, $path, $alt]);
             } catch (Throwable $exception) {
+                // Compenser l'échec SQL : ne pas laisser de nouveau fichier sans entrée en galerie.
                 unlink(__DIR__ . '/' . $path);
                 throw $exception;
             }
         } elseif ($action === 'modifier') {
-            $alt = trim($_POST['texte_alternatif'] ?? '');
-            if ($alt === '' || mb_strlen($alt) > 255) {
-                throw new DomainException('Décrivez l’image en 1 à 255 caractères.');
-            }
+            $alt = validateMenuImageAlt($_POST['texte_alternatif'] ?? '');
             $query = $pdo->prepare('UPDATE menu_images SET texte_alternatif = ? WHERE id = ? AND menu_id = ?');
             $query->execute([$alt, positiveId($_POST['image_id'] ?? null), $id]);
         } else {
             throw new DomainException('Action invalide.');
         }
+        // POST/Redirect/GET : actualiser la page ne rejoue pas la mutation.
         header('Location: gerer-menu-images.php?id=' . $id, true, 303);
         exit;
     } catch (DomainException $exception) {

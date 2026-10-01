@@ -24,6 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $action = $_POST['action'] ?? 'recap';
         $input = $_POST;
         if ($action === 'confirm') {
+            // Reprendre le récapitulatif serveur, pas les prix ou coordonnées renvoyés par le client.
             $quoteToken = $_POST['quote_token'] ?? '';
             $quote = $_SESSION['order_quotes'][$quoteToken] ?? null;
             if (!$quote || $quote['menu_id'] !== $id || $quote['expires'] < time()) {
@@ -51,6 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['order_quotes'] = array_slice($_SESSION['order_quotes'], -10, null, true);
         } elseif ($action === 'confirm') {
             $orderId = (new OrderService($pdo))->create((int) $_SESSION['user_id'], $id, $input);
+            // Consommer le jeton après validation SQL ; l'email ne doit pas annuler la commande.
             unset($_SESSION['order_quotes'][$quoteToken]);
             notifyOrderStatus($pdo, $orderId, 'en attente');
             header('Location: mes-commandes.php', true, 303);

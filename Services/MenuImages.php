@@ -1,6 +1,22 @@
 <?php
 
-/** Réencode les images téléversées : le fichier original (et son contenu caché) n'est jamais publié. */
+/** Même règle d'accessibilité à l'ajout et à la modification d'une image. */
+function validateMenuImageAlt(string $value): string
+{
+    $alt = trim($value);
+    if ($alt === '' || mb_strlen($alt) > 255) {
+        throw new DomainException('Décrivez l’image en 1 à 255 caractères.');
+    }
+    return $alt;
+}
+
+/**
+ * Réencode les images téléversées : le fichier original n'est jamais publié.
+ *
+ * @param array $file Une entrée de $_FILES, jamais un chemin fourni librement.
+ * @return string Chemin relatif à Public/, utilisable dans la galerie.
+ * @throws DomainException Si le contenu ou les dimensions sont refusés.
+ */
 function storeMenuImage(array $file): string
 {
     if (($file['error'] ?? UPLOAD_ERR_NO_FILE) !== UPLOAD_ERR_OK || !is_uploaded_file($file['tmp_name'] ?? '')) {
@@ -18,6 +34,7 @@ function storeMenuImage(array $file): string
     if (!$source) {
         throw new DomainException('Impossible de lire cette image.');
     }
+    // Le nom d'origine n'est pas réutilisé : éviter collisions et chemins contrôlés par le client.
     $path = 'assets/uploads/' . bin2hex(random_bytes(20)) . '.png';
     $destination = __DIR__ . '/../Public/' . $path;
     try {

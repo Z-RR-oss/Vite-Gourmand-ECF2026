@@ -9,7 +9,7 @@ if (PHP_SAPI !== 'cli') {
 
 require_once __DIR__ . '/../Services/StatisticsService.php';
 
-// One process per server; keep the lock while writing the snapshot to Firebase.
+// Une seule synchronisation par serveur ; garder le verrou jusqu'à la fin de l'écriture Firebase.
 $lock = fopen(sys_get_temp_dir() . '/vite-gourmand-stats-' . hash('sha256', __DIR__) . '.lock', 'c');
 if ($lock === false || !flock($lock, LOCK_EX | LOCK_NB)) {
     fwrite(STDERR, "Une synchronisation est déjà en cours.\n");
@@ -23,7 +23,7 @@ try {
     fwrite(STDOUT, 'Synchronisation Firebase réussie : ' . count($snapshot['menus']) . ' menus, '
         . count($snapshot['days']) . ' jours ; ' . $snapshot['synced_at'] . ".\n");
 } catch (Throwable $exception) {
-    // Never print configuration, provider response bodies, credentials or full URLs.
+    // Ne jamais afficher configuration, réponse brute du fournisseur, jetons ou URLs complètes.
     error_log('Statistics synchronization failed [' . get_class($exception) . '].');
     fwrite(STDERR, "Échec de synchronisation. Vérifiez la configuration SQL/Firebase et les accès réseau.\n");
     exit(1);

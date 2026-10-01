@@ -115,3 +115,9 @@ Les 68 fichiers PHP applicatifs/scripts/tests passent la vérification syntaxiqu
 La migration des deux images a été exécutée puis relancée sans doublon dans la base locale. Les couvertures Vegan et Noël sont chargées et leurs alternatives textuelles sont présentes. Contrôles navigateur à 1440 px sur le catalogue et 390 px sur les deux fiches : largeur document égale au viewport. Captures : `captures/menu-vegan-photo-mobile.png` et `captures/menu-noel-photo-mobile.png`.
 
 Après déploiement du commit `2e80ccb`, 34 contrôles HTTPS/authentification/Firebase réussissent, dont les chemins API des deux nouvelles images et la comparaison des empreintes des JPEG/CSS publiés avec les fichiers locaux. Rapport : `recette-nettoyage-visuels.json`. Le filtre AJAX Vegan affiche une seule carte avec sa photo chargée ; Réinitialiser restitue les quatre menus actifs de la démonstration. Capture publique : `captures/catalogue-nouveaux-visuels-en-ligne.png`.
+
+## Commentaires et maintenance — 1er octobre 2026
+
+La connexion est simplifiée avec une destination interne partagée, des redirections 303 et un message d'erreur annoncé aux technologies d'assistance. La validation du texte alternatif est commune aux deux actions de galerie. La normalisation du catalogue n'utilise plus de référence persistante de boucle. Des commentaires et contrats PHPDoc expliquent les limites et invariants des sessions, commandes, emails, uploads, agrégats Firebase et tâches planifiées.
+
+Sur `vite_gourmand_test_comments_20261001`, les 25 assertions métier, 41 statistiques, 126 HTTP/SQL/SMTP et 4 images réussissent. Les 68 fichiers PHP passent le contrôle syntaxique ; JavaScript, formatage et assemblage CSS sont vérifiés. La connexion est inspectée sur ordinateur et à 390 px (largeur du document : 390 px). Aucun email de recette n'est envoyé hors de la capture locale.

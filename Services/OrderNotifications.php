@@ -2,7 +2,7 @@
 
 require_once __DIR__ . '/../Config/mail.php';
 
-/** Email is a post-commit side effect: a delivery failure never undoes an order. */
+/** À appeler après commit : un échec d'email ne doit jamais annuler une commande enregistrée. */
 function notifyOrderStatus(PDO $pdo, int $id, string $status): bool
 {
     $stmt = $pdo->prepare('SELECT c.*, u.nom, u.prenom, u.email, m.titre FROM commandes c JOIN users u ON u.id = c.user_id JOIN menus m ON m.id = c.menu_id WHERE c.id = ?');
