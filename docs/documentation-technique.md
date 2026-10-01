@@ -24,7 +24,7 @@ Environnement vérifié : macOS, XAMPP, PHP 8.2.4, MariaDB, virtual host Public/
 | Repositories/StatisticsRepository.php | Transport REST Firebase et authentification OAuth |
 | Scripts | Migration additive et tâches CLI |
 
-Il s'agit d'une évolution progressive, pas d'un MVC intégral. Les petits CRUD restent procéduraux; les règles risquées sont centralisées. Voir [MCD/UML](diagrammes.md).
+Il s'agit d'une évolution progressive, pas d'un MVC intégral. Les petits CRUD restent procéduraux; les règles risquées sont centralisées. Voir le [MCD conceptuel](mcd.md), son [PDF](../output/pdf/mcd-vite-gourmand.pdf) et les [diagrammes relationnel et UML](diagrammes.md).
 
 ## Modèle SQL
 
@@ -60,4 +60,4 @@ La synchronisation NoSQL remplace atomiquement un instantané agrégé; ni nom, 
 
 Tokens CSS partagés, typographies système sans chargement tiers, illustrations SVG originales, mise en page mobile/tablette/desktop. Labels, textes alternatifs, lang fr, h1 unique, focus visible, lien d'évitement, tableaux avec entêtes, graphique avec chiffres/tableau. Les erreurs et statuts sont nommés en texte.
 
-Recette pragmatique documentée dans [plan-tests.md](plan-tests.md), sans revendication de conformité RGAA totale. Distance déclarative, jours ouvrés sans fériés, agrégation par création de commande et absence de comptabilité fiscale sont des choix explicites. La mise en ligne et la recette Firebase réelle restent bloquées par la configuration externe absente.
+Recette pragmatique documentée dans [plan-tests.md](plan-tests.md), sans revendication de conformité RGAA totale. Distance déclarative, jours ouvrés sans fériés, agrégation par création de commande et absence de comptabilité fiscale sont des choix explicites. La mise en ligne Alwaysdata et la recette Firebase réelle sont documentées dans le [rapport final](rapport-final.md) et les fichiers de recette d'hébergement.

@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE svg
+  PUBLIC '-//W3C//DTD SVG 1.0//EN'
+  'http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd'>
+<svg width="1190.5511811023623" height="841.8897637795277" preserveAspectRatio="xMinYMin meet" viewBox="0 0 1190 841" xmlns="http://www.w3.org/2000/svg" version="1.0" fill-rule="evenodd" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<title>...</title>
+	<desc>...</desc>
+	<clipPath id="clip">
+		<rect x="0" y="0" width="1190.5511811023623" height="841.8897637795277"/>
+	</clipPath>
+	<g id="group" transform="scale(1,-1) translate(0,-841)" style="clip-path: url(#clip)">
+		<g transform="">
+			<rect x="0" y="0" width="1190.5511811023623" height="841.8897637795277" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="45" y="790" style="font-family: McdBold; font-size: 12px;fill: rgb(40%,18%,24%); stroke:none;" transform="translate(0,1580) scale(1,-1)">VITE &amp; GOURMAND  /  MODÈLE CONCEPTUEL DE DONNÉES</text>
+			<text x="45" y="748" style="font-family: McdBold; font-size: 29px;fill: rgb(16%,17%,14%); stroke:none;" transform="translate(0,1496) scale(1,-1)">Commandes, avis et historique</text>
+			<text x="45" y="721" style="font-family: McdBody; font-size: 12px;fill: rgb(16%,17%,14%); stroke:none;" transform="translate(0,1442) scale(1,-1)">Une commande concerne un seul menu. Son prix et ses informations de prestation sont conservés lors de la commande.</text>
+			<path d="M 45,48 L 1145.551181,48 Z" style="stroke: rgb(32%,41%,34%); stroke-linecap: butt; stroke-width: 1;"/>
+			<text x="45" y="28" style="font-family: McdBody; font-size: 10px;fill: rgb(16%,17%,14%); stroke:none;" transform="translate(0,56) scale(1,-1)">01 octobre 2026 | Identifiants soulignés | Cardinalités près de chaque entité</text>
+			<text x="1126.0931732898623" y="28" style="font-family: McdBody; font-size: 10px;fill: rgb(16%,17%,14%); stroke:none;" transform="translate(0,56) scale(1,-1)">2 / 3</text>
+			<rect x="45" y="443" width="245" height="208" style="stroke: rgb(40%,18%,24%); stroke-linecap: butt; stroke-width: 1.4; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<rect x="45" y="618" width="245" height="33" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(40%,18%,24%); fill-rule: evenodd;"/>
+			<text x="57" y="629" style="font-family: McdBold; font-size: 12px;fill: rgb(100%,100%,100%); stroke:none;" transform="translate(0,1258) scale(1,-1)">UTILISATEUR</text>
+			<text x="57" y="598" style="font-family: McdBody; font-size: 11px;fill: rgb(16%,17%,14%); stroke:none;" transform="translate(0,1196) scale(1,-1)">Identifiant utilisateur</text>
+			<path d="M 57,596 L 154.834473,596 Z" style="stroke: rgb(16%,17%,14%); stroke-linecap: butt; stroke-width: 1;"/>
+			<text x="57" y="582" style="font-family: McdBody; font-size: 11px;fill: rgb(16%,17%,14%); stroke:none;" transform="translate(0,1164) scale(1,-1)">Nom</text>
+			<text x="57" y="566" style="font-family: McdBody; font-size: 11px;fill: rgb(16%,17%,14%); stroke:none;" transform="translate(0,1132) scale(1,-1)">Prénom</text>
+			<text x="57" y="550" style="font-family: McdBody; font-size: 11px;fill: rgb(16%,17%,14%); stroke:none;" transform="translate(0,1100) scale(1,-1)">Email</text>
+			<text x="57" y="534" style="font-family: McdBody; font-size: 11px;fill: rgb(16%,17%,14%); stroke:none;" transform="translate(0,1068) scale(1,-1)">Empreinte du mot de passe</text>
+			<text x="57" y="518" style="font-family: McdBody; font-size: 11px;fill: rgb(16%,17%,14%); stroke:none;" transform="translate(0,1036) scale(1,-1)">Rôle</text>
+			<text x="57" y="502" style="font-family: McdBody; font-size: 11px;fill: rgb(16%,17%,14%); stroke:none;" transform="translate(0,1004) scale(1,-1)">Téléphone</text>
+			<text x="57" y="486" style="font-family: McdBody; font-size: 11px;fill: rgb(16%,17%,14%); stroke:none;" transform="translate(0,972) scale(1,-1)">Adresse</text>
+			<text x="57" y="470" style="font-family: McdBody; font-size: 11px;fill: rgb(16%,17%,14%); stroke:none;" transform="translate(0,940) scale(1,-1)">Actif</text>
+			<text x="57" y="454" style="font-family: McdBody; font-size: 11px;fill: rgb(16%,17%,14%); stroke:none;" transform="translate(0,908) scale(1,-1)">Date de création</text>
+			<rect x="470" y="332" width="265" height="356" style="stroke: rgb(40%,18%,24%); stroke-linecap: butt; stroke-width: 1.4; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<rect x="470" y="655" width="265" height="33" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(40%,18%,24%); fill-rule: evenodd;"/>
+			<text x="482" y="666" style="font-family: McdBold; font-size: 12px;fill: rgb(100%,100%,100%); stroke:none;" transform="translate(0,1332) scale(1,-1)">COMMANDE</text>
+			<text x="482" y="635" style="font-family: McdBody; font-size: 11px;fill: rgb(16%,17%,14%); stroke:none;" transform="translate(0,1270) scale(1,-1)">Identifiant commande</text>
+			<path d="M 482,633 L 587.171387,633 Z" style="stroke: rgb(16%,17%,14%); stroke-linecap: butt; stroke-width: 1;"/>
+			<text x="482" y="621" style="font-family: McdBody; font-size: 11px;fill: rgb(16%,17%,14%); stroke:none;" transform="translate(0,1242) scale(1,-1)">Nombre de personnes</text>
+			<text x="482" y="607" style="font-family: McdBody; font-size: 11px;fill: rgb(16%,17%,14%); stroke:none;" transform="translate(0,1214) scale(1,-1)">Prix total</text>
+			<text x="482" y="593" style="font-family: McdBody; font-size: 11px;fill: rgb(16%,17%,14%); stroke:none;" transform="translate(0,1186) scale(1,-1)">Date de prestation</text>
+			<text x="482" y="579" style="font-family: McdBody; font-size: 11px;fill: rgb(16%,17%,14%); stroke:none;" transform="translate(0,1158) scale(1,-1)">Heure de prestation</text>
+			<text x="482" y="565" style="font-family: McdBody; font-size: 11px;fill: rgb(16%,17%,14%); stroke:none;" transform="translate(0,1130) scale(1,-1)">Lieu de prestation</text>
+			<text x="482" y="551" style="font-family: McdBody; font-size: 11px;fill: rgb(16%,17%,14%); stroke:none;" transform="translate(0,1102) scale(1,-1)">Adresse de prestation</text>
+			<text x="482" y="537" style="font-family: McdBody; font-size: 11px;fill: rgb(16%,17%,14%); stroke:none;" transform="translate(0,1074) scale(1,-1)">Distance</text>
+			<text x="482" y="523" style="font-family: McdBody; font-size: 11px;fill: rgb(16%,17%,14%); stroke:none;" transform="translate(0,1046) scale(1,-1)">Frais de livraison</text>
+			<text x="482" y="509" style="font-family: McdBody; font-size: 11px;fill: rgb(16%,17%,14%); stroke:none;" transform="translate(0,1018) scale(1,-1)">Remise</text>
+			<text x="482" y="495" style="font-family: McdBody; font-size: 11px;fill: rgb(16%,17%,14%); stroke:none;" transform="translate(0,990) scale(1,-1)">Statut</text>
+			<text x="482" y="481" style="font-family: McdBody; font-size: 11px;fill: rgb(16%,17%,14%); stroke:none;" transform="translate(0,962) scale(1,-1)">Mode de contact pour annulation</text>
+			<text x="482" y="467" style="font-family: McdBody; font-size: 11px;fill: rgb(16%,17%,14%); stroke:none;" transform="translate(0,934) scale(1,-1)">Motif d’annulation</text>
+			<text x="482" y="453" style="font-family: McdBody; font-size: 11px;fill: rgb(16%,17%,14%); stroke:none;" transform="translate(0,906) scale(1,-1)">Date d’annulation</text>
+			<text x="482" y="439" style="font-family: McdBody; font-size: 11px;fill: rgb(16%,17%,14%); stroke:none;" transform="translate(0,878) scale(1,-1)">Début d’attente du matériel</text>
+			<text x="482" y="425" style="font-family: McdBody; font-size: 11px;fill: rgb(16%,17%,14%); stroke:none;" transform="translate(0,850) scale(1,-1)">Date de retour du matériel</text>
+			<text x="482" y="411" style="font-family: McdBody; font-size: 11px;fill: rgb(16%,17%,14%); stroke:none;" transform="translate(0,822) scale(1,-1)">Matériel retourné</text>
+			<text x="482" y="397" style="font-family: McdBody; font-size: 11px;fill: rgb(16%,17%,14%); stroke:none;" transform="translate(0,794) scale(1,-1)">Frais de retard</text>
+			<text x="482" y="383" style="font-family: McdBody; font-size: 11px;fill: rgb(16%,17%,14%); stroke:none;" transform="translate(0,766) scale(1,-1)">Notification de retard envoyée</text>
+			<text x="482" y="369" style="font-family: McdBody; font-size: 11px;fill: rgb(16%,17%,14%); stroke:none;" transform="translate(0,738) scale(1,-1)">Date de notification de retard</text>
+			<text x="482" y="355" style="font-family: McdBody; font-size: 11px;fill: rgb(16%,17%,14%); stroke:none;" transform="translate(0,710) scale(1,-1)">Date de création</text>
+			<text x="482" y="341" style="font-family: McdBody; font-size: 11px;fill: rgb(16%,17%,14%); stroke:none;" transform="translate(0,682) scale(1,-1)">Date de modification</text>
+			<rect x="935" y="508" width="210" height="82" style="stroke: rgb(40%,18%,24%); stroke-linecap: butt; stroke-width: 1.4; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<rect x="935" y="557" width="210" height="33" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(40%,18%,24%); fill-rule: evenodd;"/>
+			<text x="947" y="568" style="font-family: McdBold; font-size: 12px;fill: rgb(100%,100%,100%); stroke:none;" transform="translate(0,1136) scale(1,-1)">MENU (VUE 1)</text>
+			<text x="947" y="537" style="font-family: McdBody; font-size: 11px;fill: rgb(16%,17%,14%); stroke:none;" transform="translate(0,1074) scale(1,-1)">Identifiant menu</text>
+			<path d="M 947,535 L 1025.272949,535 Z" style="stroke: rgb(16%,17%,14%); stroke-linecap: butt; stroke-width: 1;"/>
+			<text x="947" y="520" style="font-family: McdBody; font-size: 11px;fill: rgb(16%,17%,14%); stroke:none;" transform="translate(0,1040) scale(1,-1)">Attributs : voir vue 1</text>
+			<rect x="330" y="535" width="100" height="48" rx="22" ry="22" style="stroke: rgb(32%,41%,34%); stroke-linecap: butt; stroke-width: 1.3; fill: rgb(96%,95%,92%); fill-rule: evenodd;"/>
+			<text x="357.38232421875" y="554" style="font-family: McdBold; font-size: 11px;fill: rgb(16%,17%,14%); stroke:none;" transform="translate(0,1108) scale(1,-1)">PASSER</text>
+			<polyline points="290 559, 330 559" style="stroke: rgb(32%,41%,34%); stroke-linecap: butt; stroke-width: 1.4; fill: None; fill-rule: evenodd;"/>
+			<text x="294" y="575" style="font-family: McdBold; font-size: 12px;fill: rgb(32%,41%,34%); stroke:none;" transform="translate(0,1150) scale(1,-1)">0,N</text>
+			<polyline points="430 559, 470 559" style="stroke: rgb(32%,41%,34%); stroke-linecap: butt; stroke-width: 1.4; fill: None; fill-rule: evenodd;"/>
+			<text x="437" y="575" style="font-family: McdBold; font-size: 12px;fill: rgb(32%,41%,34%); stroke:none;" transform="translate(0,1150) scale(1,-1)">1,1</text>
+			<rect x="780" y="535" width="120" height="48" rx="22" ry="22" style="stroke: rgb(32%,41%,34%); stroke-linecap: butt; stroke-width: 1.3; fill: rgb(96%,95%,92%); fill-rule: evenodd;"/>
+			<text x="804.553466796875" y="554" style="font-family: McdBold; font-size: 11px;fill: rgb(16%,17%,14%); stroke:none;" transform="translate(0,1108) scale(1,-1)">CONCERNER</text>
+			<polyline points="735 559, 780 559" style="stroke: rgb(32%,41%,34%); stroke-linecap: butt; stroke-width: 1.4; fill: None; fill-rule: evenodd;"/>
+			<text x="742" y="575" style="font-family: McdBold; font-size: 12px;fill: rgb(32%,41%,34%); stroke:none;" transform="translate(0,1150) scale(1,-1)">1,1</text>
+			<polyline points="900 559, 935 559" style="stroke: rgb(32%,41%,34%); stroke-linecap: butt; stroke-width: 1.4; fill: None; fill-rule: evenodd;"/>
+			<text x="902" y="575" style="font-family: McdBold; font-size: 12px;fill: rgb(32%,41%,34%); stroke:none;" transform="translate(0,1150) scale(1,-1)">0,N</text>
+			<rect x="45" y="95" width="245" height="133" style="stroke: rgb(40%,18%,24%); stroke-linecap: butt; stroke-width: 1.4; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<rect x="45" y="195" width="245" height="33" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(40%,18%,24%); fill-rule: evenodd;"/>
+			<text x="57" y="206" style="font-family: McdBold; font-size: 12px;fill: rgb(100%,100%,100%); stroke:none;" transform="translate(0,412) scale(1,-1)">AVIS</text>
+			<text x="57" y="175" style="font-family: McdBody; font-size: 11px;fill: rgb(16%,17%,14%); stroke:none;" transform="translate(0,350) scale(1,-1)">Identifiant avis</text>
+			<path d="M 57,173 L 127.318359,173 Z" style="stroke: rgb(16%,17%,14%); stroke-linecap: butt; stroke-width: 1;"/>
+			<text x="57" y="158" style="font-family: McdBody; font-size: 11px;fill: rgb(16%,17%,14%); stroke:none;" transform="translate(0,316) scale(1,-1)">Note</text>
+			<text x="57" y="141" style="font-family: McdBody; font-size: 11px;fill: rgb(16%,17%,14%); stroke:none;" transform="translate(0,282) scale(1,-1)">Commentaire</text>
+			<text x="57" y="124" style="font-family: McdBody; font-size: 11px;fill: rgb(16%,17%,14%); stroke:none;" transform="translate(0,248) scale(1,-1)">Statut de validation</text>
+			<text x="57" y="107" style="font-family: McdBody; font-size: 11px;fill: rgb(16%,17%,14%); stroke:none;" transform="translate(0,214) scale(1,-1)">Date de création</text>
+			<rect x="100" y="320" width="140" height="48" rx="22" ry="22" style="stroke: rgb(32%,41%,34%); stroke-linecap: butt; stroke-width: 1.3; fill: rgb(96%,95%,92%); fill-rule: evenodd;"/>
+			<text x="144.941162109375" y="339" style="font-family: McdBold; font-size: 11px;fill: rgb(16%,17%,14%); stroke:none;" transform="translate(0,678) scale(1,-1)">RÉDIGER</text>
+			<polyline points="170 443, 170 368" style="stroke: rgb(32%,41%,34%); stroke-linecap: butt; stroke-width: 1.4; fill: None; fill-rule: evenodd;"/>
+			<text x="182" y="414" style="font-family: McdBold; font-size: 12px;fill: rgb(32%,41%,34%); stroke:none;" transform="translate(0,828) scale(1,-1)">0,N</text>
+			<polyline points="170 320, 170 228" style="stroke: rgb(32%,41%,34%); stroke-linecap: butt; stroke-width: 1.4; fill: None; fill-rule: evenodd;"/>
+			<text x="182" y="243" style="font-family: McdBold; font-size: 12px;fill: rgb(32%,41%,34%); stroke:none;" transform="translate(0,486) scale(1,-1)">1,1</text>
+			<rect x="330" y="145" width="110" height="48" rx="22" ry="22" style="stroke: rgb(32%,41%,34%); stroke-linecap: butt; stroke-width: 1.3; fill: rgb(96%,95%,92%); fill-rule: evenodd;"/>
+			<text x="358.71923828125" y="164" style="font-family: McdBold; font-size: 11px;fill: rgb(16%,17%,14%); stroke:none;" transform="translate(0,328) scale(1,-1)">ÉVALUER</text>
+			<polyline points="290 169, 330 169" style="stroke: rgb(32%,41%,34%); stroke-linecap: butt; stroke-width: 1.4; fill: None; fill-rule: evenodd;"/>
+			<text x="293" y="184" style="font-family: McdBold; font-size: 12px;fill: rgb(32%,41%,34%); stroke:none;" transform="translate(0,368) scale(1,-1)">1,1</text>
+			<polyline points="470 350, 455 350, 455 169, 440 169" style="stroke: rgb(32%,41%,34%); stroke-linecap: butt; stroke-width: 1.4; fill: None; fill-rule: evenodd;"/>
+			<text x="420" y="363" style="font-family: McdBold; font-size: 12px;fill: rgb(32%,41%,34%); stroke:none;" transform="translate(0,726) scale(1,-1)">0,1</text>
+			<rect x="825" y="95" width="290" height="99" style="stroke: rgb(40%,18%,24%); stroke-linecap: butt; stroke-width: 1.4; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<rect x="825" y="161" width="290" height="33" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(40%,18%,24%); fill-rule: evenodd;"/>
+			<text x="837" y="172" style="font-family: McdBold; font-size: 12px;fill: rgb(100%,100%,100%); stroke:none;" transform="translate(0,344) scale(1,-1)">ÉVÉNEMENT DE STATUT</text>
+			<text x="837" y="141" style="font-family: McdBody; font-size: 11px;fill: rgb(16%,17%,14%); stroke:none;" transform="translate(0,282) scale(1,-1)">Identifiant événement</text>
+			<path d="M 837,139 L 942.182129,139 Z" style="stroke: rgb(16%,17%,14%); stroke-linecap: butt; stroke-width: 1;"/>
+			<text x="837" y="124" style="font-family: McdBody; font-size: 11px;fill: rgb(16%,17%,14%); stroke:none;" transform="translate(0,248) scale(1,-1)">Statut</text>
+			<text x="837" y="107" style="font-family: McdBody; font-size: 11px;fill: rgb(16%,17%,14%); stroke:none;" transform="translate(0,214) scale(1,-1)">Date de modification</text>
+			<rect x="850" y="320" width="185" height="48" rx="22" ry="22" style="stroke: rgb(32%,41%,34%); stroke-linecap: butt; stroke-width: 1.3; fill: rgb(96%,95%,92%); fill-rule: evenodd;"/>
+			<text x="907.660400390625" y="339" style="font-family: McdBold; font-size: 11px;fill: rgb(16%,17%,14%); stroke:none;" transform="translate(0,678) scale(1,-1)">CONSERVER</text>
+			<polyline points="735 410, 942 410, 942 368" style="stroke: rgb(32%,41%,34%); stroke-linecap: butt; stroke-width: 1.4; fill: None; fill-rule: evenodd;"/>
+			<text x="746" y="423" style="font-family: McdBold; font-size: 12px;fill: rgb(32%,41%,34%); stroke:none;" transform="translate(0,846) scale(1,-1)">0,N</text>
+			<polyline points="942 320, 942 194" style="stroke: rgb(32%,41%,34%); stroke-linecap: butt; stroke-width: 1.4; fill: None; fill-rule: evenodd;"/>
+			<text x="954" y="209" style="font-family: McdBold; font-size: 12px;fill: rgb(32%,41%,34%); stroke:none;" transform="translate(0,418) scale(1,-1)">1,1</text>
+			<text x="500" y="265" style="font-family: McdBold; font-size: 12px;fill: rgb(40%,18%,24%); stroke:none;" transform="translate(0,530) scale(1,-1)">Contraintes complémentaires</text>
+			<text x="500" y="242" style="font-family: McdBody; font-size: 11px;fill: rgb(16%,17%,14%); stroke:none;" transform="translate(0,484) scale(1,-1)">Un seul avis au maximum par commande.</text>
+			<text x="500" y="223" style="font-family: McdBody; font-size: 11px;fill: rgb(16%,17%,14%); stroke:none;" transform="translate(0,446) scale(1,-1)">L’auteur de l’avis doit être le client</text>
+			<text x="500" y="204" style="font-family: McdBody; font-size: 11px;fill: rgb(16%,17%,14%); stroke:none;" transform="translate(0,408) scale(1,-1)">de la commande, et celle-ci doit être terminée.</text>
+			<text x="500" y="165" style="font-family: McdBody; font-size: 11px;fill: rgb(16%,17%,14%); stroke:none;" transform="translate(0,330) scale(1,-1)">L’auteur des changements de statut</text>
+			<text x="500" y="146" style="font-family: McdBody; font-size: 11px;fill: rgb(16%,17%,14%); stroke:none;" transform="translate(0,292) scale(1,-1)">est représenté dans la vue 3.</text>
+		</g>
+	</g>
+</svg>

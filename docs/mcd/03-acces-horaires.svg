@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE svg
+  PUBLIC '-//W3C//DTD SVG 1.0//EN'
+  'http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd'>
+<svg width="1190.5511811023623" height="841.8897637795277" preserveAspectRatio="xMinYMin meet" viewBox="0 0 1190 841" xmlns="http://www.w3.org/2000/svg" version="1.0" fill-rule="evenodd" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<title>...</title>
+	<desc>...</desc>
+	<clipPath id="clip">
+		<rect x="0" y="0" width="1190.5511811023623" height="841.8897637795277"/>
+	</clipPath>
+	<g id="group" transform="scale(1,-1) translate(0,-841)" style="clip-path: url(#clip)">
+		<g transform="">
+			<rect x="0" y="0" width="1190.5511811023623" height="841.8897637795277" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="45" y="790" style="font-family: McdBold; font-size: 12px;fill: rgb(40%,18%,24%); stroke:none;" transform="translate(0,1580) scale(1,-1)">VITE &amp; GOURMAND  /  MODÈLE CONCEPTUEL DE DONNÉES</text>
+			<text x="45" y="748" style="font-family: McdBold; font-size: 29px;fill: rgb(16%,17%,14%); stroke:none;" transform="translate(0,1496) scale(1,-1)">Accès, traçabilité et horaires</text>
+			<text x="45" y="721" style="font-family: McdBody; font-size: 12px;fill: rgb(16%,17%,14%); stroke:none;" transform="translate(0,1442) scale(1,-1)">Les entités répétées entre les vues représentent les mêmes objets ; aucune duplication de données n’est prévue.</text>
+			<path d="M 45,48 L 1145.551181,48 Z" style="stroke: rgb(32%,41%,34%); stroke-linecap: butt; stroke-width: 1;"/>
+			<text x="45" y="28" style="font-family: McdBody; font-size: 10px;fill: rgb(16%,17%,14%); stroke:none;" transform="translate(0,56) scale(1,-1)">01 octobre 2026 | Identifiants soulignés | Cardinalités près de chaque entité</text>
+			<text x="1126.0931732898623" y="28" style="font-family: McdBody; font-size: 10px;fill: rgb(16%,17%,14%); stroke:none;" transform="translate(0,56) scale(1,-1)">3 / 3</text>
+			<rect x="65" y="455" width="270" height="82" style="stroke: rgb(40%,18%,24%); stroke-linecap: butt; stroke-width: 1.4; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<rect x="65" y="504" width="270" height="33" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(40%,18%,24%); fill-rule: evenodd;"/>
+			<text x="77" y="515" style="font-family: McdBold; font-size: 12px;fill: rgb(100%,100%,100%); stroke:none;" transform="translate(0,1030) scale(1,-1)">UTILISATEUR (VUE 2)</text>
+			<text x="77" y="484" style="font-family: McdBody; font-size: 11px;fill: rgb(16%,17%,14%); stroke:none;" transform="translate(0,968) scale(1,-1)">Identifiant utilisateur</text>
+			<path d="M 77,482 L 174.834473,482 Z" style="stroke: rgb(16%,17%,14%); stroke-linecap: butt; stroke-width: 1;"/>
+			<text x="77" y="467" style="font-family: McdBody; font-size: 11px;fill: rgb(16%,17%,14%); stroke:none;" transform="translate(0,934) scale(1,-1)">Attributs : voir vue 2</text>
+			<rect x="825" y="438" width="300" height="99" style="stroke: rgb(40%,18%,24%); stroke-linecap: butt; stroke-width: 1.4; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<rect x="825" y="504" width="300" height="33" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(40%,18%,24%); fill-rule: evenodd;"/>
+			<text x="837" y="515" style="font-family: McdBold; font-size: 12px;fill: rgb(100%,100%,100%); stroke:none;" transform="translate(0,1030) scale(1,-1)">ÉVÉNEMENT DE STATUT</text>
+			<text x="837" y="484" style="font-family: McdBody; font-size: 11px;fill: rgb(16%,17%,14%); stroke:none;" transform="translate(0,968) scale(1,-1)">Identifiant événement</text>
+			<path d="M 837,482 L 942.182129,482 Z" style="stroke: rgb(16%,17%,14%); stroke-linecap: butt; stroke-width: 1;"/>
+			<text x="837" y="467" style="font-family: McdBody; font-size: 11px;fill: rgb(16%,17%,14%); stroke:none;" transform="translate(0,934) scale(1,-1)">Statut</text>
+			<text x="837" y="450" style="font-family: McdBody; font-size: 11px;fill: rgb(16%,17%,14%); stroke:none;" transform="translate(0,900) scale(1,-1)">Date de modification</text>
+			<rect x="485" y="475" width="160" height="48" rx="22" ry="22" style="stroke: rgb(32%,41%,34%); stroke-linecap: butt; stroke-width: 1.3; fill: rgb(96%,95%,92%); fill-rule: evenodd;"/>
+			<text x="538.1123046875" y="494" style="font-family: McdBold; font-size: 11px;fill: rgb(16%,17%,14%); stroke:none;" transform="translate(0,988) scale(1,-1)">MODIFIER</text>
+			<polyline points="335 499, 485 499" style="stroke: rgb(32%,41%,34%); stroke-linecap: butt; stroke-width: 1.4; fill: None; fill-rule: evenodd;"/>
+			<text x="355" y="512" style="font-family: McdBold; font-size: 12px;fill: rgb(32%,41%,34%); stroke:none;" transform="translate(0,1024) scale(1,-1)">0,N</text>
+			<polyline points="645 499, 825 499" style="stroke: rgb(32%,41%,34%); stroke-linecap: butt; stroke-width: 1.4; fill: None; fill-rule: evenodd;"/>
+			<text x="780" y="512" style="font-family: McdBold; font-size: 12px;fill: rgb(32%,41%,34%); stroke:none;" transform="translate(0,1024) scale(1,-1)">0,1</text>
+			<rect x="65" y="105" width="270" height="133" style="stroke: rgb(40%,18%,24%); stroke-linecap: butt; stroke-width: 1.4; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<rect x="65" y="205" width="270" height="33" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(40%,18%,24%); fill-rule: evenodd;"/>
+			<text x="77" y="216" style="font-family: McdBold; font-size: 12px;fill: rgb(100%,100%,100%); stroke:none;" transform="translate(0,432) scale(1,-1)">JETON DE RÉINITIALISATION</text>
+			<text x="77" y="185" style="font-family: McdBody; font-size: 11px;fill: rgb(16%,17%,14%); stroke:none;" transform="translate(0,370) scale(1,-1)">Identifiant jeton</text>
+			<path d="M 77,183 L 151.609863,183 Z" style="stroke: rgb(16%,17%,14%); stroke-linecap: butt; stroke-width: 1;"/>
+			<text x="77" y="168" style="font-family: McdBody; font-size: 11px;fill: rgb(16%,17%,14%); stroke:none;" transform="translate(0,336) scale(1,-1)">Empreinte du jeton</text>
+			<text x="77" y="151" style="font-family: McdBody; font-size: 11px;fill: rgb(16%,17%,14%); stroke:none;" transform="translate(0,302) scale(1,-1)">Date d’expiration</text>
+			<text x="77" y="134" style="font-family: McdBody; font-size: 11px;fill: rgb(16%,17%,14%); stroke:none;" transform="translate(0,268) scale(1,-1)">Utilisé</text>
+			<text x="77" y="117" style="font-family: McdBody; font-size: 11px;fill: rgb(16%,17%,14%); stroke:none;" transform="translate(0,234) scale(1,-1)">Date de création</text>
+			<rect x="110" y="320" width="180" height="48" rx="22" ry="22" style="stroke: rgb(32%,41%,34%); stroke-linecap: butt; stroke-width: 1.3; fill: rgb(96%,95%,92%); fill-rule: evenodd;"/>
+			<text x="175.859619140625" y="339" style="font-family: McdBold; font-size: 11px;fill: rgb(16%,17%,14%); stroke:none;" transform="translate(0,678) scale(1,-1)">DÉTENIR</text>
+			<polyline points="200 455, 200 368" style="stroke: rgb(32%,41%,34%); stroke-linecap: butt; stroke-width: 1.4; fill: None; fill-rule: evenodd;"/>
+			<text x="212" y="425" style="font-family: McdBold; font-size: 12px;fill: rgb(32%,41%,34%); stroke:none;" transform="translate(0,850) scale(1,-1)">0,N</text>
+			<polyline points="200 320, 200 238" style="stroke: rgb(32%,41%,34%); stroke-linecap: butt; stroke-width: 1.4; fill: None; fill-rule: evenodd;"/>
+			<text x="212" y="253" style="font-family: McdBold; font-size: 12px;fill: rgb(32%,41%,34%); stroke:none;" transform="translate(0,506) scale(1,-1)">1,1</text>
+			<rect x="825" y="105" width="300" height="116" style="stroke: rgb(40%,18%,24%); stroke-linecap: butt; stroke-width: 1.4; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<rect x="825" y="188" width="300" height="33" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(40%,18%,24%); fill-rule: evenodd;"/>
+			<text x="837" y="199" style="font-family: McdBold; font-size: 12px;fill: rgb(100%,100%,100%); stroke:none;" transform="translate(0,398) scale(1,-1)">HORAIRE</text>
+			<text x="837" y="168" style="font-family: McdBody; font-size: 11px;fill: rgb(16%,17%,14%); stroke:none;" transform="translate(0,336) scale(1,-1)">Jour</text>
+			<path d="M 837,166 L 858.398438,166 Z" style="stroke: rgb(16%,17%,14%); stroke-linecap: butt; stroke-width: 1;"/>
+			<text x="837" y="151" style="font-family: McdBody; font-size: 11px;fill: rgb(16%,17%,14%); stroke:none;" transform="translate(0,302) scale(1,-1)">Heure d’ouverture</text>
+			<text x="837" y="134" style="font-family: McdBody; font-size: 11px;fill: rgb(16%,17%,14%); stroke:none;" transform="translate(0,268) scale(1,-1)">Heure de fermeture</text>
+			<text x="837" y="117" style="font-family: McdBody; font-size: 11px;fill: rgb(16%,17%,14%); stroke:none;" transform="translate(0,234) scale(1,-1)">Fermé</text>
+			<text x="65" y="644" style="font-family: McdBold; font-size: 15px;fill: rgb(40%,18%,24%); stroke:none;" transform="translate(0,1288) scale(1,-1)">Lecture des cardinalités</text>
+			<text x="65" y="618" style="font-family: McdBody; font-size: 13px;fill: rgb(16%,17%,14%); stroke:none;" transform="translate(0,1236) scale(1,-1)">0,N : aucun ou plusieurs  |  1,1 : exactement un  |  0,1 : aucun ou un</text>
+			<text x="410" y="395" style="font-family: McdBody; font-size: 12px;fill: rgb(16%,17%,14%); stroke:none;" transform="translate(0,790) scale(1,-1)">L’auteur d’un événement peut être absent :</text>
+			<text x="410" y="375" style="font-family: McdBody; font-size: 12px;fill: rgb(16%,17%,14%); stroke:none;" transform="translate(0,750) scale(1,-1)">par exemple après la suppression d’un compte.</text>
+			<text x="410" y="320" style="font-family: McdBody; font-size: 12px;fill: rgb(16%,17%,14%); stroke:none;" transform="translate(0,640) scale(1,-1)">Les horaires décrivent une seule entreprise.</text>
+			<text x="410" y="300" style="font-family: McdBody; font-size: 12px;fill: rgb(16%,17%,14%); stroke:none;" transform="translate(0,600) scale(1,-1)">Chaque jour est unique ; aucun lien artificiel</text>
+			<text x="410" y="280" style="font-family: McdBody; font-size: 12px;fill: rgb(16%,17%,14%); stroke:none;" transform="translate(0,560) scale(1,-1)">avec les commandes n’est ajouté.</text>
+			<text x="410" y="219" style="font-family: McdBody; font-size: 12px;fill: rgb(16%,17%,14%); stroke:none;" transform="translate(0,438) scale(1,-1)">Firebase reçoit des statistiques dérivées</text>
+			<text x="410" y="199" style="font-family: McdBody; font-size: 12px;fill: rgb(16%,17%,14%); stroke:none;" transform="translate(0,398) scale(1,-1)">des commandes, sans identité des clients.</text>
+			<text x="410" y="179" style="font-family: McdBody; font-size: 12px;fill: rgb(16%,17%,14%); stroke:none;" transform="translate(0,358) scale(1,-1)">Ce stockage ne crée pas de nouvelle entité métier.</text>
+			<text x="410" y="117" style="font-family: McdBold; font-size: 11px;fill: rgb(40%,18%,24%); stroke:none;" transform="translate(0,234) scale(1,-1)">Règles et correspondance SQL : docs/mcd.md</text>
+		</g>
+	</g>
+</svg>
