@@ -1,6 +1,7 @@
 'use strict';
 document.documentElement.classList.add('js-enabled');
 
+// La navigation reste visible sans JS ; aria-expanded reflète son état pour les lecteurs d'écran.
 const burger = document.querySelector('.burger-menu');
 const navigation = document.querySelector('#main-navigation');
 if (burger && navigation) {
@@ -15,6 +16,7 @@ if (burger && navigation) {
     document.addEventListener('keydown', (event) => {
         if (event.key === 'Escape' && navigation.classList.contains('menu-open')) {
             closeNavigation();
+            // Rendre le focus au bouton évite de le laisser dans une navigation masquée.
             burger.focus();
         }
     });

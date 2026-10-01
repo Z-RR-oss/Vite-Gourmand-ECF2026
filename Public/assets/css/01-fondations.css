@@ -1,4 +1,5 @@
 /* Vite & Gourmand · Une maison bordelaise, une table à partager. */
+/* Modifier ces variables pour faire évoluer le thème sans multiplier les valeurs locales. */
 :root {
     --color-primary: #672f3e;
     --color-primary-dark: #49202d;

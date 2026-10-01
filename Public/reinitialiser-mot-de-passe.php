@@ -20,6 +20,7 @@ $reset = null;
 // --------------------------------------------------
 
 if ($token !== '') {
+    // Seule l'empreinte est conservée en base : le lien reçu ne peut pas être reconstruit depuis SQL.
     $tokenHash =
         hash(
             'sha256',
