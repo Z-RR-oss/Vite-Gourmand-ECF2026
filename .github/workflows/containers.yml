@@ -1,0 +1,49 @@
+name: Recette conteneurs
+on:
+  push:
+    paths:
+      - 'Dockerfile'
+      - '.dockerignore'
+      - 'compose.yaml'
+      - 'docker/**'
+      - '.github/workflows/containers.yml'
+      - 'composer.*'
+      - 'Config/**'
+      - 'Controllers/**'
+      - 'Services/**'
+      - 'Repositories/**'
+      - 'Templates/**'
+      - 'Public/**'
+      - 'tests/**'
+      - 'vite_gourmand.sql.sql'
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  containers:
+    # Le runner standard est gratuit pour ce dépôt public ; aucun service payant.
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Valider la configuration et construire
+        run: |
+          docker compose config --quiet
+          docker compose build --pull
+          docker compose up --wait --wait-timeout 180
+      - name: Exécuter les suites métier isolées
+        run: |
+          docker compose exec -T web php tests/orders.php
+          docker compose exec -T web php tests/catalogue.php
+          docker compose exec -T web php tests/statistics.php
+      - name: Vérifier HTTP, isolation des fichiers et SMTP capturé
+        run: python3 tests/containers_smoke.py
+      - name: Journaux en cas d'échec
+        if: failure()
+        run: docker compose logs --tail=80
+      - name: Nettoyer les volumes jetables du runner
+        if: always()
+        run: docker compose down --volumes

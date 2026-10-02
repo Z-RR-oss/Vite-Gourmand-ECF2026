@@ -1,0 +1,26 @@
+# Contexte fermé par défaut, y compris var/, .git/ et documents personnels.
+**
+!Dockerfile
+!composer.json
+!composer.lock
+!Config/
+!Config/**
+!Controllers/
+!Controllers/**
+!Templates/
+!Templates/**
+!Services/
+!Services/**
+!Repositories/
+!Repositories/**
+!Scripts/
+!Scripts/**
+!Public/
+!Public/**
+!docker/
+!docker/**
+Config/*.local.php
+Public/assets/uploads/**
+!Public/assets/uploads/.htaccess
+!Public/assets/uploads/.gitkeep
+**/.DS_Store
