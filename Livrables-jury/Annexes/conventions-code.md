@@ -3,7 +3,8 @@
 ## Responsabilités
 
 - `Public/` traite les requêtes HTTP et affiche les pages. Les gardes d’accès précèdent toute mutation.
-- `Templates/` contient la présentation partagée et le catalogue.
+- `Controllers/` coordonne les formulaires de création/modification du catalogue ; les quatre routes publiques sont des points d’entrée minces.
+- `Templates/` contient la présentation partagée, le catalogue, les formulaires et la page d’erreur.
 - `Config/` initialise les connexions, sessions, CSRF et contrôles d’accès.
 - `Services/` porte les validations, transactions, prix et notifications.
 - `Repositories/` isole le transport Firebase.
@@ -75,3 +76,9 @@ Ne pas formater séparément le CSS généré. Les noms de classe et l’ordre d
 ## Vérification avant livraison
 
 Relire `git diff --check`, contrôler la syntaxe PHP, vérifier le CSS généré et exécuter les [suites de recette](plan-tests.md) sur une base jetable. Tester les pages concernées sur ordinateur et mobile. Les images sont décrites dans [visuels-menus.md](visuels-menus.md).
+
+## Contrat des formulaires du catalogue
+
+`FormValidationException` transporte les erreurs par champ. Les contrôleurs conservent les saisies avec `inputText()`, affichent les erreurs avec HTTP 422, puis redirigent en 303 après succès. Les vues échappent les valeurs à la sortie. Ne pas introduire de requête SQL dans ces vues. `CatalogueService` conserve ensemble le plat et ses allergènes ; toute exception annule la transaction.
+
+Commande commune : `python3 Scripts/verifier-qualite.py`. L’option `--integration` exige une base `_test_` réimportée et les services locaux du plan de tests. La recette axe utilise exclusivement `tests/accessibility-router.php` sur loopback et n’entre pas dans l’archive d’exploitation.

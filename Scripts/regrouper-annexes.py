@@ -67,6 +67,7 @@ Markdown ont été adaptés pour fonctionner depuis ce dossier.
 - [Accessibilité](accessibilite.md), [rapport final](rapport-final.md), [checklist](checklist-finale.md).
 - [Aide à la copie officielle](preparation-copie-ecf.md), [remise au jury](remise-jury.md), [démonstration](parcours-jury.md).
 - [Mockups Figma](figma-mockups.md), [captures de recette](captures/).
+- [Revue de qualité du 2 octobre](revue-qualite-20261002.md), [décisions techniques](decisions-techniques.md), [recette axe](recette-axe-20261002.json).
 - [PowerPoint et script](../Presentation/README.md).
 
 Les rapports JSON de recette sont également présents dans ce dossier. Les

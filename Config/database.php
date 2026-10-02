@@ -33,6 +33,8 @@ try {
     refreshAuthentication($pdo);
 } catch (PDOException $exception) {
     error_log('Connexion base de données indisponible (code ' . $exception->getCode() . ').');
-    http_response_code(503);
-    exit('Le service est temporairement indisponible. Réessayez dans quelques instants.');
+    if (PHP_SAPI === 'cli') {
+        throw new RuntimeException('Base de données indisponible.', 0, $exception);
+    }
+    abortRequest(503, 'Le service est temporairement indisponible. Réessayez dans quelques instants.');
 }

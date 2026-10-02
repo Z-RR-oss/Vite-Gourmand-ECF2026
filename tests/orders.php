@@ -8,7 +8,7 @@ if (!str_contains((string) getenv('DB_NAME'), '_test_')) {
 require __DIR__ . '/../Config/database.php';
 require __DIR__ . '/../Services/OrderService.php';
 
-$input = ['adresse_prestation' => 'Adresse fictive', 'lieu_prestation' => 'Bordeaux',
+$input = ['adresse_prestation' => 'Adresse fictive', 'lieu_prestation' => 'Mérignac',
     'date_prestation' => date('Y-m-d', strtotime('+30 days')), 'heure_prestation' => '12:00',
     'nb_personnes' => 9, 'distance_km' => 20];
 if (($argv[1] ?? '') === '--worker') {
@@ -103,7 +103,7 @@ try {
     }
     sort($outputs);
     check($outputs === ['created', 'sold-out'], 'dernière disponibilité : une seule commande concurrente');
-    check((int)$pdo->query("SELECT stock_disponible FROM menus WHERE id=$menuId")->fetchColumn() === 0,'stock concurrent jamais négatif');
+    check((int)$pdo->query("SELECT stock_disponible FROM menus WHERE id=$menuId")->fetchColumn() === 0, 'stock concurrent jamais négatif');
     echo "$count assertions métier réussies.\n";
 } finally {
     $pdo->exec("DELETE FROM commandes WHERE menu_id=$menuId");

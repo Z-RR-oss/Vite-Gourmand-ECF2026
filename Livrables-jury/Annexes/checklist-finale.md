@@ -40,7 +40,7 @@ Sources : Prompt_Maitre_Vite_Gourmand_Transfert_IA.pdf (12 pages) relu intégral
 | Transitions cohérentes et historique atomique | OK | Services/OrderRules.php; Services/OrderService.php | Chaîne complète, saut refusé, états finaux | Vérifié localement. |
 | Annulation employé après contact et motif | OK | Public/annuler-commande-employe.php | Motif/contact requis; SQL conservé | Vérifié localement. |
 | Livraison sans prêt -> terminée | OK | Services/OrderService.php | Assertion métier dédiée | Vérifié localement. |
-| Prêt : mail immédiat, délai dix jours,600 € | OK | Services/OrderNotifications.php; Services/OrderRules.php | SMTP capturé, frontière dix jours et week-ends | Jours ouvrés lundi-vendredi sans fériés, hors jour initial. |
+| Prêt : mail immédiat, délai dix jours,600 € | OK | Services/OrderNotifications.php; Services/OrderRules.php | SMTP capturé, frontière dix jours et week-ends | Lundi-vendredi hors fériés nationaux et jour initial ; fixtures officielles 2026/2027 vérifiées. |
 | Retour matériel clôture, date et frais | OK | Public/retour-materiel.php; Services/OrderService.php | Retour HTTP, retard et double retour | Vérifié localement. |
 | Rappel retard idempotent en exécution normale | OK | Scripts/verifier-retards-materiel.php | Deux exécutions, un email et marqueur | Crash SMTP/commit : fenêtre de doublon documentée. |
 | CRUD menus, stock, délai, actif, suppression sûre | OK | Public/ajouter-menu.php; Public/modifier-menu.php; Public/supprimer-menu.php | Création/modification/suppression; référencé -> désactivé | Vérifié localement. |
@@ -64,7 +64,7 @@ Sources : Prompt_Maitre_Vite_Gourmand_Transfert_IA.pdf (12 pages) relu intégral
 | Design system et cohérence des pages principales | OK | Public/style.css; Templates/layout.php; docs/captures | Revue visuelle des 22 pages | Vérifié localement. |
 | Responsive mobile/tablette/desktop | OK | docs/recette-responsive.json | 72 mesures initiales ; 48 mesures complémentaires à320/390/768/1440 et texte agrandi | Vérifié localement. |
 | Accessibilité pragmatique : lang,h1,labels,alt,focus,clavier | OK | Templates/layout.php; Public/style.css; Public/scripts.js | Lien évitement, focus visible, Menu Entrée/Échap, mesures DOM | Contrastes principaux >4,5:1; pas de certification RGAA exhaustive. |
-| Évaluation RGAA exhaustive, lecteur d’écran et zoom navigateur | À FAIRE | docs/accessibilite.md | 473 contrôles HTML ciblés et mesures de présentation effectués ; VoiceOver bloqué par les permissions Mac | Aucun taux de conformité déclaré. |
+| Évaluation RGAA exhaustive, lecteur d’écran et zoom navigateur | À FAIRE | docs/accessibilite.md | 470 contrôles HTML ciblés et 24 états axe sans violation détectée au 2 octobre ; mesures de présentation effectuées ; VoiceOver bloqué par les permissions Mac | Aucun taux de conformité déclaré. |
 | JavaScript séparé, fetch et absence erreur console observée | OK | Public/scripts.js; Public/assets/js/statistics.js | node --check et journaux navigateur vides | Vérifié localement. |
 | Architecture progressive, services POO et validations partagées | OK | Services; Repositories; docs/documentation-technique.md | Revue responsabilités et diagramme classes | Vérifié localement. |
 | Composer et lock conservés, PHPMailer | OK | composer.json; composer.lock | validate réussi; audit sans vulnérabilité signalée | Avertissement licence non renseignée; aucun choix juridique inventé. |

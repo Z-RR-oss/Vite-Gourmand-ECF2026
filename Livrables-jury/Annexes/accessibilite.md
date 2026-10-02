@@ -1,5 +1,11 @@
 # Accessibilité : contrôles et limites
 
+## Actualisation du 2 octobre 2026
+
+La [revue de qualité](revue-qualite-20261002.md) décrit les corrections, leur recette et les limites restantes. Les résultats datés ci-dessous restent historiques ; les nouveaux résultats ne constituent pas une certification RGAA.
+
+Axe-core 4.13.0 : 24 états sans violation détectée (18 ordinateur, 6 mobile), après correction du bandeau hors repère. Le [JSON](recette-axe-20261002.json) conserve les points à examiner manuellement. Le résumé d’erreurs et ses liens ont été testés au clavier à 390 px. VoiceOver demeure bloqué par les permissions Mac ; le vrai zoom navigateur reste à vérifier.
+
 Revue du 1er octobre 2026. Référence : [critères et tests officiels RGAA 4.1.2](https://accessibilite.numerique.gouv.fr/methode/criteres-et-tests/). Ce rapport documente les contrôles effectués ; il ne constitue ni un audit exhaustif des 106 critères, ni un taux de conformité.
 
 ## Périmètre et méthode
@@ -61,3 +67,9 @@ Une validation finale RGAA nécessite encore la restitution avec technologies d'
 ## Essai VoiceOver
 
 Le 1er octobre 2026, la propriétaire a autorisé un essai temporaire avec VoiceOver. L’accès à l’utilitaire a été refusé par le contrôle du Mac (« Computer Use permissions are not granted »). Aucune activation ni restitution vocale n’a pu être confirmée ; le test reste non exécuté. Les contrôles de structure et de clavier ci-dessus ne sont pas présentés comme un essai de lecteur d’écran.
+
+## Reproduire le scan axe du 2 octobre
+
+Utiliser le fichier `axe.min.js` du paquet officiel npm `axe-core@4.13.0`, placé dans `var/tools/axe.min.js` (outil de développement exclu du dépôt). La version et l’intégrité du paquet ont été vérifiées lors du téléchargement de recette. Démarrer le serveur loopback avec la configuration de base fictive/SMTP du plan de tests et le routeur `tests/accessibility-router.php`. Ouvrir les chemins du rapport JSON avec le rôle approprié : le résultat est ajouté dans un bloc « Résultat de la recette axe » après chaque chargement. Le script `tests/axe-runner.js` sélectionne les règles WCAG 2 A/AA, 2.1 A/AA et les bonnes pratiques.
+
+Le routeur refuse les accès non locaux et les environnements sans `_test_`. Il ne doit jamais être utilisé comme serveur de production ; l’archive d’exploitation exclut `tests/` et `var/tools/`. Les résultats « incomplete » restent des demandes d’examen manuel, même quand `violations` est vide.
