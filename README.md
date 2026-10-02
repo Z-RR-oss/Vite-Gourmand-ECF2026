@@ -4,6 +4,8 @@ Application de traiteur bordelais : catalogue filtrable, commandes, suivi, avis 
 
 **Site de démonstration publié le 30 septembre 2026 : [https://vite-gourmandecf2026.alwaysdata.net](https://vite-gourmandecf2026.alwaysdata.net).** Hébergement alwaysdata Free (0 €), PHP 8.2, MySQL et Firebase opérationnels; 29 contrôles HTTPS/authentification réussis. Les deux tâches sont installées et le test SMTP autorisé est indiqué « Envoyé » par alwaysdata. La réception de l’email est confirmée par la propriétaire et les deux scripts sont validés par le planificateur. La version finale est fusionnée dans develop puis main ; main est la branche de livraison. Les mots de passe publics ont été remplacés; ils sont remis séparément dans un fichier privé. Voir la [checklist](docs/checklist-finale.md) et le [rapport](docs/rapport-final.md).
 
+La [revue de qualité du 2 octobre](docs/revue-qualite-20261002.md) présente les formulaires mutualisés, les validations renforcées, le calendrier des fériés et leurs preuves de recette.
+
 ## Installation locale
 
 Prérequis : PHP >=8.2, pdo_mysql, mbstring, curl, openssl, gd; MariaDB/MySQL et Composer 2. PHP et SQL doivent utiliser Europe/Paris. Environnement de recette : XAMPP/macOS.
@@ -56,7 +58,7 @@ Sans configuration, les statistiques répondent 503 avec explication. Aucun JSON
 
 ## Métier, architecture et sécurité
 
-Prix du menu = forfait du minimum de convives. Prix proportionnel, remise 10 % dès minimum + 5, livraison hors Bordeaux 5 € + 0,59 €/km. Distance déclarative (0 à Bordeaux), contrôlée par l'équipe. Jours ouvrés : lundi-vendredi, hors jour de départ, sans jours fériés. Stock = nombre de commandes disponibles.
+Prix du menu = forfait du minimum de convives. Prix proportionnel, remise 10 % dès minimum + 5, livraison hors Bordeaux 5 € + 0,59 €/km. Distance déclarative contrôlée par l’équipe : le serveur impose 0 à Bordeaux et une valeur positive ailleurs. Jours ouvrés : lundi-vendredi, hors jour de départ et jours fériés nationaux de France métropolitaine. Stock = nombre de commandes disponibles.
 
 `Public/` : pages/contrôleurs; `Templates/` : présentation commune; `Config/` : connexions, sessions, CSRF, rôles; `Services/` : métier et transactions; `Repositories/` : accès Firebase; `Scripts/` : tâches CLI. SQL garde le métier; Firebase reçoit des agrégats sans données clients.
 

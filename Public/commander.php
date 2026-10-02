@@ -3,6 +3,8 @@ require_once __DIR__ . '/../Config/database.php';
 require_once __DIR__ . '/../Services/OrderService.php';
 require_once __DIR__ . '/../Services/OrderNotifications.php';
 requireLogin();
+requireFormMethod();
+require_once __DIR__ . '/../Services/FormValidation.php';
 $id = positiveId($_GET['id'] ?? null);
 $stmt = $pdo->prepare('SELECT * FROM menus WHERE id = ?');
 $stmt->execute([$id]);
@@ -13,6 +15,7 @@ if (!$menu || !(int) $menu['actif'] || (int) $menu['stock_disponible'] <= 0) {
 $stmt = $pdo->prepare('SELECT nom, prenom, email, gsm, adresse FROM users WHERE id = ?');
 $stmt->execute([$_SESSION['user_id']]);
 $user = $stmt->fetch(PDO::FETCH_ASSOC);
+$orderInput = ['adresse_prestation' => $user['adresse'], 'nb_personnes' => $menu['nb_personnes_min'], 'distance_km' => 0];
 $adressePrestation = $user['adresse'];
 $datePrestation = $heurePrestation = $lieuPrestation = $erreur = '';
 $nbPersonnes = (int) $menu['nb_personnes_min'];
@@ -32,7 +35,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
             $input = $quote['input'];
         }
+        foreach (['adresse_prestation', 'lieu_prestation', 'date_prestation', 'heure_prestation', 'nb_personnes', 'distance_km'] as $field) {
+            $orderInput[$field] = inputText($input, $field);
+        }
         $data = validateOrderInput($input, $menu);
+        $orderInput = $data;
         $adressePrestation = $data['adresse_prestation'];
         $datePrestation = $data['date_prestation'];
         $heurePrestation = $data['heure_prestation'];
@@ -68,254 +75,45 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <?php require_once __DIR__ . '/../Templates/layout.php';
 renderHeader('Commander'); ?>
 <section class="content-panel">
-    <h1>
-        <?= htmlspecialchars($menu['titre']) ?>
-    </h1>
-    <p>
-        <?= htmlspecialchars($menu['description']) ?>
-    </p>
-    <div class="infos-menu">
-        <p>
-            <strong>
-                Prix de base :
-            </strong>
-            <?= number_format($menu['prix'], 2, ',', ' ') ?>
-
-            €
-
-        </p>
-        <p>
-            <strong>
-                Minimum :
-            </strong>
-            <?= (int) $menu['nb_personnes_min'] ?>
-
-            personnes
-
-        </p>
-        <p class="stock">
-
-            Commandes encore disponibles :
-
-            <?= (int) $menu['stock_disponible'] ?>
-        </p>
-        <p>
-
-            Délai minimum de commande :
-
-            <?= (int) $menu[ 'delai_commande_heures' ] ?>
-
-            heure(s)
-
-        </p>
-    </div>
-    <?php if ($erreur !== ''): ?>
-        <p class="erreur" role="alert">
-            <?= htmlspecialchars($erreur) ?>
-        </p>
-    <?php endif; ?>
+    <h1><?= e($menu['titre']) ?></h1>
+    <p><?= e($menu['description']) ?></p>
+    <dl class="infos-menu">
+        <dt>Prix de base</dt><dd><?= number_format((float) $menu['prix'], 2, ',', ' ') ?> € pour <?= (int) $menu['nb_personnes_min'] ?> personnes</dd>
+        <dt>Commandes encore disponibles</dt><dd><?= (int) $menu['stock_disponible'] ?></dd>
+        <dt>Délai minimum de commande</dt><dd><?= (int) $menu['delai_commande_heures'] ?> heure(s)</dd>
+    </dl>
+    <?php if ($erreur !== ''): ?><p class="erreur" role="alert"><?= e($erreur) ?></p><?php endif; ?>
     <form method="post">
         <?= csrfInput() ?>
-        <input type="hidden" name="quote_token" value="<?= e($quoteToken) ?>">
-        <h2>
-            Votre commande
-        </h2>
-        <label for="nom">
-            Nom
-        </label>
-        <input
-            type="text"
-            id="nom"
-            value="<?= htmlspecialchars($user['nom']) ?>"
-            disabled
-        >
-        <label for="prenom">
-            Prénom
-        </label>
-        <input
-            type="text"
-            id="prenom"
-            value="<?= htmlspecialchars($user['prenom']) ?>"
-            disabled
-        >
-        <label for="client-email">Adresse email du compte</label>
-        <input id="client-email" type="email" value="<?= e($user['email']) ?>" disabled>
-        <label for="client-gsm">Téléphone du compte</label>
-        <input id="client-gsm" type="tel" value="<?= e($user['gsm']) ?>" disabled>
-        <p class="small-note">Pour les corriger, rendez-vous dans <a href="mon-profil.php">Mon profil</a>.</p>
-        <label for="adresse_prestation">Adresse de prestation <span class="required-label">(obligatoire)</span></label>
-        <input
-            type="text"
-            id="adresse_prestation"
-            name="adresse_prestation"
-            value="<?= htmlspecialchars($adressePrestation) ?>"
-            required
-        >
-        <label for="date_prestation">Date de prestation <span class="required-label">(obligatoire)</span></label>
-        <input
-            type="date"
-            id="date_prestation"
-            name="date_prestation"
-            value="<?= htmlspecialchars($datePrestation) ?>"
-            required
-        >
-        <label for="heure_prestation">Heure de prestation <span class="required-label">(obligatoire)</span></label>
-        <input
-            type="time"
-            id="heure_prestation"
-            name="heure_prestation"
-            value="<?= htmlspecialchars($heurePrestation) ?>"
-            required
-        >
-        <label for="lieu_prestation">Lieu de prestation <span class="required-label">(obligatoire)</span></label>
-        <input
-            type="text"
-            id="lieu_prestation"
-            name="lieu_prestation"
-            value="<?= htmlspecialchars($lieuPrestation) ?>"
-            required
-        >
-        <label for="nb_personnes">Nombre de personnes <span class="required-label">(obligatoire)</span></label>
-        <input
-            type="number"
-            id="nb_personnes"
-            name="nb_personnes"
-            min="<?= (int) $menu['nb_personnes_min'] ?>"
-            value="<?= $nbPersonnes ?>"
-            required
-        >
-        <label for="distance_km">Distance hors Bordeaux en km <span class="required-label">(obligatoire)</span></label>
-        <input
-            type="number"
-            id="distance_km"
-            name="distance_km"
-            min="0"
-            step="0.1"
-            value="<?= $distanceKm ?>"
-            required
-        >
-        <button
-            type="submit"
-            name="action"
-            value="recap"
-        >
-            Voir le récapitulatif
-        </button>
+        <h2>Votre commande</h2>
+        <dl>
+            <dt>Client</dt><dd><?= e($user['prenom'] . ' ' . $user['nom']) ?></dd>
+            <dt>Adresse email</dt><dd><?= e($user['email']) ?></dd>
+            <dt>Téléphone</dt><dd><?= e($user['gsm']) ?></dd>
+        </dl>
+        <p class="small-note">Pour corriger vos coordonnées, rendez-vous dans <a href="mon-profil.php">Mon profil</a>.</p>
+        <?php $minimumPeople = (int) $menu['nb_personnes_min'];
+require __DIR__ . '/../Templates/forms/order-fields.php'; ?>
+        <button type="submit" name="action" value="recap">Voir le récapitulatif</button>
     </form>
     <?php if ($recap): ?>
-        <section class="recap">
-            <h2>
-                Récapitulatif de votre commande
-            </h2>
-            <p>
-
-                Menu :
-
-                <strong>
-                    <?= htmlspecialchars($menu['titre']) ?>
-                </strong>
-            </p>
-            <p>
-
-                Date :
-
-                <?= htmlspecialchars($datePrestation) ?>
-
-                à
-
-                <?= htmlspecialchars($heurePrestation) ?>
-            </p>
-            <p>
-
-                Nombre de personnes :
-
-                <?= $nbPersonnes ?>
-            </p>
-            <p>
-
-                Prix du repas :
-
-                <?= number_format($prixRepas, 2, ',', ' ') ?>
-
-                €
-
-            </p>
-            <p>
-
-                Remise :
-
-                <?= $remisePourcentage ?>
-
-                %
-
-            </p>
-            <p>
-
-                Montant de la remise :
-
-                <?= number_format($montantRemise, 2, ',', ' ') ?>
-
-                €
-
-            </p>
-            <p>
-
-                Frais de livraison :
-
-                <?= number_format($fraisLivraison, 2, ',', ' ') ?>
-
-                €
-
-            </p>
-            <h3>
-
-                Total :
-
-                <?= number_format($prixTotal, 2, ',', ' ') ?>
-
-                €
-
-            </h3>
+        <section class="recap" aria-labelledby="recap-title">
+            <h2 id="recap-title" tabindex="-1">Récapitulatif de votre commande</h2>
+            <dl>
+                <dt>Menu</dt><dd><?= e($menu['titre']) ?></dd>
+                <dt>Date et heure</dt><dd><?= e($datePrestation . ' à ' . $heurePrestation) ?></dd>
+                <dt>Adresse</dt><dd><?= e($adressePrestation . ', ' . $lieuPrestation) ?></dd>
+                <dt>Nombre de personnes</dt><dd><?= (int) $nbPersonnes ?></dd>
+                <dt>Prix du repas</dt><dd><?= number_format($prixRepas, 2, ',', ' ') ?> €</dd>
+                <dt>Remise de <?= (int) $remisePourcentage ?> %</dt><dd><?= number_format($montantRemise, 2, ',', ' ') ?> €</dd>
+                <dt>Livraison</dt><dd><?= number_format($fraisLivraison, 2, ',', ' ') ?> €</dd>
+                <dt>Total</dt><dd><strong><?= number_format($prixTotal, 2, ',', ' ') ?> €</strong></dd>
+            </dl>
             <form method="post">
-        <?= csrfInput() ?>
-        <input type="hidden" name="quote_token" value="<?= e($quoteToken) ?>">
-                <input
-                    type="hidden"
-                    name="adresse_prestation"
-                    value="<?= htmlspecialchars($adressePrestation) ?>"
-                >
-                <input
-                    type="hidden"
-                    name="date_prestation"
-                    value="<?= htmlspecialchars($datePrestation) ?>"
-                >
-                <input
-                    type="hidden"
-                    name="heure_prestation"
-                    value="<?= htmlspecialchars($heurePrestation) ?>"
-                >
-                <input
-                    type="hidden"
-                    name="lieu_prestation"
-                    value="<?= htmlspecialchars($lieuPrestation) ?>"
-                >
-                <input
-                    type="hidden"
-                    name="nb_personnes"
-                    value="<?= $nbPersonnes ?>"
-                >
-                <input
-                    type="hidden"
-                    name="distance_km"
-                    value="<?= $distanceKm ?>"
-                >
-                <button
-                    type="submit"
-                    name="action"
-                    value="confirm"
-                >
-                    Confirmer la commande
-                </button>
+                <?= csrfInput() ?>
+                <!-- Seul le jeton est transmis : les données du devis restent en session. -->
+                <input type="hidden" name="quote_token" value="<?= e($quoteToken) ?>">
+                <button type="submit" name="action" value="confirm">Confirmer la commande</button>
             </form>
         </section>
     <?php endif; ?>

@@ -2,19 +2,11 @@
 
 require_once __DIR__ . '/../Config/database.php';
 
-// Vérifier la connexion
-
-// Autoriser admin / employé
 requireAdminOrEmployee();
+requireFormMethod();
 
 // Vérifier l'identifiant
-$id = $_GET['id'] ?? null;
-
-if (!$id || !is_numeric($id)) {
-    exit('ID de plat invalide.');
-}
-
-$id = (int) $id;
+$id = positiveId($_GET['id'] ?? null);
 
 // Récupérer le plat
 $sql = '
@@ -32,7 +24,7 @@ $stmt->execute([
 $plat = $stmt->fetch(PDO::FETCH_ASSOC);
 
 if (!$plat) {
-    exit('Plat introuvable.');
+    abortRequest(404, 'Plat introuvable.');
 }
 
 // Vérifier combien de menus utilisent ce plat
@@ -102,9 +94,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $pdo->commit();
 
-        header(
-            'Location: admin-plats.php'
-        );
+        header('Location: admin-plats.php', true, 303);
 
         exit;
     } catch (Throwable $e) {
@@ -117,7 +107,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             . $e->getMessage()
         );
 
-        exit(
+        abortRequest(
+            500,
             'Une erreur est survenue lors de la suppression du plat.'
         );
     }

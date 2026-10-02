@@ -1,5 +1,7 @@
 <?php
 
+require_once __DIR__ . '/BusinessCalendar.php';
+
 /** Refuse aussi les dates normalisées silencieusement par PHP, comme le 31 février. */
 function creerDatePrestation(string $date, string $heure): ?DateTimeImmutable
 {
@@ -53,8 +55,15 @@ function validateOrderInput(array $input, array $menu): array
     }
     $people = filter_var($input['nb_personnes'] ?? null, FILTER_VALIDATE_INT);
     $distance = filter_var($input['distance_km'] ?? null, FILTER_VALIDATE_FLOAT);
-    if ($people === false || $distance === false || $people < (int) $menu['nb_personnes_min']) {
+    if ($people === false || $distance === false || $distance < 0 || $distance > 10000 || $people < (int) $menu['nb_personnes_min']) {
         throw new DomainException('Le nombre de personnes doit être au minimum de ' . (int) $menu['nb_personnes_min'] . ' et la distance doit être un nombre positif ou nul.');
+    }
+    // La ville et la distance sont vérifiées ensemble : zéro kilomètre ne suffit pas à rendre une livraison gratuite.
+    $city = mb_strtolower(trim($data['lieu_prestation']));
+    if (preg_match('/^(?:33000\s+)?bordeaux(?:\s+33000)?$/uD', $city)) {
+        $distance = 0.0;
+    } elseif ($distance <= 0) {
+        throw new DomainException('Hors Bordeaux, indiquez une distance strictement positive à confirmer avec notre équipe.');
     }
     $error = verifierDelaiCommande($data['date_prestation'], $data['heure_prestation'], (int) $menu['delai_commande_heures']);
     if ($error !== null) {
@@ -76,14 +85,15 @@ function allowedOrderTransitions(string $status): array
     };
 }
 
-/** Du lundi au vendredi, sans compter le jour de départ ni déduire les jours fériés. */
+/** Exclut le départ, les week-ends et les jours fériés nationaux ; inclut le jour de retour. */
 function calculerJoursOuvres(string $dateDebut, string $dateFin): int
 {
     $day = (new DateTimeImmutable($dateDebut))->setTime(0, 0)->modify('+1 day');
     $end = (new DateTimeImmutable($dateFin))->setTime(0, 0);
     $count = 0;
     while ($day <= $end) {
-        if ((int) $day->format('N') <= 5) {
+        if ((int) $day->format('N') <= 5
+            && !in_array($day->format('Y-m-d'), metropolitanHolidays((int) $day->format('Y')), true)) {
             $count++;
         }
         $day = $day->modify('+1 day');

@@ -92,7 +92,7 @@ def footer(c,doc):
     c.drawRightString(A4[0]-44,28,str(doc.page))
 story=[Spacer(1,40),Paragraph('Vite & Gourmand',styles['title']),Paragraph('Manuel utilisateur',styles['h']),Paragraph('Les parcours client, employé et administrateur',styles['p']),Spacer(1,15)]
 im=PILImage.open(DELIVERABLES/'Mockups/accueil-desktop.jpeg');story.append(Image(str(DELIVERABLES/'Mockups/accueil-desktop.jpeg'),width=500,height=500*im.height/im.width))
-story += [Spacer(1,20),Paragraph('Édition de mise en ligne · 30 septembre 2026',styles['p']),Paragraph('Site publié sur alwaysdata, avec MySQL et Firebase réels. Les mots de passe du site public sont remis séparément dans un fichier privé.',styles['small']),PageBreak()]
+story += [Spacer(1,20),Paragraph('Édition révisée · 2 octobre 2026',styles['p']),Paragraph('Site publié sur alwaysdata, avec MySQL et Firebase réels. Les mots de passe du site public sont remis séparément dans un fichier privé.',styles['small']),PageBreak()]
 for block in (DOC/'manuel-utilisateur.md').read_text().split('\n\n'):
     if block.startswith('# '):continue
     if block.startswith('## '):story.append(Paragraph(escape(block[3:]),styles['h']))

@@ -6,7 +6,7 @@ Le projet conserve PHP 8.2/PDO/MariaDB et les pages existantes pour rester compr
 
 Firebase Realtime Database via REST HTTPS satisfait le besoin NoSQL sans extension native. L'ancienne piste PECL MongoDB n'est pas reprise, compte tenu du mélange PHP XAMPP x86_64 et Mac arm64. Le code utilise cURL/OpenSSL déjà disponibles. Les détails et références officielles sont dans [nosql.md](nosql.md).
 
-Environnement vérifié : macOS, XAMPP, PHP 8.2.4, MariaDB, virtual host Public/. Base personnelle conservée; migration additive après sauvegarde privée. Toutes les mutations de recette sont faites dans vite_gourmand_test_20260928, avec SMTP loopback. Les captures sont pédagogiques, pas des données de production.
+Environnement vérifié : macOS, XAMPP, PHP 8.2.4, MariaDB, virtual host Public/. Base personnelle conservée; migration additive après sauvegarde privée. Les mutations de recette utilisent des bases jetables nommées `_test_`, dont `vite_gourmand_test_quality_20261002` pour la revue du 2 octobre, avec SMTP loopback. Les captures sont pédagogiques, pas des données de production.
 
 ## Couches et responsabilités
 
@@ -14,17 +14,20 @@ Environnement vérifié : macOS, XAMPP, PHP 8.2.4, MariaDB, virtual host Public/
 | --- | --- |
 | Config | Bootstrap, validation globale, sessions, authentification, PDO, SMTP et Firebase |
 | Public | Contrôleurs HTTP et vues, CSS/JS et images servies |
-| Templates | Header/footer par rôle, catalogue et cartes partagés |
+| Controllers | Contrôleurs communs de création/modification des menus et plats |
+| Templates | Header/footer, catalogue, formulaires partagés et page d’erreur |
 | Services/OrderRules.php | Prix, dates, jours ouvrés, transitions |
 | Services/OrderService.php | Transactions création/modification/annulation/suivi/retour |
 | Services/OrderNotifications.php | Emails après mutation validée |
-| Services/CatalogueValidation.php | Validation partagée des menus/plats |
+| Services/CatalogueValidation.php | Validation des types, bornes, champs et allergènes des menus/plats |
+| Services/CatalogueService.php | Persistance du catalogue, transaction des plats et associations |
+| Services/BusinessCalendar.php | Calendrier des jours fériés nationaux pour Bordeaux |
 | Services/MenuImages.php | Contrôle et réencodage des uploads |
 | Services/StatisticsService.php | Agrégation SQL, instantané et filtres des agrégats |
 | Repositories/StatisticsRepository.php | Transport REST Firebase et authentification OAuth |
 | Scripts | Migration additive et tâches CLI |
 
-Il s'agit d'une évolution progressive, pas d'un MVC intégral. Les petits CRUD restent procéduraux; les règles risquées sont centralisées. Voir le [MCD conceptuel](mcd.md), son [PDF](../MCD/mcd-vite-gourmand.pdf) et les [diagrammes relationnel et UML](diagrammes.md).
+Il s'agit d'une évolution progressive, pas d'un MVC intégral. Les formulaires menus/plats ont des contrôleurs et vues communs ; certaines autres pages restent procédurales. Les règles risquées sont centralisées. Voir le [MCD conceptuel](mcd.md), son [PDF](../MCD/mcd-vite-gourmand.pdf) et les [diagrammes relationnel et UML](diagrammes.md).
 
 ## Modèle SQL
 
@@ -60,4 +63,4 @@ La synchronisation NoSQL remplace atomiquement un instantané agrégé; ni nom, 
 
 Tokens CSS partagés, typographies système sans chargement tiers, illustrations SVG originales, mise en page mobile/tablette/desktop. Labels, textes alternatifs, lang fr, h1 unique, focus visible, lien d'évitement, tableaux avec entêtes, graphique avec chiffres/tableau. Les erreurs et statuts sont nommés en texte.
 
-Recette pragmatique documentée dans [plan-tests.md](plan-tests.md), sans revendication de conformité RGAA totale. Distance déclarative, jours ouvrés sans fériés, agrégation par création de commande et absence de comptabilité fiscale sont des choix explicites. La mise en ligne Alwaysdata et la recette Firebase réelle sont documentées dans le [rapport final](rapport-final.md) et les fichiers de recette d'hébergement.
+Recette pragmatique documentée dans [plan-tests.md](plan-tests.md), sans revendication de conformité RGAA totale. Distance déclarative contrôlée avec la ville, calendrier national des fériés pour les jours ouvrés, agrégation par création de commande et absence de comptabilité fiscale sont des choix explicites. La mise en ligne Alwaysdata et la recette Firebase réelle sont documentées dans le [rapport final](rapport-final.md) et les fichiers de recette d'hébergement.

@@ -3,14 +3,9 @@
 require_once __DIR__ . '/../Config/database.php';
 
 requireAdminOrEmployee();
+requireFormMethod();
 
-$id = $_GET['id'] ?? null;
-
-if (!$id || !is_numeric($id)) {
-    exit('ID de menu invalide.');
-}
-
-$id = (int) $id;
+$id = positiveId($_GET['id'] ?? null);
 
 $sqlMenu = '
     SELECT *
@@ -27,7 +22,7 @@ $stmtMenu->execute([
 $menu = $stmtMenu->fetch(PDO::FETCH_ASSOC);
 
 if (!$menu) {
-    exit('Menu introuvable.');
+    abortRequest(404, 'Menu introuvable.');
 }
 
 $sqlPlats = "
@@ -159,9 +154,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $pdo->commit();
 
-        header(
-            'Location: admin-menus.php'
-        );
+        header('Location: admin-menus.php', true, 303);
 
         exit;
     } catch (Throwable $e) {

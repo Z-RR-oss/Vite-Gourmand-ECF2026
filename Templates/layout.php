@@ -34,11 +34,12 @@ function renderHeader(string $title): void
 </head>
 <body class="<?= $staff ? 'staff-page' : 'public-page' ?>">
 <a class="skip-link" href="#main-content">Aller au contenu</a>
+<header>
 <div class="announcement">
     <span>Bordeaux & ses alentours</span>
     <span>Des moments à partager, tout simplement.</span>
 </div>
-<header class="site-header">
+<div class="site-header">
     <a class="brand" href="index.php" aria-label="Vite et Gourmand, accueil">
         <img src="assets/images/embleme.svg" alt="" width="45" height="45">
         <span>Vite <i>&</i> Gourmand<small>LA TABLE À PARTAGER</small></span>
@@ -57,6 +58,7 @@ function renderHeader(string $title): void
             <a class="nav-account" href="login.php" <?= $current === 'login.php' ? 'aria-current="page"' : '' ?>>Mon espace <span aria-hidden="true">↗</span></a>
         <?php endif; ?>
     </nav>
+</div>
 </header>
 <main id="main-content" class="page-shell" tabindex="-1">
 <?php

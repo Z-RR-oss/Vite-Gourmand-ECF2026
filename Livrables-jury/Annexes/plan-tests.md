@@ -1,5 +1,9 @@
 # Plan de recette et résultats
 
+## Actualisation du 2 octobre 2026
+
+La [revue de qualité](revue-qualite-20261002.md) décrit les corrections, leur recette et les limites restantes. Les résultats datés ci-dessous restent historiques ; les nouveaux résultats ne constituent pas une certification RGAA.
+
 Recette locale du 28 septembre 2026, PHP 8.2.4/MariaDB XAMPP. Les données de tests sont fictives. Les tests modifient une base dédiée contenant `_test_`, jamais la base personnelle.
 
 ## Reproduction automatisée
