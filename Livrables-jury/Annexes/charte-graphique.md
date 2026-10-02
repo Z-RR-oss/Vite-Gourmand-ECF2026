@@ -38,9 +38,9 @@ Le PDF réunit les douze vues. Les captures montrent la fenêtre initiale; le co
 
 | Écran | Wireframe ordinateur | Wireframe mobile | Mockup ordinateur | Mockup mobile |
 | --- | --- | --- | --- | --- |
-| Accueil | [SVG](../Livrables-jury/Wireframes/accueil-desktop.svg) | [SVG](../Livrables-jury/Wireframes/accueil-mobile.svg) | [PNG](../Livrables-jury/Mockups/accueil-desktop.jpeg) | [PNG](../Livrables-jury/Mockups/accueil-mobile.png) |
-| Détail menu | [SVG](../Livrables-jury/Wireframes/detail-menu-desktop.svg) | [SVG](../Livrables-jury/Wireframes/detail-menu-mobile.svg) | [PNG](../Livrables-jury/Mockups/detail-menu-desktop.png) | [PNG](../Livrables-jury/Mockups/detail-menu-mobile.png) |
-| Contact | [SVG](../Livrables-jury/Wireframes/contact-desktop.svg) | [SVG](../Livrables-jury/Wireframes/contact-mobile.svg) | [PNG](../Livrables-jury/Mockups/contact-desktop.png) | [PNG](../Livrables-jury/Mockups/contact-mobile.png) |
+| Accueil | [SVG](../Wireframes/accueil-desktop.svg) | [SVG](../Wireframes/accueil-mobile.svg) | [PNG](../Mockups/accueil-desktop.jpeg) | [PNG](../Mockups/accueil-mobile.png) |
+| Détail menu | [SVG](../Wireframes/detail-menu-desktop.svg) | [SVG](../Wireframes/detail-menu-mobile.svg) | [PNG](../Mockups/detail-menu-desktop.png) | [PNG](../Mockups/detail-menu-mobile.png) |
+| Contact | [SVG](../Wireframes/contact-desktop.svg) | [SVG](../Wireframes/contact-mobile.svg) | [PNG](../Mockups/contact-desktop.png) | [PNG](../Mockups/contact-mobile.png) |
 
 ## Complément Figma du 2 octobre 2026
 

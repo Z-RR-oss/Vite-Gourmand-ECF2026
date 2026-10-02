@@ -81,4 +81,4 @@ Le PHP suit les règles de `.php-cs-fixer.dist.php`, le CSS et le JavaScript cel
 
 Les menus Vegan et Noël disposent de [visuels générés et optimisés](docs/visuels-menus.md). Pour compléter une base existante sans réimporter le dump : examiner `php Scripts/installer-images-menus.php`, puis ajouter `--apply`. Les photos personnelles restent conservées.
 
-Les visuels de remise sont regroupés à la racine dans [Livrables-jury](Livrables-jury/README.md) : MCD, mockups et wireframes.
+Les visuels de remise sont regroupés à la racine dans [Livrables-jury](Livrables-jury/README.md) : MCD, mockups, wireframes, documents annexes et [PowerPoint avec script oral](Livrables-jury/Presentation/README.md). Les [six vues Figma](docs/figma-mockups.md) complètent les captures du site.

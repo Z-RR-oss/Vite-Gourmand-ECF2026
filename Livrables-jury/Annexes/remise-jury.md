@@ -10,7 +10,7 @@ La branche `main` contient la version finale testée, après fusion de la branch
 
 ## Documents à joindre
 
-L’ensemble est regroupé dans [Livrables-jury](../Livrables-jury/README.md). Le [PowerPoint et son script](../Livrables-jury/Presentation/README.md) servent à préparer l’oral ; les [mockups Figma](figma-mockups.md) sont également disponibles.
+L’ensemble est regroupé dans [Livrables-jury](../README.md). Le [PowerPoint et son script](../Presentation/README.md) servent à préparer l’oral ; les [mockups Figma](figma-mockups.md) sont également disponibles.
 
 - `manuel-utilisateur.pdf` : parcours et comptes du dump local.
 - `charte-graphique.pdf` : identité, 6 wireframes et 6 mockups (pour chacun : 3 ordinateur et 3 mobile).
