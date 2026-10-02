@@ -18,7 +18,7 @@ function notifyOrderStatus(PDO $pdo, int $id, string $status): bool
         $content .= '<p>Votre commande est enregistrée pour le ' . e($order['date_prestation']) . ' à ' . e($order['heure_prestation']) . ', pour ' . (int) $order['nb_personnes'] . ' personnes.</p><p>Livraison : ' . e($order['adresse_prestation']) . ' — ' . e($order['lieu_prestation']) . '.</p><p>Total : ' . number_format((float) $order['prix_total'], 2, ',', ' ') . ' €.</p>';
     } elseif ($status === 'en attente du retour de matériel') {
         $subject = 'Retour du matériel : délai de 10 jours ouvrés';
-        $content .= '<p>Le matériel prêté doit être rendu sous 10 jours ouvrés (du lundi au vendredi, hors jour de départ). Passé ce délai, des frais de 600 € sont appliqués conformément aux CGV.</p><p>Contactez notre entreprise pour organiser le retour : <a href="' . e($baseUrl . '/contact.php') . '">contacter Vite &amp; Gourmand</a>.</p>';
+        $content .= '<p>Le matériel prêté doit être rendu sous 10 jours ouvrés (du lundi au vendredi, hors jours fériés nationaux et jour de départ). Passé ce délai, des frais de 600 € sont appliqués conformément aux CGV.</p><p>Contactez notre entreprise pour organiser le retour : <a href="' . e($baseUrl . '/contact.php') . '">contacter Vite &amp; Gourmand</a>.</p>';
     } elseif ($status === 'terminée') {
         $subject = 'Donnez votre avis sur votre commande';
         $content .= '<p>Votre commande est terminée. Merci de votre confiance.</p><p><a href="' . e($baseUrl . '/laisser-avis.php?id=' . $id) . '">Laisser une note et un commentaire</a>.</p>';

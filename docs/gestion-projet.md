@@ -1,5 +1,9 @@
 # Gestion du projet
 
+## Actualisation du 2 octobre 2026
+
+La [revue de qualité](revue-qualite-20261002.md) décrit les corrections, leur recette et les limites restantes. Les résultats datés ci-dessous restent historiques ; les nouveaux résultats ne constituent pas une certification RGAA.
+
 Application réalisée dans le cadre de l'ECF DWWM. Le travail est organisé par parcours et risques, avec une priorité aux règles métier, à la sécurité et à la possibilité de recréer l'application.
 
 Tableau existant : https://trello.com/b/mHfEGdUL/vite-gourmand-projet-ecf . Relecture du 1er octobre 2026 : aucune carte en « A faire » ou « En cours » et 23 en « Terminé ». La carte des maquettes a été renommée et complétée avec les exports réellement produits et leur méthode, sans prétendre à une utilisation de Figma. Les 19 cartes livrées ont été déplacées vers « Terminé » après accord explicite de la propriétaire. Les 6 cartes du guide Trello sont conservées séparément. Preuve : [capture du tableau](captures/trello-cartes-terminees.png). Ce suivi est une mise à jour de l'état réel, pas une reconstitution de sprints historiques. Le tableau demande une connexion dans une session non authentifiée : prévoir son accès pour le jury.

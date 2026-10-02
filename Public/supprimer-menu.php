@@ -2,19 +2,11 @@
 
 require_once __DIR__ . '/../Config/database.php';
 
-// Vérifier la connexion
-
-// Autoriser admin / employé
 requireAdminOrEmployee();
+requireFormMethod();
 
 // Vérifier l'identifiant
-$id = $_GET['id'] ?? null;
-
-if (!$id || !is_numeric($id)) {
-    exit('ID de menu invalide.');
-}
-
-$id = (int) $id;
+$id = positiveId($_GET['id'] ?? null);
 
 // Récupérer le menu
 $sqlMenu = '
@@ -32,7 +24,7 @@ $stmtMenu->execute([
 $menu = $stmtMenu->fetch(PDO::FETCH_ASSOC);
 
 if (!$menu) {
-    exit('Menu introuvable.');
+    abortRequest(404, 'Menu introuvable.');
 }
 
 // Vérifier si des commandes utilisent ce menu
@@ -98,9 +90,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         $pdo->commit();
-        header(
-            'Location: admin-menus.php'
-        );
+        header('Location: admin-menus.php', true, 303);
 
         exit;
     } catch (PDOException $e) {
@@ -113,7 +103,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             . $e->getMessage()
         );
 
-        exit(
+        abortRequest(
+            500,
             'Une erreur est survenue lors de la suppression du menu.'
         );
     }

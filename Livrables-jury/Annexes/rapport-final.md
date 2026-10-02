@@ -1,5 +1,9 @@
 # Rapport final de réalisation et de recette locale
 
+## Actualisation du 2 octobre 2026
+
+La [revue de qualité](revue-qualite-20261002.md) décrit les corrections, leur recette et les limites restantes. Les résultats datés ci-dessous restent historiques ; les nouveaux résultats ne constituent pas une certification RGAA.
+
 Édition du 30 septembre 2026. **Le site est publié : https://vite-gourmandecf2026.alwaysdata.net.** MySQL et Firebase réels sont vérifiés sur alwaysdata, avec 29 contrôles en ligne. Les tâches sont installées et l’email de test est indiqué « Envoyé ». La réception est confirmée et les deux scripts réussissent dans le planificateur. L’intégration finale feature → develop → main est réalisée et publiée.
 
 ## 1. Résumé

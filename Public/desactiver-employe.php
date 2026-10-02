@@ -1,95 +1,20 @@
 <?php
 
 require_once __DIR__ . '/../Config/database.php';
-
-// Vérifier la connexion
-requireLogin();
-
-// Seul l'administrateur peut modifier un employé
 requireRole('admin');
-
-// Cette page ne doit être appelée qu'en POST
-if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    header('Location: admin-employes.php');
-    exit;
+requirePost();
+$id = positiveId($_POST['id'] ?? null);
+$action = $_POST['action'] ?? '';
+if (!in_array($action, ['activer', 'desactiver'], true)) {
+    abortRequest(400, 'Action invalide.');
 }
-
-// Récupérer les informations
-$id = $_POST['id'] ?? null;
-
-$action = trim(
-    $_POST['action'] ?? ''
-);
-
-if (!$id || !is_numeric($id)) {
-    exit('Employé invalide.');
+$query = $pdo->prepare("SELECT id FROM users WHERE id = ? AND role = 'employe'");
+$query->execute([$id]);
+if (!$query->fetchColumn()) {
+    abortRequest(404, 'Compte employé introuvable.');
 }
-
-$id = (int) $id;
-
-if (
-    $action !== 'desactiver'
-    && $action !== 'activer'
-) {
-    exit('Action invalide.');
-}
-
-// Vérifier que le compte existe
-// et qu'il s'agit bien d'un employé
-$sqlEmploye = "
-    SELECT
-        id,
-        role,
-        actif
-    FROM users
-
-    WHERE id = :id
-    AND role = 'employe'
-";
-
-$stmtEmploye = $pdo->prepare(
-    $sqlEmploye
-);
-
-$stmtEmploye->execute([
-    ':id' => $id
-]);
-
-$employe = $stmtEmploye->fetch(
-    PDO::FETCH_ASSOC
-);
-
-if (!$employe) {
-    exit('Compte employé introuvable.');
-}
-
-// Déterminer le nouvel état
-$nouvelEtat =
-    $action === 'activer'
-        ? 1
-        : 0;
-
-// Mise à jour
-$sqlUpdate = "
-    UPDATE users
-
-    SET actif = :actif
-
-    WHERE id = :id
-    AND role = 'employe'
-";
-
-$stmtUpdate = $pdo->prepare(
-    $sqlUpdate
-);
-
-$stmtUpdate->execute([
-    ':actif' => $nouvelEtat,
-    ':id' => $id
-]);
-
-header(
-    'Location: admin-employes.php'
-);
-
+// Le filtre de rôle reste aussi dans l'écriture : un administrateur ne peut pas être ciblé.
+$query = $pdo->prepare("UPDATE users SET actif = ? WHERE id = ? AND role = 'employe'");
+$query->execute([$action === 'activer' ? 1 : 0, $id]);
+header('Location: admin-employes.php', true, 303);
 exit;

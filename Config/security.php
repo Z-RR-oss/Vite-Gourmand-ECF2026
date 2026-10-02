@@ -47,7 +47,7 @@ function abortRequest(int $status, string $message): never
 {
     http_response_code($status);
     header('Content-Type: text/html; charset=UTF-8');
-    echo '<!doctype html><html lang="fr"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Vite &amp; Gourmand</title><main><h1>Vite &amp; Gourmand</h1><p>' . e($message) . '</p><p><a href="index.php">Retour à l’accueil</a></p></main></html>';
+    require __DIR__ . '/../Templates/error.php';
     exit;
 }
 
@@ -56,6 +56,15 @@ function requirePost(): void
     if (($_SERVER['REQUEST_METHOD'] ?? '') !== 'POST') {
         header('Allow: POST');
         abortRequest(405, 'Cette action nécessite un formulaire de confirmation.');
+    }
+}
+
+/** GET affiche le formulaire ; POST le traite. Les autres méthodes ne mutent rien. */
+function requireFormMethod(): void
+{
+    if (!in_array($_SERVER['REQUEST_METHOD'] ?? 'GET', ['GET', 'POST'], true)) {
+        header('Allow: GET, POST');
+        abortRequest(405, 'Cette méthode n’est pas autorisée pour ce formulaire.');
     }
 }
 

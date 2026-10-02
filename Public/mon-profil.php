@@ -30,7 +30,7 @@ $stmt->execute([
 $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
 if (!$user) {
-    exit('Utilisateur introuvable.');
+    abortRequest(404, 'Utilisateur introuvable.');
 }
 
 // Compte désactivé

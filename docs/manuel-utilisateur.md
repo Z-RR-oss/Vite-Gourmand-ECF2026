@@ -1,6 +1,6 @@
 # Manuel utilisateur
 
-Vite & Gourmand • ECF DWWM • Édition du 30 septembre 2026
+Vite & Gourmand • ECF DWWM • Édition du 2 octobre 2026
 
 ## Présentation et accès
 
@@ -28,7 +28,7 @@ Se connecter avec email et mot de passe. Mot de passe oublié envoie un lien val
 
 ## Commander : formulaire et récapitulatif
 
-Cliquer Commander ce menu. Une connexion est demandée au visiteur. Le menu et les informations du compte sont repris. Corriger email/téléphone depuis Mon profil si nécessaire. Indiquer adresse, lieu, date, heure, convives et distance; respecter le minimum et le délai du menu.
+Cliquer Commander ce menu. Une connexion est demandée au visiteur. Le menu et les informations du compte sont repris. Corriger email/téléphone depuis Mon profil si nécessaire. Indiquer l’adresse, la ville, la date, l’heure, les convives et la distance (strictement positive hors Bordeaux, remise à zéro par le serveur pour Bordeaux); respecter le minimum et le délai du menu.
 
 Distance : saisir 0 pour Bordeaux. Hors Bordeaux, déclarer les kilomètres à confirmer avec l'équipe; aucun calcul cartographique automatique n'est effectué. Le tarif est 5 € + 0,59 € par kilomètre hors Bordeaux.
 
@@ -40,7 +40,7 @@ Lire le récapitulatif, puis confirmer. La disponibilité et le prix sont revér
 
 Mes commandes affiche les détails et l'historique horodaté. Tant que le statut est en attente, modifier la prestation ou annuler avec confirmation. Le menu ne peut pas être changé. Après acceptation, contacter l'équipe pour toute demande.
 
-Le suivi passe par accepté, en préparation, en cours de livraison, livré, puis terminée sans prêt de matériel, ou attente du retour de matériel. En cas de prêt, contacter l'entreprise pour restituer le matériel. Le délai est de 10 jours ouvrés, lundi-vendredi sans jours fériés dans cette version; au-delà, 600 € de frais sont appliqués.
+Le suivi passe par accepté, en préparation, en cours de livraison, livré, puis terminée sans prêt de matériel, ou attente du retour de matériel. En cas de prêt, contacter l'entreprise pour restituer le matériel. Le délai est de 10 jours ouvrés, du lundi au vendredi, hors jours fériés nationaux de France métropolitaine et hors jour de départ; au-delà, 600 € de frais sont appliqués.
 
 Après clôture, l'email invite à déposer une note de 1 à 5 et un commentaire. Un seul avis est possible par commande. Il apparaît en accueil seulement après validation par l'équipe. Mon profil permet de changer ses coordonnées, jamais son rôle.
 

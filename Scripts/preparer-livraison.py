@@ -11,7 +11,7 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parent.parent
-RUNTIME_DIRECTORIES = {"Config", "Public", "Repositories", "Services", "Templates"}
+RUNTIME_DIRECTORIES = {"Config", "Controllers", "Public", "Repositories", "Services", "Templates"}
 RUNTIME_FILES = {"composer.json", "composer.lock", "vite_gourmand.sql.sql"}
 
 

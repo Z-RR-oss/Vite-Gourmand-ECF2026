@@ -2,7 +2,7 @@
 
 // Les secrets locaux, les dépendances et les fichiers générés ne sont jamais formatés.
 $finder = PhpCsFixer\Finder::create()
-    ->in(['Config', 'Public', 'Repositories', 'Services', 'Templates', 'Scripts', 'tests'])
+    ->in(['Config', 'Controllers', 'Public', 'Repositories', 'Services', 'Templates', 'Scripts', 'tests'])
     ->name('*.php')
     ->notName('*.local.php');
 

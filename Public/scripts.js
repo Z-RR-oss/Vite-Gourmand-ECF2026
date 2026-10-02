@@ -7,7 +7,16 @@ const formError = document.querySelector('main [role="alert"]');
 if (formError) {
     formError.setAttribute('tabindex', '-1');
     formError.focus();
+} else {
+    // Après le calcul, annoncer le devis sans obliger à reparcourir tous les champs.
+    document.querySelector('#recap-title')?.focus();
 }
+
+document.querySelectorAll('.form-errors a[href^="#"]').forEach((link) => {
+    link.addEventListener('click', () => {
+        document.getElementById(link.getAttribute('href').slice(1))?.focus();
+    });
+});
 
 // La navigation reste visible sans JS ; aria-expanded reflète son état pour les lecteurs d'écran.
 const burger = document.querySelector('.burger-menu');
@@ -113,7 +122,12 @@ if (filtersForm && menuContainer && resultsStatus) {
         // d'écraser les résultats des derniers filtres saisis.
         activeController?.abort();
         const version = ++requestVersion;
-        if (!filtersForm.reportValidity()) return;
+        if (!filtersForm.reportValidity()) {
+            menuContainer.removeAttribute('aria-busy');
+            resultsStatus.textContent =
+                'Vérifiez les filtres. Les derniers résultats restent affichés.';
+            return;
+        }
         activeController = new AbortController();
         const params = new URLSearchParams(new FormData(filtersForm));
         resultsStatus.textContent = 'Recherche des menus…';
